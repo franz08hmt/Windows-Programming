@@ -1,0 +1,63 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\WIPR_25-26\\W1\\ComplexNumberApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{23035F02-FEB6-409F-8DB9-D540316744A3}|ComplexNumberApp.csproj|c:\\wipr_25-26\\w1\\complexnumberapp\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23035F02-FEB6-409F-8DB9-D540316744A3}|ComplexNumberApp.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23035F02-FEB6-409F-8DB9-D540316744A3}|ComplexNumberApp.csproj|C:\\WIPR_25-26\\W1\\ComplexNumberApp\\complexnumber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23035F02-FEB6-409F-8DB9-D540316744A3}|ComplexNumberApp.csproj|solutionrelative:complexnumber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ComplexNumber.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\ComplexNumberApp\\ComplexNumber.cs",
+              "RelativeDocumentMoniker": "ComplexNumber.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\ComplexNumberApp\\ComplexNumber.cs",
+              "RelativeToolTip": "ComplexNumber.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T21:02:30.445Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form2.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\ComplexNumberApp\\Form2.cs",
+              "RelativeDocumentMoniker": "Form2.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\ComplexNumberApp\\Form2.cs",
+              "RelativeToolTip": "Form2.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T20:54:43.489Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
