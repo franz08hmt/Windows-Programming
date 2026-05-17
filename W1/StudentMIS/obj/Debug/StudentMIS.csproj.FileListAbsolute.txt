@@ -1,0 +1,10 @@
+C:\WIPR_25-26\W1\StudentMIS\bin\Debug\StudentMIS.exe.config
+C:\WIPR_25-26\W1\StudentMIS\bin\Debug\StudentMIS.exe
+C:\WIPR_25-26\W1\StudentMIS\bin\Debug\StudentMIS.pdb
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.csproj.AssemblyReference.cache
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.Login_Form.resources
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.Properties.Resources.resources
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.csproj.GenerateResource.cache
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.csproj.CoreCompileInputs.cache
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.exe
+C:\WIPR_25-26\W1\StudentMIS\obj\Debug\StudentMIS.pdb

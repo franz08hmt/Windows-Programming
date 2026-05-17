@@ -1,0 +1,10 @@
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.csproj.AssemblyReference.cache
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.Form2.resources
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.Properties.Resources.resources
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.csproj.GenerateResource.cache
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.csproj.CoreCompileInputs.cache
+C:\WIPR_25-26\W1\ComplexNumberApp\bin\Debug\ComplexNumberApp.exe.config
+C:\WIPR_25-26\W1\ComplexNumberApp\bin\Debug\ComplexNumberApp.exe
+C:\WIPR_25-26\W1\ComplexNumberApp\bin\Debug\ComplexNumberApp.pdb
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.exe
+C:\WIPR_25-26\W1\ComplexNumberApp\obj\Debug\ComplexNumberApp.pdb

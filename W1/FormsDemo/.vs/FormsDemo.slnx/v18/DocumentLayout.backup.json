@@ -1,0 +1,491 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\WIPR_25-26\\W1\\FormsDemo\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmovertimes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmovertimes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmovertimes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmovertimes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmemployees.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmemployees.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmemployees.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmemployees.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmresize.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmresize.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmresize.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmresize.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmkeypress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmkeypress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmkeypress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmkeypress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmmethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmmethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmmethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmmethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmactivate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmactivate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmproperties.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmproperties.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmproperties.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmproperties.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmothers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmothers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmcircle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmcircle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\frmcircle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:frmcircle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\form6.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:form6.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|c:\\wipr_25-26\\w1\\formsdemo\\form6.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4C9BEB-9559-4E5C-B5AE-E75FB96E6962}|FormsDemo.csproj|solutionrelative:form6.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "frmOvertimes.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOvertimes.cs",
+              "RelativeDocumentMoniker": "frmOvertimes.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOvertimes.cs",
+              "RelativeToolTip": "frmOvertimes.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA3wB0AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:25:59.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "frmEmployees.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmEmployees.cs",
+              "RelativeDocumentMoniker": "frmEmployees.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmEmployees.cs",
+              "RelativeToolTip": "frmEmployees.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAuwA4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:23:41.048Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "frmMain.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMain.cs",
+              "RelativeDocumentMoniker": "frmMain.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMain.cs",
+              "RelativeToolTip": "frmMain.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAcwB4AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:20:30.004Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "frmOvertimes.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOvertimes.cs",
+              "RelativeDocumentMoniker": "frmOvertimes.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOvertimes.cs [Design]",
+              "RelativeToolTip": "frmOvertimes.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:15:36.775Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "frmEmployees.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmEmployees.cs",
+              "RelativeDocumentMoniker": "frmEmployees.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmEmployees.cs [Design]",
+              "RelativeToolTip": "frmEmployees.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:15:20.267Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "frmMain.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMain.cs",
+              "RelativeDocumentMoniker": "frmMain.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMain.cs [Design]",
+              "RelativeToolTip": "frmMain.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:15:06.619Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "frmResize.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmResize.cs",
+              "RelativeDocumentMoniker": "frmResize.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmResize.cs",
+              "RelativeToolTip": "frmResize.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA2wBYAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:13:11.44Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "frmKeyPress.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmKeyPress.cs",
+              "RelativeDocumentMoniker": "frmKeyPress.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmKeyPress.cs",
+              "RelativeToolTip": "frmKeyPress.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA2wBUAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:12:07.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "frmLoad.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmLoad.cs",
+              "RelativeDocumentMoniker": "frmLoad.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmLoad.cs",
+              "RelativeToolTip": "frmLoad.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA2wBwAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:11:04.72Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "frmClosing.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosing.cs",
+              "RelativeDocumentMoniker": "frmClosing.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosing.cs",
+              "RelativeToolTip": "frmClosing.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAkwBkAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:08:07.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "frmClosed.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosed.cs",
+              "RelativeDocumentMoniker": "frmClosed.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosed.cs",
+              "RelativeToolTip": "frmClosed.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAuwBUAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:07:13.151Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "frmResize.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmResize.cs",
+              "RelativeDocumentMoniker": "frmResize.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmResize.cs [Design]",
+              "RelativeToolTip": "frmResize.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:04:38.908Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "frmKeyPress.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmKeyPress.cs",
+              "RelativeDocumentMoniker": "frmKeyPress.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmKeyPress.cs [Design]",
+              "RelativeToolTip": "frmKeyPress.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:04:27.687Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "frmLoad.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmLoad.cs",
+              "RelativeDocumentMoniker": "frmLoad.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmLoad.cs [Design]",
+              "RelativeToolTip": "frmLoad.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:04:17.424Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "frmClosing.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosing.cs",
+              "RelativeDocumentMoniker": "frmClosing.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosing.cs [Design]",
+              "RelativeToolTip": "frmClosing.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:04:08.774Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "frmClosed.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosed.cs",
+              "RelativeDocumentMoniker": "frmClosed.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmClosed.cs [Design]",
+              "RelativeToolTip": "frmClosed.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:03:55.327Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "frmMethods.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMethods.cs",
+              "RelativeDocumentMoniker": "frmMethods.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMethods.cs",
+              "RelativeToolTip": "frmMethods.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAA3wC4AAAB1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:02:30.673Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "frmActivate.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmActivate.cs",
+              "RelativeDocumentMoniker": "frmActivate.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmActivate.cs [Design]",
+              "RelativeToolTip": "frmActivate.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T12:02:09.153Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "frmMethods.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMethods.cs",
+              "RelativeDocumentMoniker": "frmMethods.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmMethods.cs [Design]",
+              "RelativeToolTip": "frmMethods.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T11:58:04.961Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "frmProperties.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmProperties.cs",
+              "RelativeDocumentMoniker": "frmProperties.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmProperties.cs",
+              "RelativeToolTip": "frmProperties.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAiwEMAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T11:53:06.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "frmProperties.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmProperties.cs",
+              "RelativeDocumentMoniker": "frmProperties.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmProperties.cs [Design]",
+              "RelativeToolTip": "frmProperties.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T09:06:02.029Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "frmOthers.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOthers.cs",
+              "RelativeDocumentMoniker": "frmOthers.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmOthers.cs [Design]",
+              "RelativeToolTip": "frmOthers.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:59:58.905Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "frmCircle.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmCircle.cs",
+              "RelativeDocumentMoniker": "frmCircle.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmCircle.cs",
+              "RelativeToolTip": "frmCircle.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAlwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:59:00.307Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "frmCircle.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmCircle.cs",
+              "RelativeDocumentMoniker": "frmCircle.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\frmCircle.cs [Design]",
+              "RelativeToolTip": "frmCircle.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:56:19.438Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Form6.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form6.cs",
+              "RelativeDocumentMoniker": "Form6.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form6.cs",
+              "RelativeToolTip": "Form6.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:49:12.013Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Form6.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form6.cs",
+              "RelativeDocumentMoniker": "Form6.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form6.cs [Design]",
+              "RelativeToolTip": "Form6.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:48:49.783Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T08:25:18.485Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W1\\FormsDemo\\Form1.cs [Design]",
+              "RelativeToolTip": "Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-11T07:23:36.132Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
