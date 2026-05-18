@@ -118,5 +118,93 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
             return dt;
         }
+        // Tìm kiếm sinh viên theo keyword (MSSV, Họ, Tên, Email)
+        public static DataTable SearchStudents(string keyword)
+        {
+            My_DB db = new My_DB();
+            try
+            {
+                db.openConnection();
+                string query = @"SELECT MSSV, Fname, Lname, Dob, Gder, Phone, Email 
+                         FROM Student 
+                         WHERE CAST(MSSV AS NVARCHAR) LIKE @kw
+                            OR Fname LIKE @kw 
+                            OR Lname LIKE @kw 
+                            OR Email LIKE @kw";
+                SqlCommand cmd = new SqlCommand(query, db.conn);
+                cmd.Parameters.AddWithValue("@kw", "%" + keyword + "%");
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return table;
+            }
+            catch { return new DataTable(); }
+            finally { db.closeConnection(); }
+        }
+
+        // Lấy 1 sinh viên theo MSSV, trả về object Student đầy đủ data
+        public static Student GetStudentByID(int mssv)
+        {
+            My_DB db = new My_DB();
+            try
+            {
+                db.openConnection();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM Student WHERE MSSV=@mssv", db.conn);
+                cmd.Parameters.AddWithValue("@mssv", mssv);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    byte[] pic = null;
+                    if (reader["Pture"] != DBNull.Value)
+                        pic = (byte[])reader["Pture"];
+
+                    Student s = new Student(
+                        (int)reader["MSSV"],
+                        reader["Fname"].ToString(),
+                        reader["Lname"].ToString(),
+                        (DateTime)reader["Dob"],
+                        reader["Gder"].ToString(),
+                        reader["Phone"].ToString(),
+                        reader["Address"].ToString(),
+                        reader["Htown"].ToString(),
+                        reader["Email"].ToString(),
+                        pic
+                    );
+                    reader.Close();
+                    return s;
+                }
+                reader.Close();
+                return null;
+            }
+            catch { return null; }
+            finally { db.closeConnection(); }
+        }
+        // Lấy danh sách SV có điểm TB < ngưỡng
+        public static DataTable GetLowScoreStudents(double threshold = 5.0)
+        {
+            My_DB db = new My_DB();
+            try
+            {
+                db.openConnection();
+                string query = @"
+            SELECT s.MSSV, s.Fname, s.Lname, 
+                   ROUND(AVG(sc.Diem), 2) AS DiemTB
+            FROM Student s
+            INNER JOIN Score sc ON s.MSSV = sc.MSSV
+            GROUP BY s.MSSV, s.Fname, s.Lname
+            HAVING AVG(sc.Diem) < @threshold
+            ORDER BY AVG(sc.Diem) ASC";
+                SqlCommand cmd = new SqlCommand(query, db.conn);
+                cmd.Parameters.AddWithValue("@threshold", threshold);
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch { return new DataTable(); }
+            finally { db.closeConnection(); }
+        }
     }
+
 }
