@@ -1,0 +1,32 @@
+C:\WIPR_25-26\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
+C:\WIPR_25-26\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
+C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
