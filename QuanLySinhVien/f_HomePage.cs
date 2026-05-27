@@ -15,6 +15,14 @@ namespace QuanLySinhVien
     public partial class f_HomePage : Form
     {
         private string userFullName;
+
+        
+        public f_HomePage()
+        {
+            InitializeComponent();
+        }
+
+        
         public f_HomePage(string loginName)
         {
             InitializeComponent();
@@ -36,7 +44,7 @@ namespace QuanLySinhVien
                 SqlCommand cmdPending = new SqlCommand(queryPending, db.conn);
                 int totalPending = (int)cmdPending.ExecuteScalar();
 
-                lblTotalStudents.Text = totalStudents.ToString(); 
+                lblTotalStudents.Text = totalStudents.ToString();
                 lblTotalPending.Text = totalPending.ToString();
 
                 lblTotalHR.Text = "0";
@@ -62,7 +70,7 @@ namespace QuanLySinhVien
             path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
             path.CloseFigure();
 
-            // Áp dụng hình dáng mới cho Panel
+            
             pnl.Region = new Region(path);
         }
 
@@ -97,6 +105,7 @@ namespace QuanLySinhVien
                 this.Close();
             }
         }
+
         private void f_HomePage_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (Application.OpenForms["f_Login"] != null && !Application.OpenForms["f_Login"].Visible)
@@ -111,7 +120,6 @@ namespace QuanLySinhVien
             editForm.Show();
             this.Close();
         }
-
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -132,6 +140,17 @@ namespace QuanLySinhVien
         {
             BoGocPanel(pnlTaiKhoanHR, 20);
         }
-    }
 
+        private void btnRegisterMenu_Click(object sender, EventArgs e)
+        {
+            f_RegisterCourse formDangKy = new f_RegisterCourse();
+            formDangKy.ShowDialog();
+        }
+
+        private void btnManageCourse_Click(object sender, EventArgs e)
+        {
+            f_ManageCourse formQuanLy = new f_ManageCourse();
+            formQuanLy.ShowDialog();
+        }
+    }
 }

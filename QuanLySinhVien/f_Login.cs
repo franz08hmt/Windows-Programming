@@ -9,30 +9,34 @@ namespace QuanLySinhVien
     {
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(
-        int nLeftRect,     // Tọa độ x góc trên bên trái
-        int nTopRect,      // Tọa độ y góc trên bên trái
-        int nRightRect,    // Tọa độ x góc dưới bên phải
-        int nBottomRect,   // Tọa độ y góc dưới bên phải
-        int nWidthEllipse, // Độ bo tròn theo chiều ngang (số càng lớn góc càng tròn)
-        int nHeightEllipse // Độ bo tròn theo chiều dọc
-    );
+        int nLeftRect,
+        int nTopRect,
+        int nRightRect,
+        int nBottomRect,
+        int nWidthEllipse,
+        int nHeightEllipse
+        );
+
         public f_Login()
         {
             InitializeComponent();
         }
 
-
         private bool ValidateInput()
         {
+            // Bỏ qua nếu người dùng chưa nhập gì mà vẫn để chữ gợi ý
+            string userText = (txtUsername.Text == "Tên đăng nhập" || txtUsername.Text == "Họ và tên") ? "" : txtUsername.Text;
+            string passText = (txtPassword.Text == "●●●●●●●●●●") ? "" : txtPassword.Text;
+
             bool valid = true;
-            if (string.IsNullOrEmpty(txtUsername.Text))
+            if (string.IsNullOrEmpty(userText))
             {
                 errorProvider1.SetError(txtUsername, "Vui lòng nhập tên đăng nhập!");
                 valid = false;
             }
             else errorProvider1.SetError(txtUsername, "");
 
-            if (string.IsNullOrEmpty(txtPassword.Text))
+            if (string.IsNullOrEmpty(passText))
             {
                 errorProvider1.SetError(txtPassword, "Vui lòng nhập mật khẩu!");
                 valid = false;
@@ -41,8 +45,7 @@ namespace QuanLySinhVien
 
             if (!rdStudent.Checked && !rdHR.Checked)
             {
-                MessageBox.Show("Vui lòng chọn loại tài khoản!", "Cảnh báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn loại tài khoản!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 valid = false;
             }
             return valid;
@@ -63,9 +66,10 @@ namespace QuanLySinhVien
                     "AND Pass = @pass COLLATE SQL_Latin1_General_CP1_CS_AS " +
                     "AND position = @pos AND VALID = 1";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@user", txtUsername.Text);
+                cmd.Parameters.AddWithValue("@user", txtUsername.Text.Trim());
                 cmd.Parameters.AddWithValue("@pass", txtPassword.Text);
                 cmd.Parameters.AddWithValue("@pos", position);
+
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 if (reader.Read())
@@ -74,11 +78,14 @@ namespace QuanLySinhVien
 
                     Globals.SetSession(
                         reader["MSGV"].ToString(),
-                        reader["Fname"].ToString() + " " + reader["Lname"].ToString(),
+                        fullName,
                         position);
 
                     MessageBox.Show("Đăng nhập thành công!\nXin chào: " + Globals.GlobalUserName,
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Đóng DataReader TRƯỚC KHI mở form mới để tránh lỗi Database
+                    reader.Close();
 
                     f_HomePage homeForm = new f_HomePage(fullName);
                     homeForm.Show();
@@ -88,8 +95,8 @@ namespace QuanLySinhVien
                 {
                     MessageBox.Show("Sai thông tin đăng nhập hoặc không có quyền truy cập!",
                         "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    reader.Close();
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
@@ -102,30 +109,29 @@ namespace QuanLySinhVien
             }
         }
 
+        // Mở đúng form f_Register (Đăng ký tài khoản)
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
             f_Register reg = new f_Register();
             reg.ShowDialog();
+            this.Show(); // Hiện lại form login khi tắt form đăng ký
         }
+
         private void lnkForgetPass_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
             f_ForgetPass forgetPass = new f_ForgetPass();
             forgetPass.ShowDialog();
-        }
-
-        private void txtUsername_TextChanged(object sender, EventArgs e)
-        {
-
+            this.Show();
         }
 
         private void txtUsername_Enter(object sender, EventArgs e)
         {
-            if (txtUsername.Text == "Họ và tên")
+            if (txtUsername.Text == "Họ và tên" || txtUsername.Text == "Tên đăng nhập")
             {
-                txtUsername.Text = ""; // Xóa chữ gợi ý đi
-                txtUsername.ForeColor = Color.Black; // Chuyển màu chữ thành đen để gõ
+                txtUsername.Text = "";
+                txtUsername.ForeColor = Color.Black;
             }
         }
 
@@ -133,8 +139,8 @@ namespace QuanLySinhVien
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                txtUsername.Text = "Họ và tên"; // Hiện lại chữ gợi ý
-                txtUsername.ForeColor = Color.Gray; // Chuyển lại thành màu xám
+                txtUsername.Text = "Tên đăng nhập";
+                txtUsername.ForeColor = Color.Gray;
             }
         }
 
@@ -144,7 +150,7 @@ namespace QuanLySinhVien
             {
                 txtPassword.Text = "";
                 txtPassword.ForeColor = Color.Black;
-                txtPassword.PasswordChar = '●'; // Khi gõ thì ẩn ký tự đi thành dấu chấm đen
+                txtPassword.PasswordChar = '●';
             }
         }
 
@@ -154,7 +160,7 @@ namespace QuanLySinhVien
             {
                 txtPassword.Text = "●●●●●●●●●●";
                 txtPassword.ForeColor = Color.Gray;
-                txtPassword.PasswordChar = '\0'; // Hiện lại text thường để thấy placeholder
+                txtPassword.PasswordChar = '\0';
             }
         }
 
@@ -163,5 +169,7 @@ namespace QuanLySinhVien
             pnlBackground.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, pnlBackground.Width, pnlBackground.Height, 25, 25));
             btnLogin.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, btnLogin.Width, btnLogin.Height, 12, 12));
         }
+
+        private void txtUsername_TextChanged(object sender, EventArgs e) { }
     }
 }

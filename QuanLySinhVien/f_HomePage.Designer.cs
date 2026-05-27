@@ -33,24 +33,26 @@
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblHethong = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.btnRegisterMenu = new System.Windows.Forms.Button();
             this.bttLogout = new System.Windows.Forms.Button();
             this.bttFix = new System.Windows.Forms.Button();
             this.bttList = new System.Windows.Forms.Button();
             this.bttAdd = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.lblTotalHR = new System.Windows.Forms.Label();
             this.lblTaiKhoanHR = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.lblTotalPending = new System.Windows.Forms.Label();
             this.lblChoDuyet = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblTotalStudents = new System.Windows.Forms.Label();
             this.lblTongSoSinhVien = new System.Windows.Forms.Label();
             this.pnlTaiKhoanHR = new System.Windows.Forms.Panel();
             this.pnlChoDuyet = new System.Windows.Forms.Panel();
             this.pnlTongSinhVien = new System.Windows.Forms.Panel();
             this.lblTongQuan = new System.Windows.Forms.Label();
-            this.lblTotalStudents = new System.Windows.Forms.Label();
-            this.lblTotalPending = new System.Windows.Forms.Label();
-            this.lblTotalHR = new System.Windows.Forms.Label();
+            this.btnManageCourse = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             this.pnlSidebar.SuspendLayout();
@@ -107,6 +109,8 @@
             // pnlSidebar
             // 
             this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.pnlSidebar.Controls.Add(this.btnManageCourse);
+            this.pnlSidebar.Controls.Add(this.btnRegisterMenu);
             this.pnlSidebar.Controls.Add(this.bttLogout);
             this.pnlSidebar.Controls.Add(this.bttFix);
             this.pnlSidebar.Controls.Add(this.bttList);
@@ -116,6 +120,20 @@
             this.pnlSidebar.Name = "pnlSidebar";
             this.pnlSidebar.Size = new System.Drawing.Size(200, 504);
             this.pnlSidebar.TabIndex = 1;
+            // 
+            // btnRegisterMenu
+            // 
+            this.btnRegisterMenu.FlatAppearance.BorderSize = 0;
+            this.btnRegisterMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegisterMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegisterMenu.ForeColor = System.Drawing.Color.White;
+            this.btnRegisterMenu.Location = new System.Drawing.Point(0, 187);
+            this.btnRegisterMenu.Name = "btnRegisterMenu";
+            this.btnRegisterMenu.Size = new System.Drawing.Size(197, 71);
+            this.btnRegisterMenu.TabIndex = 3;
+            this.btnRegisterMenu.Text = "Đăng ký môn học";
+            this.btnRegisterMenu.UseVisualStyleBackColor = true;
+            this.btnRegisterMenu.Click += new System.EventHandler(this.btnRegisterMenu_Click);
             // 
             // bttLogout
             // 
@@ -141,9 +159,9 @@
             this.bttFix.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bttFix.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bttFix.ForeColor = System.Drawing.Color.White;
-            this.bttFix.Location = new System.Drawing.Point(0, 170);
+            this.bttFix.Location = new System.Drawing.Point(0, 130);
             this.bttFix.Name = "bttFix";
-            this.bttFix.Size = new System.Drawing.Size(197, 77);
+            this.bttFix.Size = new System.Drawing.Size(197, 66);
             this.bttFix.TabIndex = 2;
             this.bttFix.Text = "Sửa/Xóa SV";
             this.bttFix.UseVisualStyleBackColor = true;
@@ -157,9 +175,9 @@
             this.bttList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bttList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bttList.ForeColor = System.Drawing.Color.White;
-            this.bttList.Location = new System.Drawing.Point(0, 87);
+            this.bttList.Location = new System.Drawing.Point(0, 66);
             this.bttList.Name = "bttList";
-            this.bttList.Size = new System.Drawing.Size(197, 77);
+            this.bttList.Size = new System.Drawing.Size(197, 64);
             this.bttList.TabIndex = 1;
             this.bttList.Text = "Danh sách SV";
             this.bttList.UseVisualStyleBackColor = true;
@@ -175,7 +193,7 @@
             this.bttAdd.ForeColor = System.Drawing.Color.White;
             this.bttAdd.Location = new System.Drawing.Point(0, 0);
             this.bttAdd.Name = "bttAdd";
-            this.bttAdd.Size = new System.Drawing.Size(200, 81);
+            this.bttAdd.Size = new System.Drawing.Size(200, 67);
             this.bttAdd.TabIndex = 0;
             this.bttAdd.Text = "Thêm sinh viên";
             this.bttAdd.UseVisualStyleBackColor = true;
@@ -208,6 +226,17 @@
             this.panel4.Size = new System.Drawing.Size(220, 124);
             this.panel4.TabIndex = 6;
             // 
+            // lblTotalHR
+            // 
+            this.lblTotalHR.AutoSize = true;
+            this.lblTotalHR.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalHR.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblTotalHR.Location = new System.Drawing.Point(93, 19);
+            this.lblTotalHR.Name = "lblTotalHR";
+            this.lblTotalHR.Size = new System.Drawing.Size(36, 37);
+            this.lblTotalHR.TabIndex = 3;
+            this.lblTotalHR.Text = "0";
+            // 
             // lblTaiKhoanHR
             // 
             this.lblTaiKhoanHR.AutoSize = true;
@@ -229,6 +258,17 @@
             this.panel3.Size = new System.Drawing.Size(220, 124);
             this.panel3.TabIndex = 5;
             // 
+            // lblTotalPending
+            // 
+            this.lblTotalPending.AutoSize = true;
+            this.lblTotalPending.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalPending.ForeColor = System.Drawing.Color.LightCoral;
+            this.lblTotalPending.Location = new System.Drawing.Point(95, 25);
+            this.lblTotalPending.Name = "lblTotalPending";
+            this.lblTotalPending.Size = new System.Drawing.Size(36, 37);
+            this.lblTotalPending.TabIndex = 2;
+            this.lblTotalPending.Text = "0";
+            // 
             // lblChoDuyet
             // 
             this.lblChoDuyet.AutoSize = true;
@@ -249,6 +289,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(220, 124);
             this.panel2.TabIndex = 4;
+            // 
+            // lblTotalStudents
+            // 
+            this.lblTotalStudents.AutoSize = true;
+            this.lblTotalStudents.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalStudents.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.lblTotalStudents.Location = new System.Drawing.Point(87, 25);
+            this.lblTotalStudents.Name = "lblTotalStudents";
+            this.lblTotalStudents.Size = new System.Drawing.Size(36, 37);
+            this.lblTotalStudents.TabIndex = 1;
+            this.lblTotalStudents.Text = "0";
             // 
             // lblTongSoSinhVien
             // 
@@ -299,38 +350,19 @@
             this.lblTongQuan.TabIndex = 2;
             this.lblTongQuan.Text = "TỔNG QUAN HỆ THỐNG";
             // 
-            // lblTotalStudents
+            // btnManageCourse
             // 
-            this.lblTotalStudents.AutoSize = true;
-            this.lblTotalStudents.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalStudents.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.lblTotalStudents.Location = new System.Drawing.Point(87, 25);
-            this.lblTotalStudents.Name = "lblTotalStudents";
-            this.lblTotalStudents.Size = new System.Drawing.Size(36, 37);
-            this.lblTotalStudents.TabIndex = 1;
-            this.lblTotalStudents.Text = "0";
-            // 
-            // lblTotalPending
-            // 
-            this.lblTotalPending.AutoSize = true;
-            this.lblTotalPending.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalPending.ForeColor = System.Drawing.Color.LightCoral;
-            this.lblTotalPending.Location = new System.Drawing.Point(95, 25);
-            this.lblTotalPending.Name = "lblTotalPending";
-            this.lblTotalPending.Size = new System.Drawing.Size(36, 37);
-            this.lblTotalPending.TabIndex = 2;
-            this.lblTotalPending.Text = "0";
-            // 
-            // lblTotalHR
-            // 
-            this.lblTotalHR.AutoSize = true;
-            this.lblTotalHR.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalHR.ForeColor = System.Drawing.Color.OliveDrab;
-            this.lblTotalHR.Location = new System.Drawing.Point(93, 19);
-            this.lblTotalHR.Name = "lblTotalHR";
-            this.lblTotalHR.Size = new System.Drawing.Size(36, 37);
-            this.lblTotalHR.TabIndex = 3;
-            this.lblTotalHR.Text = "0";
+            this.btnManageCourse.FlatAppearance.BorderSize = 0;
+            this.btnManageCourse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnManageCourse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnManageCourse.ForeColor = System.Drawing.Color.White;
+            this.btnManageCourse.Location = new System.Drawing.Point(0, 249);
+            this.btnManageCourse.Name = "btnManageCourse";
+            this.btnManageCourse.Size = new System.Drawing.Size(197, 71);
+            this.btnManageCourse.TabIndex = 7;
+            this.btnManageCourse.Text = "Quản lý môn học";
+            this.btnManageCourse.UseVisualStyleBackColor = true;
+            this.btnManageCourse.Click += new System.EventHandler(this.btnManageCourse_Click);
             // 
             // f_HomePage
             // 
@@ -385,5 +417,7 @@
         private System.Windows.Forms.Label lblTotalHR;
         private System.Windows.Forms.Label lblTotalPending;
         private System.Windows.Forms.Label lblTotalStudents;
+        private System.Windows.Forms.Button btnRegisterMenu;
+        private System.Windows.Forms.Button btnManageCourse;
     }
 }

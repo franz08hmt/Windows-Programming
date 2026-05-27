@@ -106,6 +106,12 @@
     <Compile Include="f_Register.Designer.cs">
       <DependentUpon>f_Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="f_RegisterCourse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="f_RegisterCourse.Designer.cs">
+      <DependentUpon>f_RegisterCourse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="f_HomePage.cs">
       <SubType>Form</SubType>
@@ -146,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="f_HomePage.resx">
       <DependentUpon>f_HomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_RegisterCourse.resx">
+      <DependentUpon>f_RegisterCourse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

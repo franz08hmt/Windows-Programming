@@ -306,6 +306,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.f_Login_Load);
+            this.Click += new System.EventHandler(this.btnLogin_Click);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.pnlPassword.ResumeLayout(false);
             this.pnlPassword.PerformLayout();
