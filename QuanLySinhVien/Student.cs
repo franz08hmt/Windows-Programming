@@ -120,7 +120,7 @@ namespace QuanLySinhVien
                 db.openConnection();
                 string query = "INSERT INTO DKMH (MSSV, MaMH) VALUES (@mssv, @mamh)";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); // Ép sang kiểu INT khớp DB của bạn
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
                 cmd.Parameters.AddWithValue("@mamh", mamh);
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -136,7 +136,7 @@ namespace QuanLySinhVien
                 db.openConnection();
                 string query = "DELETE FROM DKMH WHERE MSSV = @mssv AND MaMH = @mamh";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); // Ép sang kiểu INT khớp DB của bạn
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); 
                 cmd.Parameters.AddWithValue("@mamh", mamh);
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -155,7 +155,7 @@ namespace QuanLySinhVien
                                "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
                                "WHERE d.MSSV = @mssv";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); // Ép sang kiểu INT khớp DB của bạn
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(dt);
                 return dt;
@@ -174,7 +174,7 @@ namespace QuanLySinhVien
                                "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
                                "WHERE d.MSSV = @mssv AND c.Hky = @hky";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); // Ép sang kiểu INT khớp DB của bạn
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv)); 
                 cmd.Parameters.AddWithValue("@hky", hky);
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }

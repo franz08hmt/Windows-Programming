@@ -98,8 +98,8 @@ namespace QuanLySinhVien
         {
             if (txtSearch.Text == "Tìm kiếm...")
             {
-                txtSearch.Text = ""; // Xóa chữ gợi ý đi
-                txtSearch.ForeColor = Color.Black; // Chuyển màu chữ thành đen để gõ
+                txtSearch.Text = ""; 
+                txtSearch.ForeColor = Color.Black; 
             }
         }
 
@@ -107,8 +107,8 @@ namespace QuanLySinhVien
         {
             if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
-                txtSearch.Text = "Tìm kiếm..."; // Hiện lại chữ gợi ý
-                txtSearch.ForeColor = Color.Gray; // Chuyển lại thành màu xám
+                txtSearch.Text = "Tìm kiếm..."; 
+                txtSearch.ForeColor = Color.Gray; 
             }
         }
 
@@ -119,28 +119,28 @@ namespace QuanLySinhVien
             txtSearch.Text = "Tìm kiếm...";
             txtSearch.ForeColor = Color.Gray;
         }
-        // Lọc giới tính
+ 
         private void cboFilterGender_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (svView == null) return;
 
             string selectedGender = cboFilterGender.Text.Trim();
 
-            // Kiểm tra chính xác chữ hiển thị trên ComboBox của bạn
+         
             if (selectedGender == "Tất cả" || string.IsNullOrEmpty(selectedGender))
             {
-                svView.RowFilter = ""; // Xóa bộ lọc
+                svView.RowFilter = ""; 
             }
             else
             {
-                // Lọc theo giá trị được chọn (Nam hoặc Nữ)
+           
                 svView.RowFilter = $"Gder = '{selectedGender}'";
             }
 
             UpdateTotalCount();
         }
 
-        // Lọc sắp xếp  
+       
         private void cboSortBy_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (svView == null) return;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient; // Đã thêm thư viện này để thao tác DB
+using System.Data.SqlClient; 
 using System.Windows.Forms;
 
 namespace QuanLySinhVien
@@ -49,7 +49,7 @@ namespace QuanLySinhVien
             {
                 MessageBox.Show("Thêm môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ClearTabAdd();
-                btnRefresh_Click(sender, e); // Tự động làm mới bảng sau khi thêm
+                btnRefresh_Click(sender, e); 
             }
             else
             {
@@ -67,7 +67,7 @@ namespace QuanLySinhVien
             txtAddMota.Clear();
         }
 
-        // Nút Tìm kiếm này dùng để fetch dữ liệu lên các ô Edit (Giữ nguyên của bạn)
+  
         private void btnSearch_Click(object sender, EventArgs e)
         {
             string ma = txtEditMa.Text.Trim();
@@ -112,7 +112,7 @@ namespace QuanLySinhVien
             if (c.EditCourse())
             {
                 MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                btnRefresh_Click(sender, e); // Tự động làm mới bảng
+                btnRefresh_Click(sender, e); 
             }
             else
                 MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -123,7 +123,7 @@ namespace QuanLySinhVien
             string ma = txtEditMa.Text.Trim();
             if (string.IsNullOrWhiteSpace(ma)) return;
 
-            // 🛑 TÍNH NĂNG MỚI: Kiểm tra xem môn học đã có sinh viên đăng ký chưa
+       
             try
             {
                 My_DB db = new My_DB();
@@ -136,7 +136,7 @@ namespace QuanLySinhVien
                 if (count > 0)
                 {
                     MessageBox.Show("Không thể xóa! Môn học này hiện đang có sinh viên đăng ký.", "Cảnh báo ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; // Chặn lệnh xóa
+                    return; 
                 }
             }
             catch (Exception ex)
@@ -145,7 +145,7 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Nếu không vướng ràng buộc thì cho phép xóa
+        
             var confirm = MessageBox.Show($"Xóa môn học '{ma}'?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)
@@ -155,7 +155,7 @@ namespace QuanLySinhVien
                 {
                     MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ClearTabEdit();
-                    btnRefresh_Click(sender, e); // Tự động làm mới bảng
+                    btnRefresh_Click(sender, e); 
                 }
                 else
                     MessageBox.Show("Xóa thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -178,14 +178,10 @@ namespace QuanLySinhVien
             dgvCourse.DataSource = dt;
         }
 
-        // =========================================================================
-        // 🚀 CÁC TÍNH NĂNG MỚI BỔ SUNG (TÌM KIẾM & LỌC TRÊN DATAGRIDVIEW)
-        // =========================================================================
-
-        // Sự kiện cho nút Tìm kiếm trên bảng (btnSearchList)
+      
         private void btnSearchList_Click(object sender, EventArgs e)
         {
-            if (txtSearchList == null) return; // Tránh lỗi nếu chưa tạo control
+            if (txtSearchList == null) return; 
 
             string keyword = txtSearchList.Text.Trim();
             try
@@ -209,14 +205,14 @@ namespace QuanLySinhVien
             }
         }
 
-        // Sự kiện lọc dữ liệu theo ComboBox (cboFilterSemester)
+       
         private void cboFilterSemester_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboFilterSemester.SelectedItem == null) return;
 
             string selectedSemester = cboFilterSemester.SelectedItem.ToString();
 
-            // Nếu người dùng chọn xem tất cả
+       
             if (selectedSemester == "Tất cả" || selectedSemester == "All")
             {
                 btnRefresh_Click(sender, e);
@@ -244,7 +240,7 @@ namespace QuanLySinhVien
             }
         }
 
-        // =========================================================================
+      
 
         private void tabPage2_Click(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }

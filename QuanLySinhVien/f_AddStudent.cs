@@ -17,10 +17,10 @@ namespace QuanLySinhVien
         public f_AddStudent()
         {
             InitializeComponent();
-            RegisterRealTimeValidation(); // Kích hoạt tính năng gõ đến đâu báo lỗi đến đó ngay bên cạnh
+            RegisterRealTimeValidation(); 
         }
 
-        // --- Ý 1: TỰ ĐỘNG BÁO LỖI NGAY BÊN CẠNH KHI ĐANG NHẬP (REAL-TIME) ---
+      
         private void RegisterRealTimeValidation()
         {
             txtMSSV.TextChanged += (s, e) => {
@@ -29,10 +29,10 @@ namespace QuanLySinhVien
                 else if (!int.TryParse(txtMSSV.Text.Trim(), out _))
                     erp2.SetError(txtMSSV, "MSSV bắt buộc phải là số, không chứa chữ hay ký tự đặc biệt!");
                 else
-                    erp2.SetError(txtMSSV, ""); // Đúng định dạng thì tự động mất dấu đỏ
+                    erp2.SetError(txtMSSV, ""); 
             };
 
-            // Bắt sự kiện khi người dùng gõ phím ở ô Họ
+        
             txtFname.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtFname.Text.Trim()))
                     erp2.SetError(txtFname, "Vui lòng nhập Họ của sinh viên!");
@@ -42,7 +42,6 @@ namespace QuanLySinhVien
                     erp2.SetError(txtFname, "");
             };
 
-            // Bắt sự kiện khi người dùng gõ phím ở ô Tên
             txtLname.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtLname.Text.Trim()))
                     erp2.SetError(txtLname, "Vui lòng nhập Tên của sinh viên!");
@@ -52,7 +51,7 @@ namespace QuanLySinhVien
                     erp2.SetError(txtLname, "");
             };
 
-            // Bắt sự kiện gõ phím ở ô Điện thoại
+       
             txtPhone.TextChanged += (s, e) => {
                 if (!string.IsNullOrEmpty(txtPhone.Text.Trim()) && !long.TryParse(txtPhone.Text.Trim(), out _))
                     erp2.SetError(txtPhone, "Số điện thoại không hợp lệ! Chỉ được nhập số.");
@@ -60,7 +59,6 @@ namespace QuanLySinhVien
                     erp2.SetError(txtPhone, "");
             };
 
-            // Bắt sự kiện gõ phím ở ô Email để check real-time đuôi trường học luôn
             txtEmail.TextChanged += (s, e) => {
                 string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(txtEmail.Text.Trim(), emailPattern) && txtEmail.Text.Length > 0)
@@ -72,11 +70,11 @@ namespace QuanLySinhVien
 
         private bool ValidateInput()
         {
-            // Bước đầu tiên: Xóa sạch các dấu báo lỗi cũ trước khi kiểm tra lại
+          
             erp2.Clear();
             bool isValid = true;
 
-            // 1. Kiểm tra Mã số sinh viên (MSSV)
+       
             if (string.IsNullOrEmpty(txtMSSV.Text.Trim()))
             {
                 erp2.SetError(txtMSSV, "Mã số sinh viên không được để trống!");
@@ -88,7 +86,7 @@ namespace QuanLySinhVien
                 isValid = false;
             }
 
-            // 2. Kiểm tra Họ (Last Name)
+    
             if (string.IsNullOrEmpty(txtFname.Text.Trim()))
             {
                 erp2.SetError(txtFname, "Vui lòng nhập Họ của sinh viên!");
@@ -100,7 +98,7 @@ namespace QuanLySinhVien
                 isValid = false;
             }
 
-            // 3. Kiểm tra Tên (First Name)
+    
             if (string.IsNullOrEmpty(txtLname.Text.Trim()))
             {
                 erp2.SetError(txtLname, "Vui lòng nhập Tên của sinh viên!");
@@ -112,14 +110,14 @@ namespace QuanLySinhVien
                 isValid = false;
             }
 
-            // 4. Kiểm tra Giới tính (ComboBox)
+  
             if (cboGender.SelectedIndex == -1 || string.IsNullOrEmpty(cboGender.Text))
             {
                 erp2.SetError(cboGender, "Vui lòng chọn Giới tính!");
                 isValid = false;
             }
 
-            // 5. Kiểm tra Số điện thoại
+  
             if (!string.IsNullOrEmpty(txtPhone.Text.Trim()))
             {
                 if (!long.TryParse(txtPhone.Text.Trim(), out _))
@@ -129,11 +127,11 @@ namespace QuanLySinhVien
                 }
             }
 
-            // 6. --- ĐÃ SỬA: Chấp nhận mọi định dạng email cá nhân lẫn email sinh viên dài lòng thòng của trường ---
+    
             if (!string.IsNullOrEmpty(txtEmail.Text.Trim()))
             {
                 string email = txtEmail.Text.Trim();
-                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$"; // Pattern mở rộng bẻ gãy mọi giới hạn tên miền
+                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
                 if (!Regex.IsMatch(email, emailPattern))
                 {
@@ -358,7 +356,6 @@ namespace QuanLySinhVien
                                     string cleanLine = line.Trim();
                                     string lowerLine = cleanLine.ToLower();
 
-                                    // 1. Nhận dạng MSSV chuẩn từ nhãn thẻ trường học
                                     if (lowerLine.Contains("mã số") || lowerLine.Contains("id"))
                                     {
                                         Match mssvMatch = Regex.Match(cleanLine, @"\d{8,10}");
@@ -368,7 +365,7 @@ namespace QuanLySinhVien
                                         }
                                     }
 
-                                    // 2. Nhận dạng Họ tên
+                           
                                     if (lowerLine.Contains("họ tên") || lowerLine.Contains("fullname"))
                                     {
                                         int colonIndex = cleanLine.IndexOf(":");
@@ -386,7 +383,7 @@ namespace QuanLySinhVien
                                         }
                                     }
 
-                                    // 3. Nhận dạng Ngày sinh
+                     
                                     if (lowerLine.Contains("ngày sinh") || lowerLine.Contains("dob"))
                                     {
                                         Match dobMatch = Regex.Match(cleanLine, @"\d{2}/\d{2}/\d{4}|\d{2}-\d{2}-\d{4}");
@@ -399,7 +396,7 @@ namespace QuanLySinhVien
                                         }
                                     }
 
-                                    // 4. Nhận dạng Giới tính
+                        
                                     if (lowerLine.Contains("nam"))
                                     {
                                         cboGender.Text = "Nam";

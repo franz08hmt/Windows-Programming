@@ -45,17 +45,17 @@ namespace QuanLySinhVien
 
         private void RegisterRealTimeValidation()
         {
-            // Bắt sự kiện khi người dùng gõ phím ở ô Họ
+  
             txtFname.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtFname.Text.Trim()))
                     erpEdit.SetError(txtFname, "Vui lòng nhập Họ của sinh viên!");
                 else if (Regex.IsMatch(txtFname.Text.Trim(), @"\d"))
                     erpEdit.SetError(txtFname, "Họ không được chứa chữ số!");
                 else
-                    erpEdit.SetError(txtFname, ""); // Hết lỗi thì tự động xóa dấu đỏ
+                    erpEdit.SetError(txtFname, "");
             };
 
-            // Bắt sự kiện khi người dùng gõ phím ở ô Tên
+         
             txtLname.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtLname.Text.Trim()))
                     erpEdit.SetError(txtLname, "Vui lòng nhập Tên của sinh viên!");
@@ -65,7 +65,7 @@ namespace QuanLySinhVien
                     erpEdit.SetError(txtLname, "");
             };
 
-            // Bắt sự kiện gõ phím ở ô Điện thoại
+ 
             txtPhone.TextChanged += (s, e) => {
                 if (!string.IsNullOrEmpty(txtPhone.Text.Trim()) && !long.TryParse(txtPhone.Text.Trim(), out _))
                     erpEdit.SetError(txtPhone, "Số điện thoại không hợp lệ! Chỉ được nhập số.");
@@ -73,7 +73,7 @@ namespace QuanLySinhVien
                     erpEdit.SetError(txtPhone, "");
             };
 
-            // --- THÊM KHÚC NÀY: Bắt lỗi gõ phím Real-Time cho ô Email ---
+         
             txtEmail.TextChanged += (s, e) => {
                 string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(txtEmail.Text.Trim(), emailPattern) && txtEmail.Text.Length > 0)
@@ -83,19 +83,19 @@ namespace QuanLySinhVien
             };
         }
 
-        // Hàm kiểm tra tổng thể trước khi lưu
+
         private bool ValidateInput()
         {
             bool isValid = true;
 
-            // 1. Kiểm tra Mã số sinh viên
+  
             if (string.IsNullOrEmpty(txtMSSV.Text.Trim()))
             {
                 erpEdit.SetError(txtMSSV, "Mã số sinh viên không được để trống!");
                 isValid = false;
             }
 
-            // 2. Kiểm tra Họ
+         
             if (string.IsNullOrEmpty(txtFname.Text.Trim()))
             {
                 erpEdit.SetError(txtFname, "Vui lòng nhập Họ của sinh viên!");
@@ -107,7 +107,7 @@ namespace QuanLySinhVien
                 isValid = false;
             }
 
-            // 3. Kiểm tra Tên
+        
             if (string.IsNullOrEmpty(txtLname.Text.Trim()))
             {
                 erpEdit.SetError(txtLname, "Vui lòng nhập Tên của sinh viên!");
@@ -119,14 +119,14 @@ namespace QuanLySinhVien
                 isValid = false;
             }
 
-            // 4. Kiểm tra Giới tính (ComboBox)
+         
             if (cboGender.SelectedIndex == -1 || string.IsNullOrEmpty(cboGender.Text))
             {
                 erpEdit.SetError(cboGender, "Vui lòng chọn Giới tính!");
                 isValid = false;
             }
 
-            // 5. Kiểm tra Số điện thoại
+       
             if (!string.IsNullOrEmpty(txtPhone.Text.Trim()))
             {
                 if (!long.TryParse(txtPhone.Text.Trim(), out _))
@@ -136,11 +136,11 @@ namespace QuanLySinhVien
                 }
             }
 
-            // 6. --- ĐÃ SỬA: Chấp nhận mọi định dạng email có tên miền dài như trường HCMUTE ---
+    
             if (!string.IsNullOrEmpty(txtEmail.Text.Trim()))
             {
                 string email = txtEmail.Text.Trim();
-                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$"; // Pattern mở rộng bẻ gãy giới hạn cụm kí tự cũ
+                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$"; 
 
                 if (!Regex.IsMatch(email, emailPattern))
                 {
@@ -198,7 +198,7 @@ namespace QuanLySinhVien
             cboGender.Text = gioitinh;
             txtMSSV.Enabled = false;
 
-            erpEdit.Clear(); // Xóa sạch dấu đỏ thừa khi đổ từ danh sách sang
+            erpEdit.Clear();
         }
 
         private void btnBack_Click(object sender, EventArgs e)

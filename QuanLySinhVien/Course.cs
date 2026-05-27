@@ -6,15 +6,15 @@ namespace QuanLySinhVien
 {
     public class Course
     {
-        // 1. Các thuộc tính khớp 100% với code Form của bạn
+       
         public string Mamh { get; set; }
         public string Tenmh { get; set; }
         public int Sotc { get; set; }
         public int Tuan { get; set; }
         public int Hocky { get; set; }
-        public string Decription { get; set; } // Khớp với chữ "Decription" bạn viết ở form
+        public string Decription { get; set; } 
 
-        // 2. HÀM THÊM MÔN HỌC (Đây chính là phần code quyết định nút THÊM chạy)
+ 
         public bool AddCourse()
         {
             My_DB db = new My_DB();
@@ -22,7 +22,7 @@ namespace QuanLySinhVien
             {
                 db.openConnection();
 
-                // Câu lệnh SQL thêm dữ liệu vào bảng Course (hoặc tên bảng của bạn trong DB)
+       
                 string query = "INSERT INTO Course (MaMH, TenMH, SoTC, Tuan, Hky, Mota) " +
                                "VALUES (@ma, @ten, @sotc, @tuan, @hky, @mota)";
 
@@ -36,12 +36,12 @@ namespace QuanLySinhVien
 
                 int result = cmd.ExecuteNonQuery();
 
-                // Nếu số dòng ảnh hưởng > 0 tức là thêm thành công
+              
                 return result > 0;
             }
             catch (Exception)
             {
-                // Nếu trùng mã môn học (Primary Key) hoặc lỗi kết nối sẽ nhảy vào đây
+            
                 return false;
             }
             finally
@@ -50,11 +50,7 @@ namespace QuanLySinhVien
             }
         }
 
-        // =========================================================================
-        // TIỆN TAY LÀM SẴN CÁC HÀM CÒN LẠI CHO TAB SỬA/XÓA/DANH SÁCH CỦA BẠN LUÔN:
-        // =========================================================================
-
-        // Hàm Tìm kiếm môn học theo Mã (Phục vụ cho btnSearch_Click của bạn)
+     
         public DataTable GetCourseByMa(string ma)
         {
             My_DB db = new My_DB();
@@ -80,7 +76,7 @@ namespace QuanLySinhVien
             }
         }
 
-        // Hàm Sửa môn học (Phục vụ cho btnEdit_Click của bạn)
+       
         public bool EditCourse()
         {
             My_DB db = new My_DB();
@@ -103,7 +99,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        // Hàm Xóa môn học (Phục vụ cho btnDel_Click của bạn)
+      
         public bool DelCourse()
         {
             My_DB db = new My_DB();
@@ -121,7 +117,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        // Hàm lấy toàn bộ danh sách môn học (Phục vụ cho btnRefresh_Click của bạn)
+     
         public static DataTable GetAllCourses()
         {
             My_DB db = new My_DB();

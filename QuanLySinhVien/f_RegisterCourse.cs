@@ -114,13 +114,13 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // .Trim() để loại bỏ khoảng trắng thừa của kiểu dữ liệu CHAR trong DB nếu có
+    
             string selectedMSSV = cboStudent.SelectedValue.ToString().Trim();
             string selectedMaMH = cboCourse.SelectedValue.ToString().Trim();
 
             try
             {
-                // 🚀 GỘP TRUY VẤN THÀNH 1 CÂU DUY NHẤT ĐỂ ĐẢM BẢO CHÍNH XÁC 100%
+   
                 string checkQuery = @"
             SELECT 
                 c1.Hky, 
@@ -156,9 +156,7 @@ namespace QuanLySinhVien
                     return;
                 }
 
-                // 🛠️ CHẾ ĐỘ KIỂM TRA (BUG-TRACKING): 
-                // Hiện hộp thoại này để bạn biết chính xác máy tính đang ghi nhận bao nhiêu tín chỉ.
-                // (Khi nào test xong xuôi bạn có thể xóa hoặc comment dòng này lại nhé)
+     
                 MessageBox.Show($"[KIỂM TRA DỮ LIỆU]:\n" +
                                 $"- Môn học này thuộc: Học kỳ {hky}\n" +
                                 $"- Số tín chỉ môn này: {soTCMonMoi} TC\n" +
@@ -166,16 +164,16 @@ namespace QuanLySinhVien
                                 $"- Tổng số sau khi cộng thêm: {tongTCDaDangKy + soTCMonMoi} TC",
                                 "Hệ thống theo dõi TC");
 
-                // 🛑 RÀNG BUỘC KIỂM TRA: Tổng số tín chỉ trong cùng 1 học kỳ vượt quá 24 TC sẽ bị chặn
+       
                 if (tongTCDaDangKy + soTCMonMoi > 24)
                 {
                     MessageBox.Show($"Không thể đăng ký! Trong Học kỳ {hky}, sinh viên này đã đăng ký {tongTCDaDangKy} TC.\n" +
                                     $"Nếu đăng ký thêm môn này ({soTCMonMoi} TC) sẽ vượt quá giới hạn tối đa 24 TC của một học kỳ!",
                                     "Cảnh báo vượt hạn mức tín chỉ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; // Dừng lại, không thực hiện lệnh INSERT phía dưới
+                    return; 
                 }
 
-                // 💾 TIẾN HÀNH LƯU DỮ LIỆU KHI THỎA MÃN ĐIỀU KIỆN
+   
                 db.openConnection();
                 string query = "INSERT INTO DKMH (MSSV, MaMH) VALUES (@mssv, @mamh)";
                 SqlCommand cmd = new SqlCommand(query, db.conn);

@@ -24,7 +24,7 @@ namespace QuanLySinhVien
 
         private bool ValidateInput()
         {
-            // Bỏ qua nếu người dùng chưa nhập gì mà vẫn để chữ gợi ý
+
             string userText = (txtUsername.Text == "Tên đăng nhập" || txtUsername.Text == "Họ và tên") ? "" : txtUsername.Text;
             string passText = (txtPassword.Text == "●●●●●●●●●●") ? "" : txtPassword.Text;
 
@@ -84,7 +84,7 @@ namespace QuanLySinhVien
                     MessageBox.Show("Đăng nhập thành công!\nXin chào: " + Globals.GlobalUserName,
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Đóng DataReader TRƯỚC KHI mở form mới để tránh lỗi Database
+             
                     reader.Close();
 
                     f_HomePage homeForm = new f_HomePage(fullName);
@@ -109,13 +109,13 @@ namespace QuanLySinhVien
             }
         }
 
-        // Mở đúng form f_Register (Đăng ký tài khoản)
+      
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
             f_Register reg = new f_Register();
             reg.ShowDialog();
-            this.Show(); // Hiện lại form login khi tắt form đăng ký
+            this.Show(); 
         }
 
         private void lnkForgetPass_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
