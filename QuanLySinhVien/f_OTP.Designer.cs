@@ -44,9 +44,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnResend = new System.Windows.Forms.Button();
             this.timerOTP = new System.Windows.Forms.Timer(this.components);
+            this.picQRCode = new System.Windows.Forms.PictureBox();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptGmail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMessage
@@ -206,12 +208,22 @@
             this.timerOTP.Interval = 1000;
             this.timerOTP.Tick += new System.EventHandler(this.timerOTP_Tick);
             // 
+            // picQRCode
+            // 
+            this.picQRCode.Location = new System.Drawing.Point(285, 89);
+            this.picQRCode.Name = "picQRCode";
+            this.picQRCode.Size = new System.Drawing.Size(217, 127);
+            this.picQRCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picQRCode.TabIndex = 22;
+            this.picQRCode.TabStop = false;
+            // 
             // f_OTP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.picQRCode);
             this.Controls.Add(this.btnResend);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblTimer);
@@ -229,6 +241,7 @@
             this.pnlHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptGmail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,5 +263,6 @@
         private System.Windows.Forms.Button btnBackLogin;
         private System.Windows.Forms.Button btnResend;
         private System.Windows.Forms.Timer timerOTP;
+        private System.Windows.Forms.PictureBox picQRCode;
     }
 }

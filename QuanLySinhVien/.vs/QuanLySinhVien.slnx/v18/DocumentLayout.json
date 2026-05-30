@@ -3,76 +3,36 @@
   "WorkspaceRootPath": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\my_db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:my_db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_forgetpass.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_forgetpass.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_registercourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_registercourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_otp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_otp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_otp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_otp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_otp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_newpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_newpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_managecourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_managecourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_liststudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_liststudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_register.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_homepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_homepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_forgetpass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_editstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_editstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_addstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_addstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|c:\\wipr_25-26\\w5\\windows-programming\\quanlysinhvien\\f_managecourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_managecourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_registercourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_registercourse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_addstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{4A27D83F-A3BD-4237-B04F-49AF52643514}|QuanLySinhVien.csproj|solutionrelative:f_addstudent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -82,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -90,225 +50,91 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "My_DB.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\My_DB.cs",
-              "RelativeDocumentMoniker": "My_DB.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\My_DB.cs",
-              "RelativeToolTip": "My_DB.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "f_ForgetPass.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.cs",
+              "RelativeDocumentMoniker": "f_ForgetPass.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.cs [Design]",
+              "RelativeToolTip": "f_ForgetPass.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:52:19.401Z",
+              "WhenOpened": "2026-05-30T13:29:00.211Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "f_ForgetPass.Designer.cs",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.Designer.cs",
+              "RelativeDocumentMoniker": "f_ForgetPass.Designer.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.Designer.cs",
+              "RelativeToolTip": "f_ForgetPass.Designer.cs",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAmwJ4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-30T13:26:04.323Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
+              "Title": "f_OTP.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_OTP.cs",
+              "RelativeDocumentMoniker": "f_OTP.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_OTP.cs [Design]",
+              "RelativeToolTip": "f_OTP.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T18:11:58.058Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "f_Register.cs [Design]",
+              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Register.cs",
+              "RelativeDocumentMoniker": "f_Register.cs",
+              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Register.cs [Design]",
+              "RelativeToolTip": "f_Register.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T16:19:26.925Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "f_Register.cs",
               "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Register.cs",
               "RelativeDocumentMoniker": "f_Register.cs",
               "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Register.cs",
               "RelativeToolTip": "f_Register.cs",
-              "ViewState": "AgIAAHYBAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAANkBAAAAAAAAAAAYwOYBAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:51:32.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T18:51:32.847Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "f_OTP.cs",
               "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_OTP.cs",
               "RelativeDocumentMoniker": "f_OTP.cs",
               "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_OTP.cs",
               "RelativeToolTip": "f_OTP.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAcwKkAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:51:21.563Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T18:51:21.563Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "f_NewPass.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_NewPass.cs",
-              "RelativeDocumentMoniker": "f_NewPass.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_NewPass.cs",
-              "RelativeToolTip": "f_NewPass.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:51:16.418Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "f_ListStudent.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ListStudent.cs",
-              "RelativeDocumentMoniker": "f_ListStudent.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ListStudent.cs",
-              "RelativeToolTip": "f_ListStudent.cs",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAiwI4AAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:49:48.187Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 0,
               "Title": "f_ForgetPass.cs",
               "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.cs",
               "RelativeDocumentMoniker": "f_ForgetPass.cs",
               "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ForgetPass.cs",
               "RelativeToolTip": "f_ForgetPass.cs",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMMAAAAAAAAAAAAmwM8AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-27T18:49:22.132Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "f_EditStudent.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_EditStudent.cs",
-              "RelativeDocumentMoniker": "f_EditStudent.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_EditStudent.cs",
-              "RelativeToolTip": "f_EditStudent.cs",
-              "ViewState": "AgIAAHcBAAAAAAAAAAAAAMgAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:48:44.556Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "f_AddStudent.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_AddStudent.cs",
-              "RelativeDocumentMoniker": "f_AddStudent.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_AddStudent.cs",
-              "RelativeToolTip": "f_AddStudent.cs",
-              "ViewState": "AgIAAKIBAAAAAAAAAAAqwI4BAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:47:53.353Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "f_ManageCourse.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ManageCourse.cs",
-              "RelativeDocumentMoniker": "f_ManageCourse.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ManageCourse.cs",
-              "RelativeToolTip": "f_ManageCourse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T18:22:01.601Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "f_RegisterCourse.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_RegisterCourse.cs",
-              "RelativeDocumentMoniker": "f_RegisterCourse.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_RegisterCourse.cs",
-              "RelativeToolTip": "f_RegisterCourse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHQAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T17:48:25.881Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "f_RegisterCourse.cs [Design]",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_RegisterCourse.cs",
-              "RelativeDocumentMoniker": "f_RegisterCourse.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_RegisterCourse.cs [Design]",
-              "RelativeToolTip": "f_RegisterCourse.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T17:48:19.832Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Student.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Student.cs",
-              "RelativeDocumentMoniker": "Student.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Student.cs",
-              "RelativeToolTip": "Student.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHoAAABMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T17:35:35.009Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T13:10:17.204Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "f_Login.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Login.cs",
-              "RelativeDocumentMoniker": "f_Login.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_Login.cs",
-              "RelativeToolTip": "f_Login.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T13:09:10.422Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "f_ManageCourse.cs [Design]",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ManageCourse.cs",
-              "RelativeDocumentMoniker": "f_ManageCourse.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_ManageCourse.cs [Design]",
-              "RelativeToolTip": "f_ManageCourse.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T12:51:38.446Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Course.cs",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Course.cs",
-              "RelativeDocumentMoniker": "Course.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\Course.cs",
-              "RelativeToolTip": "Course.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T03:57:43.021Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "f_AddStudent.cs [Design]",
-              "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_AddStudent.cs",
-              "RelativeDocumentMoniker": "f_AddStudent.cs",
-              "ToolTip": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_AddStudent.cs [Design]",
-              "RelativeToolTip": "f_AddStudent.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T03:46:51.289Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "f_HomePage.cs",
               "DocumentMoniker": "C:\\WIPR_25-26\\W5\\Windows-Programming\\QuanLySinhVien\\f_HomePage.cs",
               "RelativeDocumentMoniker": "f_HomePage.cs",
@@ -316,8 +142,7 @@
               "RelativeToolTip": "f_HomePage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAJsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-27T03:38:59.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T03:38:59.586Z"
             }
           ]
         },

@@ -47,6 +47,7 @@
             this.btnChoosePic = new System.Windows.Forms.Button();
             this.ptbPicture = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtConfirmPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -56,7 +57,8 @@
             this.btnBack = new System.Windows.Forms.Button();
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblDangKyTaiKhoan = new System.Windows.Forms.Label();
-            this.txtConfirmPassword = new System.Windows.Forms.TextBox();
+            this.rbEmailOTP = new System.Windows.Forms.RadioButton();
+            this.rb2FAApp = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.ptbPicture)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -241,7 +243,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.AliceBlue;
+            this.panel1.Controls.Add(this.rb2FAApp);
             this.panel1.Controls.Add(this.txtConfirmPassword);
+            this.panel1.Controls.Add(this.rbEmailOTP);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label1);
@@ -257,6 +261,15 @@
             this.panel1.Size = new System.Drawing.Size(454, 445);
             this.panel1.TabIndex = 17;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // txtConfirmPassword
+            // 
+            this.txtConfirmPassword.Location = new System.Drawing.Point(191, 248);
+            this.txtConfirmPassword.Name = "txtConfirmPassword";
+            this.txtConfirmPassword.PasswordChar = '*';
+            this.txtConfirmPassword.Size = new System.Drawing.Size(219, 26);
+            this.txtConfirmPassword.TabIndex = 11;
+            this.txtConfirmPassword.TextChanged += new System.EventHandler(this.txtConfirmPassword_TextChanged_1);
             // 
             // label8
             // 
@@ -359,13 +372,27 @@
             this.lblDangKyTaiKhoan.TabIndex = 0;
             this.lblDangKyTaiKhoan.Text = "ĐĂNG KÝ TÀI KHOẢN";
             // 
-            // txtConfirmPassword
+            // rbEmailOTP
             // 
-            this.txtConfirmPassword.Location = new System.Drawing.Point(191, 248);
-            this.txtConfirmPassword.Name = "txtConfirmPassword";
-            this.txtConfirmPassword.PasswordChar = '*';
-            this.txtConfirmPassword.Size = new System.Drawing.Size(219, 26);
-            this.txtConfirmPassword.TabIndex = 11;
+            this.rbEmailOTP.AutoSize = true;
+            this.rbEmailOTP.Checked = true;
+            this.rbEmailOTP.Location = new System.Drawing.Point(44, 345);
+            this.rbEmailOTP.Name = "rbEmailOTP";
+            this.rbEmailOTP.Size = new System.Drawing.Size(171, 24);
+            this.rbEmailOTP.TabIndex = 21;
+            this.rbEmailOTP.TabStop = true;
+            this.rbEmailOTP.Text = "Xác thực qua Email";
+            this.rbEmailOTP.UseVisualStyleBackColor = true;
+            // 
+            // rb2FAApp
+            // 
+            this.rb2FAApp.AutoSize = true;
+            this.rb2FAApp.Location = new System.Drawing.Point(253, 345);
+            this.rb2FAApp.Name = "rb2FAApp";
+            this.rb2FAApp.Size = new System.Drawing.Size(162, 24);
+            this.rb2FAApp.TabIndex = 22;
+            this.rb2FAApp.Text = "Xác thực qua 2FA";
+            this.rb2FAApp.UseVisualStyleBackColor = true;
             // 
             // f_Register
             // 
@@ -432,5 +459,7 @@
         private System.Windows.Forms.PictureBox ptLgo;
         private System.Windows.Forms.Label lblDangKyTaiKhoan;
         private System.Windows.Forms.TextBox txtConfirmPassword;
+        private System.Windows.Forms.RadioButton rb2FAApp;
+        private System.Windows.Forms.RadioButton rbEmailOTP;
     }
 }

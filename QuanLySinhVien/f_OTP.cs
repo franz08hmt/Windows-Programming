@@ -1,57 +1,163 @@
 ﻿using System;
-using System.Net;
-using System.Net.Mail; 
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
+using OtpNet; // Thư viện xử lý thuật toán TOTP
+using QRCoder; // Thư viện sinh mã QR Code
 
 namespace QuanLySinhVien
 {
     public partial class f_OTP : Form
     {
-        private string _otpCode;
+        // Khai báo các biến dùng chung cho cả 2 chế độ
         private string _email;
-        private int _timeLeft = 300;
+        private string _otpCode;
+        private bool _is2FAMode;
+        private int _timeLeft = 300; // 300 giây = 5 phút cho Email OTP
 
-        public f_OTP(string otpCode, string email)
+        // Các biến dành riêng cho chế độ 2FA
+        private string _secretKey;
+        private Totp _totp;
+
+        // Cập nhật hàm tạo nhận 3 tham số để đồng bộ với Form Register
+        public f_OTP(string otpCode, string email, bool is2FAMode)
         {
             InitializeComponent();
             _otpCode = otpCode;
             _email = email;
+            _is2FAMode = is2FAMode;
+
+            // Nếu người dùng chọn xác thực qua App 2FA -> Khởi tạo khóa bí mật
+            if (_is2FAMode)
+            {
+                byte[] secretBytes = KeyGeneration.GenerateRandomKey(20);
+                _secretKey = Base32Encoding.ToString(secretBytes);
+                _totp = new Totp(secretBytes);
+            }
         }
 
         private void f_OTP_Load_1(object sender, EventArgs e)
         {
-            lblMessage.Text = "Nhập mã OTP đã gửi về gmail: " + _email;
+            if (_is2FAMode)
+            {
+                // GIAO DIỆN CHẾ ĐỘ 2FA
+                lblMessage.Text = "Dùng ứng dụng Google Authenticator quét mã QR bên dưới để nhận mã:";
+                lblTimer.Text = "Mã tự động đổi mỗi 30 giây trên App";
+                timerOTP.Stop();
 
-            _timeLeft = 300;
-            lblTimer.Text = "Còn lại: 05:00";
-            btnResend.Enabled = false;
+                // Hiển thị mã QR và sinh hình ảnh QR
+                picQRCode.Visible = true;
+                picQRCode.BringToFront(); // Đưa QR lên trên logo Gmail
+                Generate2FAQRCode();
+            }
+            else
+            {
+                // GIAO DIỆN CHẾ ĐỘ EMAIL OTP
+                lblMessage.Text = "Nhập mã OTP đã gửi về email:";
+                picQRCode.Visible = false; // Ẩn QR Code để lộ logo Gmail ra
 
-            timerOTP.Start();
+                // Bắt đầu đếm ngược 5 phút
+                _timeLeft = 300;
+                timerOTP.Start();
+            }
+        }
+
+        // Hàm helper sinh mã QR chứa thông tin cấu hình 2FA
+        private void Generate2FAQRCode()
+        {
+            try
+            {
+                // Định dạng chuẩn để các app Authenticator (Google/Microsoft) nhận diện
+                string issuer = "QLSV_System";
+                string provisionUrl = $"otpauth://totp/{issuer}:{_email}?secret={_secretKey}&issuer={issuer}";
+
+                // Dùng thư viện QRCoder để vẽ hình QR Code
+                using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(provisionUrl, QRCodeGenerator.ECCLevel.Q))
+                using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
+                {
+                    byte[] qrCodeBytes = qrCode.GetGraphic(20);
+                    using (MemoryStream ms = new MemoryStream(qrCodeBytes))
+                    {
+                        picQRCode.Image = Image.FromStream(ms);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi sinh mã QR Code 2FA: " + ex.Message, "Hệ thống");
+            }
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_otpCode))
+            string userInput = txtOTP.Text.Trim();
+
+            if (string.IsNullOrEmpty(userInput))
             {
-                MessageBox.Show("Mã OTP đã hết hạn! Vui lòng bấm gửi lại mã.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập mã xác thực!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (txtOTP.Text.Trim() == _otpCode)
+            if (_is2FAMode)
             {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                // XỬ LÝ KIỂM TRA MÃ 2FA
+                long timeStepMatched = 0;
+
+                // Đã sửa lỗi VerificationWindow: Xóa tham số thứ 3
+                bool isValid = _totp.VerifyTotp(userInput, out timeStepMatched);
+
+                if (isValid)
+                {
+                    MessageBox.Show("Xác thực bảo mật 2FA thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Mã xác thực không đúng hoặc đã hết hạn! Vui lòng kiểm tra lại ứng dụng Authenticator.", "Lỗi bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtOTP.Clear();
+                    txtOTP.Focus();
+                }
             }
             else
             {
-                MessageBox.Show("Mã OTP không đúng! Vui lòng thử lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtOTP.Clear();
-                txtOTP.Focus();
+                // XỬ LÝ KIỂM TRA MÃ EMAIL OTP
+                if (userInput == _otpCode)
+                {
+                    MessageBox.Show("Xác thực Email thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Mã OTP không chính xác!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtOTP.Clear();
+                    txtOTP.Focus();
+                }
             }
         }
 
-        private void txtOTP_TextChanged(object sender, EventArgs e)
+        private void timerOTP_Tick(object sender, EventArgs e)
         {
+            // Chỉ chạy đếm ngược nếu đang ở chế độ Email OTP
+            if (!_is2FAMode)
+            {
+                if (_timeLeft > 0)
+                {
+                    _timeLeft--;
+                    int minutes = _timeLeft / 60;
+                    int seconds = _timeLeft % 60;
+                    lblTimer.Text = $"Còn lại: {minutes:00}:{seconds:00}";
+                }
+                else
+                {
+                    timerOTP.Stop();
+                    MessageBox.Show("Mã OTP đã hết hạn! Vui lòng đăng ký lại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                }
+            }
         }
 
         private void btnBackLogin_Click(object sender, EventArgs e)
@@ -61,57 +167,14 @@ namespace QuanLySinhVien
             this.Close();
         }
 
-        private void timerOTP_Tick(object sender, EventArgs e)
-        {
-            if (_timeLeft > 0)
-            {
-                _timeLeft--;
-                lblTimer.Text = string.Format("Còn lại: {0:00}:{1:00}", _timeLeft / 60, _timeLeft % 60);
-            }
-            else
-            {
-                timerOTP.Stop();
-                lblTimer.Text = "Mã OTP đã hết hạn!";
-                btnResend.Enabled = true;
-                _otpCode = "";
-            }
-        }
-
         private void btnResend_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // 1. Tạo mã OTP mới ngẫu nhiên 6 số
-                Random rand = new Random();
-                _otpCode = rand.Next(100000, 999999).ToString();
+            // Code gửi lại mã OTP (nếu bạn cần xử lý sau này)
+        }
 
-                // 2. Thực thi lệnh cấu hình SMTP kết nối Server Google để gửi mail thực tế
-                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("hmtlqd249@gmail.com", "ddnd acyf pyam gngf");
-
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("hmtlqd249@gmail.com");
-                mail.To.Add(_email); // Gửi tới đúng email người nhận hiện tại
-                mail.Subject = "Mã OTP mới đặt lại mật khẩu / đăng ký";
-                mail.Body = $"Mã OTP mới của bạn là: {_otpCode}\nMã có hiệu lực trong 5 phút.";
-
-                smtp.Send(mail); // Lệnh kích hoạt gửi mail đi tắp lự!
-
-                MessageBox.Show("Mã OTP mới đã được gửi lại vào Email của bạn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // 3. Khởi động lại bộ đếm ngược 5 phút như ban đầu
-                _timeLeft = 300;
-                lblTimer.Text = "Còn lại: 05:00";
-                btnResend.Enabled = false; // Khóa lại nút gửi tiếp
-                txtOTP.Clear();
-                timerOTP.Start(); // Đếm ngược lại từ đầu
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi kết nối gửi lại mã OTP: " + ex.Message, "Hệ thống");
-            }
+        private void txtOTP_TextChanged(object sender, EventArgs e)
+        {
+            // Hàm sự kiện bỏ trống
         }
     }
 }

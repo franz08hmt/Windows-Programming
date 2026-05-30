@@ -28,49 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.btnSendOTP = new System.Windows.Forms.Button();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.btnBackLogin = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblQuenmatkhau = new System.Windows.Forms.Label();
-            this.lblDatlaimatkhau = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.rtbChat = new System.Windows.Forms.RichTextBox();
+            this.txtMessage = new System.Windows.Forms.TextBox();
+            this.btnSend = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(50, 121);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(327, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Nhập email để nhận mã OTP đặt lại mật khẩu";
-            // 
-            // txtEmail
-            // 
-            this.txtEmail.Location = new System.Drawing.Point(54, 190);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(319, 26);
-            this.txtEmail.TabIndex = 1;
-            // 
-            // btnSendOTP
-            // 
-            this.btnSendOTP.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSendOTP.Location = new System.Drawing.Point(306, 331);
-            this.btnSendOTP.Name = "btnSendOTP";
-            this.btnSendOTP.Size = new System.Drawing.Size(158, 42);
-            this.btnSendOTP.TabIndex = 2;
-            this.btnSendOTP.Text = "Gửi mã OTP";
-            this.btnSendOTP.UseVisualStyleBackColor = true;
-            this.btnSendOTP.Click += new System.EventHandler(this.btnSendOTP_Click);
             // 
             // pnlHeader
             // 
@@ -139,42 +107,33 @@
             this.lblQuenmatkhau.TabIndex = 0;
             this.lblQuenmatkhau.Text = "QUÊN MẬT KHẨU";
             // 
-            // lblDatlaimatkhau
+            // rtbChat
             // 
-            this.lblDatlaimatkhau.AutoSize = true;
-            this.lblDatlaimatkhau.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblDatlaimatkhau.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDatlaimatkhau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.lblDatlaimatkhau.Location = new System.Drawing.Point(109, 51);
-            this.lblDatlaimatkhau.Name = "lblDatlaimatkhau";
-            this.lblDatlaimatkhau.Size = new System.Drawing.Size(236, 38);
-            this.lblDatlaimatkhau.TabIndex = 19;
-            this.lblDatlaimatkhau.Text = "Đặt lại mật khẩu";
+            this.rtbChat.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtbChat.Location = new System.Drawing.Point(0, 86);
+            this.rtbChat.Name = "rtbChat";
+            this.rtbChat.ReadOnly = true;
+            this.rtbChat.Size = new System.Drawing.Size(800, 284);
+            this.rtbChat.TabIndex = 18;
+            this.rtbChat.Text = "";
             // 
-            // label2
+            // txtMessage
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.label2.Location = new System.Drawing.Point(50, 154);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 21);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Email";
+            this.txtMessage.Location = new System.Drawing.Point(0, 400);
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.Size = new System.Drawing.Size(643, 26);
+            this.txtMessage.TabIndex = 19;
+            this.txtMessage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMessage_KeyDown);
             // 
-            // panel1
+            // btnSend
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.lblDatlaimatkhau);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.txtEmail);
-            this.panel1.Location = new System.Drawing.Point(176, 97);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(450, 341);
-            this.panel1.TabIndex = 21;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.btnSend.Location = new System.Drawing.Point(663, 400);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(137, 38);
+            this.btnSend.TabIndex = 20;
+            this.btnSend.Text = "Gửi";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // f_ForgetPass
             // 
@@ -182,33 +141,30 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnSend);
+            this.Controls.Add(this.txtMessage);
+            this.Controls.Add(this.rtbChat);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.btnSendOTP);
-            this.Controls.Add(this.panel1);
             this.Name = "f_ForgetPass";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "f_ForgetPass";
+            this.Load += new System.EventHandler(this.f_ForgetPass_Load);
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.Button btnSendOTP;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Button btnBackLogin;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.PictureBox ptLgo;
         private System.Windows.Forms.Label lblQuenmatkhau;
-        private System.Windows.Forms.Label lblDatlaimatkhau;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RichTextBox rtbChat;
+        private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.Button btnSend;
     }
 }

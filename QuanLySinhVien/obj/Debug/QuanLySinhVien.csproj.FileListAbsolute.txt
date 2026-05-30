@@ -65,3 +65,6 @@ C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.csp
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\bin\Debug\Otp.NET.dll
+C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\bin\Debug\QRCoder.dll
+C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\bin\Debug\QRCoder.xml

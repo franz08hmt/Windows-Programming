@@ -9,8 +9,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace QuanLySinhVien
 {
@@ -79,7 +79,7 @@ namespace QuanLySinhVien
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential(
                     "hmtlqd249@gmail.com",
-                    "ddnd acyf pyam gngf");      
+                    "ddnd acyf pyam gngf");
 
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("hmtlqd249@gmail.com");
@@ -95,19 +95,91 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnChoosePic_Click(object sender, EventArgs e)
+        // ===================================================================
+        // TÍNH NĂNG AI NÂNG CAO: COMPUTER VISION OCR TRÍCH XUẤT MSSV TỪ ẢNH
+        // ===================================================================
+        private async void btnChoosePic_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                ptbPicture.Image = Image.FromFile(ofd.FileName);
+                string filePath = ofd.FileName;
+                ptbPicture.Image = Image.FromFile(filePath);
+
+                // Tiến hành gọi hàm AI quét chữ từ ảnh thẻ không làm đơ giao diện
+                await ExtractMSSVFromCardAsync(filePath);
             }
         }
 
+        private async Task ExtractMSSVFromCardAsync(string filePath)
+        {
+            try
+            {
+                // Hiển thị trạng thái chờ xử lý AI
+                this.Cursor = Cursors.WaitCursor;
+
+                using (var client = new HttpClient())
+                {
+                    var form = new MultipartFormDataContent();
+                    var imageBytes = File.ReadAllBytes(filePath);
+
+                    form.Add(new ByteArrayContent(imageBytes, 0, imageBytes.Length), "file", Path.GetFileName(filePath));
+                    form.Add(new StringContent("helloworld"), "apikey"); // API Key miễn phí thử nghiệm toàn cầu
+                    form.Add(new StringContent("eng"), "language");       // Quét ký tự số theo bảng tiếng Anh công nghệ cao
+                    form.Add(new StringContent("true"), "isOverlayRequired");
+
+                    // Gửi ảnh lên Máy chủ AI xử lý thị giác máy tính
+                    var response = await client.PostAsync("https://api.ocr.space/parse/image", form);
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+
+                    // Phân tích văn bản từ JSON một cách an toàn
+                    string keyword = "\"ParsedText\":\"";
+                    int index = jsonResult.IndexOf(keyword);
+
+                    if (index != -1)
+                    {
+                        int start = index + keyword.Length;
+                        int end = jsonResult.IndexOf("\"", start);
+                        string parsedText = jsonResult.Substring(start, end - start);
+
+                        parsedText = parsedText.Replace("\\r\\n", "\n").Replace("\\n", "\n");
+
+                        // Quét Regex tìm mẫu định dạng Mã số sinh viên gồm đúng 8 chữ số liên tiếp
+                        var mssvMatch = Regex.Match(parsedText, @"\b\d{8}\b");
+
+                        if (mssvMatch.Success)
+                        {
+                            string detectedMSSV = mssvMatch.Value;
+
+                            // Tự động điền dữ liệu thông minh vào Form
+                            txtUsername.Text = detectedMSSV;
+                            txtEmail.Text = detectedMSSV + "@student.hcmute.edu.vn";
+
+                            this.Cursor = Cursors.Default;
+                            MessageBox.Show($"[AI Computer Vision] Đã quét thành công ảnh thẻ!\n" +
+                                            $"-> Phát hiện mã định danh MSSV: {detectedMSSV}\n" +
+                                            $"-> Hệ thống đã tự động điền Username và Email trường cho bạn.",
+                                            "Trích xuất dữ liệu AI thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi Fail-safe: Nếu mất mạng, hệ thống bỏ qua không làm sập (crash) ứng dụng
+                Console.WriteLine("Lỗi phân tích AI OCR: " + ex.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+        // ===================================================================
+
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            // Validation
+            // Validation các trường bắt buộc không để trống
             if (string.IsNullOrEmpty(txtFname.Text) ||
                 string.IsNullOrEmpty(txtLname.Text) ||
                 string.IsNullOrEmpty(txtUsername.Text) ||
@@ -123,9 +195,8 @@ namespace QuanLySinhVien
             {
                 MessageBox.Show("Vui lòng kiểm tra lại thông tin. Mật khẩu phải đạt độ MẠNH và trùng khớp trước khi đăng ký!",
                                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Dừng lại, không chạy code insert database
+                return;
             }
-
 
             if (!string.IsNullOrEmpty(erp1.GetError(txtFname)) ||
                 !string.IsNullOrEmpty(erp1.GetError(txtLname)) ||
@@ -153,7 +224,7 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Kiểm tra email tồn tại
+            // Kiểm tra email tồn tại trong Database
             if (CheckEmailExists(txtEmail.Text))
             {
                 MessageBox.Show("Email đã được sử dụng! Vui lòng dùng email khác.",
@@ -162,12 +233,41 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Gửi OTP
-            otpCode = GenerateOTP();
-            SendOTP(txtEmail.Text, otpCode);
+            // CHỨC NĂNG AI: KIỂM TRA EMAIL TẠM THỜI (DISPOSABLE EMAIL)
+            Cursor.Current = Cursors.WaitCursor;
+            if (IsDisposableEmail(txtEmail.Text.Trim()))
+            {
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Hệ thống bảo mật phát hiện đây là Email tạm thời (Disposable Email)!\n" +
+                                "Vui lòng sử dụng các dịch vụ Email chính thức (như Gmail, Outlook, hoặc email trường) để đăng ký.",
+                                "Cảnh báo bảo mật AI", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtEmail.Focus();
+                return;
+            }
 
-            // Mở form OTP
-            f_OTP otpForm = new f_OTP(otpCode, txtEmail.Text.Trim());
+            // =====================================================================
+            // CẬP NHẬT MỚI: XỬ LÝ LỰA CHỌN PHƯƠNG THỨC XÁC THỰC (EMAIL HOẶC APP 2FA)
+            // =====================================================================
+
+            // Đọc trạng thái của RadioButton rb2FAApp (Kiểm tra xem người dùng có chọn 2FA không)
+            bool use2FA = rb2FAApp.Checked;
+
+            if (!use2FA)
+            {
+                // Nếu KHÔNG dùng 2FA (tức là dùng Email OTP) -> Mới tạo mã và gửi Mail
+                otpCode = GenerateOTP();
+                SendOTP(txtEmail.Text, otpCode);
+            }
+            else
+            {
+                // Nếu dùng 2FA -> Không gửi mail, để trống mã otpCode vì App tự sinh mã
+                otpCode = "";
+            }
+
+            Cursor.Current = Cursors.Default;
+
+            // Mở form OTP và truyền 3 tham số (mã OTP, Email, cờ chọn 2FA)
+            f_OTP otpForm = new f_OTP(otpCode, txtEmail.Text.Trim(), use2FA);
 
             if (otpForm.ShowDialog() == DialogResult.OK)
             {
@@ -175,10 +275,32 @@ namespace QuanLySinhVien
             }
             else
             {
-                MessageBox.Show("Xác thực OTP thất bại! Hủy quá trình đăng ký thành viên.",
+                MessageBox.Show("Xác thực OTP thất bại hoặc đã bị hủy! Hủy quá trình đăng ký thành viên.",
                                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
 
+        private bool IsDisposableEmail(string email)
+        {
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string url = $"https://disposable.debounce.io/?email={Uri.EscapeDataString(email)}";
+                    string response = client.DownloadString(url);
+                    return response.Contains("\"disposable\":\"true\"");
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        bool ValidatePasswordStrength(string password)
+        {
+            string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
+            return Regex.IsMatch(password, pattern);
         }
 
         private void RegisterUser()
@@ -191,7 +313,6 @@ namespace QuanLySinhVien
                 string msgv = (position == 1 ? "SV" : "HR") +
                               DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                // Chuyển ảnh sang byte[]
                 byte[] picBytes = null;
                 if (ptbPicture.Image != null)
                 {
@@ -240,9 +361,7 @@ namespace QuanLySinhVien
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Panel pnl = (Panel)sender;
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
             using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
             {
                 pnl.Region = new Region(Path);
@@ -252,9 +371,7 @@ namespace QuanLySinhVien
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
             Panel pnl = (Panel)sender;
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
             using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
             {
                 pnl.Region = new Region(Path);
@@ -264,9 +381,7 @@ namespace QuanLySinhVien
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
             Panel pnl = (Panel)sender;
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
             using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
             {
                 pnl.Region = new Region(Path);
@@ -275,14 +390,13 @@ namespace QuanLySinhVien
 
         private void txtFname_TextChanged(object sender, EventArgs e)
         {
-            // Kiểm tra nếu chuỗi có chứa ký tự số
             if (txtFname.Text.Any(char.IsDigit))
             {
                 erp1.SetError(txtFname, "Họ không được chứa chữ số!");
             }
             else
             {
-                erp1.SetError(txtFname, ""); // Xóa thông báo lỗi nếu hợp lệ
+                erp1.SetError(txtFname, "");
             }
         }
 
@@ -317,31 +431,17 @@ namespace QuanLySinhVien
         private void txtPassword_TextChanged(object sender, EventArgs e)
         {
             string pass = txtPassword.Text;
+            string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$";
 
-            // 1. Kiểm tra độ dài tối thiểu
-            if (pass.Length < 8)
+            if (!Regex.IsMatch(pass, pattern))
             {
-                erp1.SetError(txtPassword, "Mật khẩu quá ngắn! Phải từ 8 ký tự trở lên.");
-                return;
-            }
-
-            // 2. Kiểm tra các điều kiện ký tự bằng LINQ (đã có using System.Linq)
-            bool hasUpper = pass.Any(char.IsUpper);
-            bool hasLower = pass.Any(char.IsLower);
-            bool hasDigit = pass.Any(char.IsDigit);
-            bool hasSpecial = pass.Any(ch => !char.IsLetterOrDigit(ch));
-
-            // 3. Đánh giá nếu thiếu bất kỳ điều kiện nào thì tính là chưa đủ mạnh
-            if (!hasUpper || !hasLower || !hasDigit || !hasSpecial)
-            {
-                erp1.SetError(txtPassword, "Mật khẩu yếu! Phải bao gồm cả chữ hoa, chữ thường, số và ký tự đặc biệt (VD: @, #, $).");
+                erp1.SetError(txtPassword, "Mật khẩu yếu! Cần ≥ 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
             }
             else
             {
-                erp1.SetError(txtPassword, ""); // Đạt chuẩn mật khẩu MẠNH
+                erp1.SetError(txtPassword, "");
             }
 
-            // Kích hoạt kiểm tra lại ô Xác nhận mật khẩu phòng trường hợp người dùng sửa mật khẩu chính sau khi đã nhập ô xác nhận
             if (!string.IsNullOrEmpty(txtConfirmPassword.Text))
             {
                 txtConfirmPassword_TextChanged(sender, e);
@@ -354,7 +454,7 @@ namespace QuanLySinhVien
 
             if (!Regex.IsMatch(txtEmail.Text.Trim(), emailPattern) && txtEmail.Text.Length > 0)
             {
-                erp1.SetError(txtEmail, "Định dạng Email không hợp lệ! (Ví dụ: abc@gmail.com hoặc sv@student.hcmute.edu.vn)");
+                erp1.SetError(txtEmail, "Định dạng Email không hợp lệ! (Ví dụ: abc@gmail.com)");
             }
             else
             {
@@ -376,11 +476,21 @@ namespace QuanLySinhVien
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            f_Login loginForm = new f_Login();
-
-            loginForm.Show();
-
+            Form login = Application.OpenForms["f_Login"];
+            if (login != null)
+            {
+                login.Show();
+            }
+            else
+            {
+                new f_Login().Show();
+            }
             this.Close();
+        }
+
+        private void txtConfirmPassword_TextChanged_1(object sender, EventArgs e)
+        {
+            // Để trống nhằm giữ tương thích nếu Designer tự liên kết sự kiện cũ
         }
     }
 }
