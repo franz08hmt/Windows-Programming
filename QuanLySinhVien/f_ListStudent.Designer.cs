@@ -43,12 +43,25 @@
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblHethong = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnExport = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabDanhSach = new System.Windows.Forms.TabPage();
+            this.tabImport = new System.Windows.Forms.TabPage();
+            this.btnLuu = new System.Windows.Forms.Button();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.dgvPreview = new System.Windows.Forms.DataGridView();
+            this.lblFilePath = new System.Windows.Forms.Label();
+            this.btnChonFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStudents)).BeginInit();
             this.pnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctKinhLup)).BeginInit();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabDanhSach.SuspendLayout();
+            this.tabImport.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // txtSearch
@@ -68,13 +81,12 @@
             // 
             this.dgvStudents.AllowUserToAddRows = false;
             this.dgvStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvStudents.Location = new System.Drawing.Point(20, 181);
+            this.dgvStudents.Location = new System.Drawing.Point(16, 244);
             this.dgvStudents.Name = "dgvStudents";
             this.dgvStudents.RowHeadersWidth = 62;
             this.dgvStudents.RowTemplate.Height = 28;
-            this.dgvStudents.Size = new System.Drawing.Size(937, 401);
+            this.dgvStudents.Size = new System.Drawing.Size(937, 334);
             this.dgvStudents.TabIndex = 1;
-            this.dgvStudents.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStudents_CellDoubleClick);
             // 
             // pnlSearch
             // 
@@ -86,6 +98,8 @@
             this.pnlSearch.Name = "pnlSearch";
             this.pnlSearch.Size = new System.Drawing.Size(376, 31);
             this.pnlSearch.TabIndex = 3;
+            this.pnlSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
+            this.pnlSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
             // pctKinhLup
             // 
@@ -101,7 +115,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(17, 146);
+            this.lblTotal.Location = new System.Drawing.Point(3, 3);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(201, 28);
             this.lblTotal.TabIndex = 8;
@@ -208,18 +222,113 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(499, 145);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(178, 39);
+            this.btnExport.TabIndex = 16;
+            this.btnExport.Text = "Export Excel";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabDanhSach);
+            this.tabControl1.Controls.Add(this.tabImport);
+            this.tabControl1.Location = new System.Drawing.Point(12, 181);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(945, 401);
+            this.tabControl1.TabIndex = 17;
+            // 
+            // tabDanhSach
+            // 
+            this.tabDanhSach.Controls.Add(this.lblTotal);
+            this.tabDanhSach.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabDanhSach.Location = new System.Drawing.Point(4, 29);
+            this.tabDanhSach.Name = "tabDanhSach";
+            this.tabDanhSach.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDanhSach.Size = new System.Drawing.Size(937, 368);
+            this.tabDanhSach.TabIndex = 0;
+            this.tabDanhSach.Text = "Danh sách";
+            this.tabDanhSach.UseVisualStyleBackColor = true;
+            // 
+            // tabImport
+            // 
+            this.tabImport.Controls.Add(this.btnLuu);
+            this.tabImport.Controls.Add(this.lblStatus);
+            this.tabImport.Controls.Add(this.dgvPreview);
+            this.tabImport.Controls.Add(this.lblFilePath);
+            this.tabImport.Controls.Add(this.btnChonFile);
+            this.tabImport.Location = new System.Drawing.Point(4, 29);
+            this.tabImport.Name = "tabImport";
+            this.tabImport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabImport.Size = new System.Drawing.Size(937, 368);
+            this.tabImport.TabIndex = 1;
+            this.tabImport.Text = "Import Excel";
+            this.tabImport.UseVisualStyleBackColor = true;
+            // 
+            // btnLuu
+            // 
+            this.btnLuu.Location = new System.Drawing.Point(774, 334);
+            this.btnLuu.Name = "btnLuu";
+            this.btnLuu.Size = new System.Drawing.Size(157, 28);
+            this.btnLuu.TabIndex = 4;
+            this.btnLuu.Text = "Lưu vào DB";
+            this.btnLuu.UseVisualStyleBackColor = true;
+            this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(3, 334);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 20);
+            this.lblStatus.TabIndex = 3;
+            // 
+            // dgvPreview
+            // 
+            this.dgvPreview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPreview.Location = new System.Drawing.Point(0, 45);
+            this.dgvPreview.Name = "dgvPreview";
+            this.dgvPreview.RowHeadersWidth = 62;
+            this.dgvPreview.RowTemplate.Height = 28;
+            this.dgvPreview.Size = new System.Drawing.Size(934, 286);
+            this.dgvPreview.TabIndex = 2;
+            this.dgvPreview.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvPreview_RowPrePaint);
+            // 
+            // lblFilePath
+            // 
+            this.lblFilePath.AutoSize = true;
+            this.lblFilePath.Location = new System.Drawing.Point(159, 13);
+            this.lblFilePath.Name = "lblFilePath";
+            this.lblFilePath.Size = new System.Drawing.Size(0, 20);
+            this.lblFilePath.TabIndex = 1;
+            // 
+            // btnChonFile
+            // 
+            this.btnChonFile.Location = new System.Drawing.Point(4, 7);
+            this.btnChonFile.Name = "btnChonFile";
+            this.btnChonFile.Size = new System.Drawing.Size(142, 32);
+            this.btnChonFile.TabIndex = 0;
+            this.btnChonFile.Text = "Chọn file Excel";
+            this.btnChonFile.UseVisualStyleBackColor = true;
+            this.btnChonFile.Click += new System.EventHandler(this.btnChonFile_Click);
+            // 
             // f_ListStudent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(978, 594);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.lbSort);
             this.Controls.Add(this.lbGioiTinh);
             this.Controls.Add(this.cboSortBy);
             this.Controls.Add(this.cboFilterGender);
-            this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.dgvStudents);
             this.Name = "f_ListStudent";
@@ -234,6 +343,12 @@
             this.pnlHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabDanhSach.ResumeLayout(false);
+            this.tabDanhSach.PerformLayout();
+            this.tabImport.ResumeLayout(false);
+            this.tabImport.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,5 +370,14 @@
         private System.Windows.Forms.Label lblHethong;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabDanhSach;
+        private System.Windows.Forms.TabPage tabImport;
+        private System.Windows.Forms.DataGridView dgvPreview;
+        private System.Windows.Forms.Label lblFilePath;
+        private System.Windows.Forms.Button btnChonFile;
+        private System.Windows.Forms.Button btnLuu;
+        private System.Windows.Forms.Label lblStatus;
     }
 }

@@ -49,13 +49,17 @@
             this.btnViewlist = new System.Windows.Forms.Button();
             this.picStudent = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lstSuggest = new System.Windows.Forms.ListBox();
+            this.txtAddress = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnSpeech = new System.Windows.Forms.Button();
+            this.btnScanCard = new System.Windows.Forms.Button();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.btnBack = new System.Windows.Forms.Button();
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblHethong = new System.Windows.Forms.Label();
             this.erp2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btnScanCard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picStudent)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -68,7 +72,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(31, 11);
+            this.label1.Location = new System.Drawing.Point(32, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(213, 21);
             this.label1.TabIndex = 0;
@@ -78,7 +82,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label2.Location = new System.Drawing.Point(31, 84);
+            this.label2.Location = new System.Drawing.Point(32, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 21);
             this.label2.TabIndex = 1;
@@ -88,7 +92,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(288, 84);
+            this.label3.Location = new System.Drawing.Point(288, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(127, 21);
             this.label3.TabIndex = 2;
@@ -98,7 +102,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label4.Location = new System.Drawing.Point(32, 162);
+            this.label4.Location = new System.Drawing.Point(32, 128);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(188, 21);
             this.label4.TabIndex = 3;
@@ -108,7 +112,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label5.Location = new System.Drawing.Point(31, 235);
+            this.label5.Location = new System.Drawing.Point(31, 192);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(139, 21);
             this.label5.TabIndex = 4;
@@ -118,7 +122,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label6.Location = new System.Drawing.Point(31, 306);
+            this.label6.Location = new System.Drawing.Point(32, 248);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 21);
             this.label6.TabIndex = 5;
@@ -128,7 +132,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
-            this.label7.Location = new System.Drawing.Point(288, 301);
+            this.label7.Location = new System.Drawing.Point(288, 248);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(48, 21);
             this.label7.TabIndex = 6;
@@ -136,28 +140,28 @@
             // 
             // txtMSSV
             // 
-            this.txtMSSV.Location = new System.Drawing.Point(33, 45);
+            this.txtMSSV.Location = new System.Drawing.Point(33, 35);
             this.txtMSSV.Name = "txtMSSV";
             this.txtMSSV.Size = new System.Drawing.Size(490, 26);
             this.txtMSSV.TabIndex = 7;
             // 
             // txtFname
             // 
-            this.txtFname.Location = new System.Drawing.Point(33, 119);
+            this.txtFname.Location = new System.Drawing.Point(33, 99);
             this.txtFname.Name = "txtFname";
             this.txtFname.Size = new System.Drawing.Size(237, 26);
             this.txtFname.TabIndex = 8;
             // 
             // txtLname
             // 
-            this.txtLname.Location = new System.Drawing.Point(292, 119);
+            this.txtLname.Location = new System.Drawing.Point(292, 99);
             this.txtLname.Name = "txtLname";
             this.txtLname.Size = new System.Drawing.Size(231, 26);
             this.txtLname.TabIndex = 9;
             // 
             // dtpDob
             // 
-            this.dtpDob.Location = new System.Drawing.Point(35, 195);
+            this.dtpDob.Location = new System.Drawing.Point(33, 163);
             this.dtpDob.Name = "dtpDob";
             this.dtpDob.Size = new System.Drawing.Size(488, 26);
             this.dtpDob.TabIndex = 10;
@@ -169,21 +173,21 @@
             "Nam",
             "Nữ",
             "Khác"});
-            this.cboGender.Location = new System.Drawing.Point(33, 270);
+            this.cboGender.Location = new System.Drawing.Point(33, 217);
             this.cboGender.Name = "cboGender";
             this.cboGender.Size = new System.Drawing.Size(490, 28);
             this.cboGender.TabIndex = 11;
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(33, 336);
+            this.txtPhone.Location = new System.Drawing.Point(33, 281);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(237, 26);
             this.txtPhone.TabIndex = 12;
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(292, 336);
+            this.txtEmail.Location = new System.Drawing.Point(292, 281);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(231, 26);
             this.txtEmail.TabIndex = 13;
@@ -191,9 +195,9 @@
             // btnChooseImage
             // 
             this.btnChooseImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChooseImage.Location = new System.Drawing.Point(50, 246);
+            this.btnChooseImage.Location = new System.Drawing.Point(50, 281);
             this.btnChooseImage.Name = "btnChooseImage";
-            this.btnChooseImage.Size = new System.Drawing.Size(227, 52);
+            this.btnChooseImage.Size = new System.Drawing.Size(227, 41);
             this.btnChooseImage.TabIndex = 15;
             this.btnChooseImage.Text = "Chọn ảnh";
             this.btnChooseImage.UseVisualStyleBackColor = true;
@@ -240,7 +244,7 @@
             // 
             this.picStudent.BackColor = System.Drawing.Color.White;
             this.picStudent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picStudent.Location = new System.Drawing.Point(87, 21);
+            this.picStudent.Location = new System.Drawing.Point(87, 11);
             this.picStudent.Name = "picStudent";
             this.picStudent.Size = new System.Drawing.Size(160, 200);
             this.picStudent.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -250,6 +254,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(237)))), ((int)(((byte)(242)))));
+            this.panel1.Controls.Add(this.lstSuggest);
+            this.panel1.Controls.Add(this.txtAddress);
+            this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.btnClear);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.txtLname);
@@ -272,9 +279,41 @@
             this.panel1.TabIndex = 19;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // lstSuggest
+            // 
+            this.lstSuggest.BackColor = System.Drawing.Color.White;
+            this.lstSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstSuggest.FormattingEnabled = true;
+            this.lstSuggest.ItemHeight = 20;
+            this.lstSuggest.Location = new System.Drawing.Point(36, 367);
+            this.lstSuggest.Name = "lstSuggest";
+            this.lstSuggest.Size = new System.Drawing.Size(485, 122);
+            this.lstSuggest.TabIndex = 20;
+            this.lstSuggest.Visible = false;
+            this.lstSuggest.Click += new System.EventHandler(this.lstSuggest_Click);
+            // 
+            // txtAddress
+            // 
+            this.txtAddress.Location = new System.Drawing.Point(35, 339);
+            this.txtAddress.Name = "txtAddress";
+            this.txtAddress.Size = new System.Drawing.Size(486, 26);
+            this.txtAddress.TabIndex = 19;
+            this.txtAddress.TextChanged += new System.EventHandler(this.txtAddress_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(35, 314);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(132, 21);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Địa chỉ (Address)";
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel2.Controls.Add(this.btnSpeech);
             this.panel2.Controls.Add(this.btnScanCard);
             this.panel2.Controls.Add(this.btnViewlist);
             this.panel2.Controls.Add(this.picStudent);
@@ -284,6 +323,29 @@
             this.panel2.Size = new System.Drawing.Size(330, 480);
             this.panel2.TabIndex = 20;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // btnSpeech
+            // 
+            this.btnSpeech.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSpeech.Location = new System.Drawing.Point(50, 217);
+            this.btnSpeech.Name = "btnSpeech";
+            this.btnSpeech.Size = new System.Drawing.Size(227, 49);
+            this.btnSpeech.TabIndex = 21;
+            this.btnSpeech.Text = "Nhập bằng giọng nói";
+            this.btnSpeech.UseVisualStyleBackColor = true;
+            this.btnSpeech.Click += new System.EventHandler(this.btnSpeech_Click);
+            // 
+            // btnScanCard
+            // 
+            this.btnScanCard.BackColor = System.Drawing.Color.White;
+            this.btnScanCard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnScanCard.Location = new System.Drawing.Point(50, 336);
+            this.btnScanCard.Name = "btnScanCard";
+            this.btnScanCard.Size = new System.Drawing.Size(227, 39);
+            this.btnScanCard.TabIndex = 20;
+            this.btnScanCard.Text = "Quét thẻ SV";
+            this.btnScanCard.UseVisualStyleBackColor = false;
+            this.btnScanCard.Click += new System.EventHandler(this.btnScanCard_Click);
             // 
             // pnlHeader
             // 
@@ -339,18 +401,6 @@
             // 
             this.erp2.ContainerControl = this;
             // 
-            // btnScanCard
-            // 
-            this.btnScanCard.BackColor = System.Drawing.Color.White;
-            this.btnScanCard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnScanCard.Location = new System.Drawing.Point(50, 323);
-            this.btnScanCard.Name = "btnScanCard";
-            this.btnScanCard.Size = new System.Drawing.Size(227, 52);
-            this.btnScanCard.TabIndex = 20;
-            this.btnScanCard.Text = "Quét thẻ SV";
-            this.btnScanCard.UseVisualStyleBackColor = false;
-            this.btnScanCard.Click += new System.EventHandler(this.btnScanCard_Click);
-            // 
             // f_AddStudent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -405,5 +455,9 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.ErrorProvider erp2;
         private System.Windows.Forms.Button btnScanCard;
+        private System.Windows.Forms.Button btnSpeech;
+        private System.Windows.Forms.ListBox lstSuggest;
+        private System.Windows.Forms.TextBox txtAddress;
+        private System.Windows.Forms.Label label8;
     }
 }

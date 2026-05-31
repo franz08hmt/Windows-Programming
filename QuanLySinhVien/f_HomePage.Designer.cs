@@ -33,6 +33,8 @@
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblHethong = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnManageCourse = new System.Windows.Forms.Button();
             this.btnRegisterMenu = new System.Windows.Forms.Button();
             this.bttLogout = new System.Windows.Forms.Button();
             this.bttFix = new System.Windows.Forms.Button();
@@ -52,7 +54,10 @@
             this.pnlChoDuyet = new System.Windows.Forms.Panel();
             this.pnlTongSinhVien = new System.Windows.Forms.Panel();
             this.lblTongQuan = new System.Windows.Forms.Label();
-            this.btnManageCourse = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.rtbChatHistory = new System.Windows.Forms.RichTextBox();
+            this.txtChatInput = new System.Windows.Forms.TextBox();
+            this.btnSendChat = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             this.pnlSidebar.SuspendLayout();
@@ -109,6 +114,7 @@
             // pnlSidebar
             // 
             this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.pnlSidebar.Controls.Add(this.button1);
             this.pnlSidebar.Controls.Add(this.btnManageCourse);
             this.pnlSidebar.Controls.Add(this.btnRegisterMenu);
             this.pnlSidebar.Controls.Add(this.bttLogout);
@@ -121,13 +127,41 @@
             this.pnlSidebar.Size = new System.Drawing.Size(200, 504);
             this.pnlSidebar.TabIndex = 1;
             // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(0, 356);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(197, 71);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Quản lý điểm - nhập điểm";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnManageCourse
+            // 
+            this.btnManageCourse.FlatAppearance.BorderSize = 0;
+            this.btnManageCourse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnManageCourse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnManageCourse.ForeColor = System.Drawing.Color.White;
+            this.btnManageCourse.Location = new System.Drawing.Point(0, 279);
+            this.btnManageCourse.Name = "btnManageCourse";
+            this.btnManageCourse.Size = new System.Drawing.Size(197, 71);
+            this.btnManageCourse.TabIndex = 7;
+            this.btnManageCourse.Text = "Quản lý môn học";
+            this.btnManageCourse.UseVisualStyleBackColor = true;
+            this.btnManageCourse.Click += new System.EventHandler(this.btnManageCourse_Click);
+            // 
             // btnRegisterMenu
             // 
             this.btnRegisterMenu.FlatAppearance.BorderSize = 0;
             this.btnRegisterMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegisterMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegisterMenu.ForeColor = System.Drawing.Color.White;
-            this.btnRegisterMenu.Location = new System.Drawing.Point(0, 187);
+            this.btnRegisterMenu.Location = new System.Drawing.Point(0, 202);
             this.btnRegisterMenu.Name = "btnRegisterMenu";
             this.btnRegisterMenu.Size = new System.Drawing.Size(197, 71);
             this.btnRegisterMenu.TabIndex = 3;
@@ -202,6 +236,10 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel1.Controls.Add(this.btnSendChat);
+            this.panel1.Controls.Add(this.txtChatInput);
+            this.panel1.Controls.Add(this.rtbChatHistory);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.panel2);
@@ -221,7 +259,7 @@
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.Controls.Add(this.lblTotalHR);
             this.panel4.Controls.Add(this.lblTaiKhoanHR);
-            this.panel4.Location = new System.Drawing.Point(543, 108);
+            this.panel4.Location = new System.Drawing.Point(543, 96);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(220, 124);
             this.panel4.TabIndex = 6;
@@ -253,7 +291,7 @@
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.lblTotalPending);
             this.panel3.Controls.Add(this.lblChoDuyet);
-            this.panel3.Location = new System.Drawing.Point(283, 108);
+            this.panel3.Location = new System.Drawing.Point(283, 96);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(220, 124);
             this.panel3.TabIndex = 5;
@@ -285,7 +323,7 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.Controls.Add(this.lblTotalStudents);
             this.panel2.Controls.Add(this.lblTongSoSinhVien);
-            this.panel2.Location = new System.Drawing.Point(17, 108);
+            this.panel2.Location = new System.Drawing.Point(17, 96);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(220, 124);
             this.panel2.TabIndex = 4;
@@ -315,7 +353,7 @@
             // pnlTaiKhoanHR
             // 
             this.pnlTaiKhoanHR.BackColor = System.Drawing.Color.OliveDrab;
-            this.pnlTaiKhoanHR.Location = new System.Drawing.Point(543, 87);
+            this.pnlTaiKhoanHR.Location = new System.Drawing.Point(543, 75);
             this.pnlTaiKhoanHR.Name = "pnlTaiKhoanHR";
             this.pnlTaiKhoanHR.Size = new System.Drawing.Size(220, 43);
             this.pnlTaiKhoanHR.TabIndex = 4;
@@ -324,7 +362,7 @@
             // pnlChoDuyet
             // 
             this.pnlChoDuyet.BackColor = System.Drawing.Color.LightCoral;
-            this.pnlChoDuyet.Location = new System.Drawing.Point(283, 87);
+            this.pnlChoDuyet.Location = new System.Drawing.Point(283, 75);
             this.pnlChoDuyet.Name = "pnlChoDuyet";
             this.pnlChoDuyet.Size = new System.Drawing.Size(220, 43);
             this.pnlChoDuyet.TabIndex = 4;
@@ -333,7 +371,7 @@
             // pnlTongSinhVien
             // 
             this.pnlTongSinhVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.pnlTongSinhVien.Location = new System.Drawing.Point(17, 87);
+            this.pnlTongSinhVien.Location = new System.Drawing.Point(17, 75);
             this.pnlTongSinhVien.Name = "pnlTongSinhVien";
             this.pnlTongSinhVien.Size = new System.Drawing.Size(220, 43);
             this.pnlTongSinhVien.TabIndex = 3;
@@ -344,25 +382,52 @@
             this.lblTongQuan.AutoSize = true;
             this.lblTongQuan.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTongQuan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.lblTongQuan.Location = new System.Drawing.Point(10, 13);
+            this.lblTongQuan.Location = new System.Drawing.Point(10, 20);
             this.lblTongQuan.Name = "lblTongQuan";
             this.lblTongQuan.Size = new System.Drawing.Size(338, 38);
             this.lblTongQuan.TabIndex = 2;
             this.lblTongQuan.Text = "TỔNG QUAN HỆ THỐNG";
             // 
-            // btnManageCourse
+            // label1
             // 
-            this.btnManageCourse.FlatAppearance.BorderSize = 0;
-            this.btnManageCourse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnManageCourse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnManageCourse.ForeColor = System.Drawing.Color.White;
-            this.btnManageCourse.Location = new System.Drawing.Point(0, 249);
-            this.btnManageCourse.Name = "btnManageCourse";
-            this.btnManageCourse.Size = new System.Drawing.Size(197, 71);
-            this.btnManageCourse.TabIndex = 7;
-            this.btnManageCourse.Text = "Quản lý môn học";
-            this.btnManageCourse.UseVisualStyleBackColor = true;
-            this.btnManageCourse.Click += new System.EventHandler(this.btnManageCourse_Click);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.label1.Location = new System.Drawing.Point(12, 245);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(185, 28);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "🤖Trợ lý hệ thống";
+            // 
+            // rtbChatHistory
+            // 
+            this.rtbChatHistory.Location = new System.Drawing.Point(17, 295);
+            this.rtbChatHistory.Name = "rtbChatHistory";
+            this.rtbChatHistory.ReadOnly = true;
+            this.rtbChatHistory.Size = new System.Drawing.Size(746, 132);
+            this.rtbChatHistory.TabIndex = 8;
+            this.rtbChatHistory.Text = "";
+            // 
+            // txtChatInput
+            // 
+            this.txtChatInput.Location = new System.Drawing.Point(17, 455);
+            this.txtChatInput.Name = "txtChatInput";
+            this.txtChatInput.Size = new System.Drawing.Size(642, 26);
+            this.txtChatInput.TabIndex = 9;
+            this.txtChatInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtChatInput_KeyDown);
+            // 
+            // btnSendChat
+            // 
+            this.btnSendChat.BackColor = System.Drawing.Color.DarkBlue;
+            this.btnSendChat.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnSendChat.ForeColor = System.Drawing.Color.White;
+            this.btnSendChat.Location = new System.Drawing.Point(665, 447);
+            this.btnSendChat.Name = "btnSendChat";
+            this.btnSendChat.Size = new System.Drawing.Size(97, 43);
+            this.btnSendChat.TabIndex = 10;
+            this.btnSendChat.Text = "Gửi";
+            this.btnSendChat.UseVisualStyleBackColor = false;
+            this.btnSendChat.Click += new System.EventHandler(this.btnSendChat_Click);
             // 
             // f_HomePage
             // 
@@ -419,5 +484,10 @@
         private System.Windows.Forms.Label lblTotalStudents;
         private System.Windows.Forms.Button btnRegisterMenu;
         private System.Windows.Forms.Button btnManageCourse;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSendChat;
+        private System.Windows.Forms.TextBox txtChatInput;
+        private System.Windows.Forms.RichTextBox rtbChatHistory;
+        private System.Windows.Forms.Label label1;
     }
 }
