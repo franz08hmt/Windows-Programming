@@ -49,6 +49,8 @@ namespace QuanLySinhVien
                 LoadCoursesRegisteredByStudent(mssv);
                 DisplayScoreBoard(mssv);
             }
+
+            if (cboTrongSo.Items.Count > 0) cboTrongSo.SelectedIndex = 0;
         }
 
         private void LoadStudentCombo()
@@ -94,7 +96,6 @@ namespace QuanLySinhVien
                 txtMota.Clear();
             }
 
-            // Tính toán GPA hệ 4 tích lũy cho sinh viên đó
             decimal gpa4 = Score.CalculateGPA(mssv);
             lblGPA.Text = $"ĐIỂM GPA TÍCH LŨY: {gpa4:F2} / 4.0";
 
@@ -127,7 +128,6 @@ namespace QuanLySinhVien
 
         private void RegisterRealTimeValidation()
         {
-            // Bắt lỗi cho ô Điểm quá trình
             txtQT.TextChanged += (s, e) => {
                 string text = txtQT.Text.Trim();
                 if (string.IsNullOrEmpty(text))
@@ -144,12 +144,11 @@ namespace QuanLySinhVien
                 }
                 else
                 {
-                    erpScore.SetError(txtQT, ""); // Hợp lệ thì xóa dấu đỏ
+                    erpScore.SetError(txtQT, "");
                 }
                 CalculateTotal();
             };
 
-            // Bắt lỗi cho ô Điểm cuối kỳ
             txtCK.TextChanged += (s, e) => {
                 string text = txtCK.Text.Trim();
                 if (string.IsNullOrEmpty(text))
@@ -166,20 +165,17 @@ namespace QuanLySinhVien
                 }
                 else
                 {
-                    erpScore.SetError(txtCK, ""); // Hợp lệ thì xóa dấu đỏ
+                    erpScore.SetError(txtCK, "");
                 }
                 CalculateTotal();
             };
         }
-
-
 
         private void CalculateTotal()
         {
             string cleanQT = txtQT.Text.Trim();
             string cleanCK = txtCK.Text.Trim();
 
-            // Nếu 1 trong 2 ô trống thì xóa sạch ô kết quả, tránh hiển thị sai lệch
             if (string.IsNullOrEmpty(cleanQT) || string.IsNullOrEmpty(cleanCK))
             {
                 txtTK.Clear();
@@ -196,11 +192,23 @@ namespace QuanLySinhVien
                     return;
                 }
 
-                // Công thức tính điểm tổng kết: Trung bình cộng chia hai
-                decimal tk = Math.Round((qt + ck) / 2m, 2);
+                decimal heSoQT = 0.5m;
+                decimal heSoCK = 0.5m;
+
+                if (cboTrongSo.SelectedItem != null)
+                {
+                    string strTrongSo = cboTrongSo.SelectedItem.ToString();
+                    string[] mangHeSo = strTrongSo.Split('/');
+                    if (mangHeSo.Length == 2)
+                    {
+                        heSoQT = Convert.ToDecimal(mangHeSo[0]) / 100m;
+                        heSoCK = Convert.ToDecimal(mangHeSo[1]) / 100m;
+                    }
+                }
+
+                decimal tk = Math.Round((qt * heSoQT) + (ck * heSoCK), 2);
                 txtTK.Text = tk.ToString("F2");
 
-                // Phân loại học lực tự động dựa trên điểm tổng kết hệ 10
                 if (tk >= 9.0m) txtXepLoai.Text = "Xuất sắc";
                 else if (tk >= 8.0m) txtXepLoai.Text = "Giỏi";
                 else if (tk >= 6.5m) txtXepLoai.Text = "Khá";
@@ -255,7 +263,6 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Bộ lọc an toàn: Ép kiểu dữ liệu điểm tổng kết tự động từ TextBox giao diện
             if (!decimal.TryParse(txtTK.Text.Trim(), out decimal tk))
             {
                 MessageBox.Show("Hệ thống chưa ghi nhận được Điểm tổng kết. Vui lòng kiểm tra lại việc nhập Điểm quá trình và Điểm cuối kỳ!", "Lỗi xử lý", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -263,16 +270,24 @@ namespace QuanLySinhVien
             }
 
             string xepLoai = txtXepLoai.Text.Trim();
-            string mssv = cboStudent.SelectedValue.ToString();
+
+            // 🛠️ SỬA LỖI TẠI ĐÂY: Chuyển đổi mã sinh viên sang kiểu số nguyên (int)
+            if (!int.TryParse(cboStudent.SelectedValue.ToString(), out int mssv))
+            {
+                MessageBox.Show("Mã số sinh viên không hợp lệ (Phải là kiểu số)!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string mamh = cboCourse.SelectedValue.ToString();
             string mota = txtMota.Text.Trim();
 
+            // Khởi tạo lớp Score thành công với tham số đầu tiên là int mssv
             Score coreScore = new Score(mssv, mamh, qt, ck, tk, xepLoai, mota);
 
             if (coreScore.SaveScore())
             {
                 MessageBox.Show("Đã thực hiện cập nhật và lưu thông tin điểm số thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DisplayScoreBoard(mssv);
+                DisplayScoreBoard(mssv.ToString());
             }
             else
             {
@@ -308,23 +323,21 @@ namespace QuanLySinhVien
 
                 if (row.Cells[3].Value != null)
                 {
-                    string diemThanhPhan = row.Cells[3].Value.ToString(); // Chuỗi gốc
+                    string diemThanhPhan = row.Cells[3].Value.ToString();
                     try
                     {
-
                         string[] phanDoan = diemThanhPhan.Split('|');
                         if (phanDoan.Length == 2)
                         {
                             string qtPart = phanDoan[0].Replace("QT:", "").Trim();
                             string ckPart = phanDoan[1].Replace("CK:", "").Trim();
 
-                            txtQT.Text = qtPart; // Trả về số "8" hoặc "8.0" sạch sẽ
-                            txtCK.Text = ckPart; // Trả về số "8" sạch sẽ
+                            txtQT.Text = qtPart;
+                            txtCK.Text = ckPart;
                         }
                     }
                     catch
                     {
-
                         txtQT.Text = diemThanhPhan;
                         txtCK.Clear();
                     }
@@ -335,9 +348,9 @@ namespace QuanLySinhVien
                     txtCK.Clear();
                 }
 
-                txtTK.Text = row.Cells[4].Value?.ToString() ?? "";       // Điểm Tổng Kết (Index 4)
-                txtXepLoai.Text = row.Cells[5].Value?.ToString() ?? "";  // Xếp Loại (Index 5)
-                txtMota.Text = row.Cells[6].Value?.ToString() ?? "";     // Ghi chú/Mô tả (Index 6)
+                txtTK.Text = row.Cells[4].Value?.ToString() ?? "";
+                txtXepLoai.Text = row.Cells[5].Value?.ToString() ?? "";
+                txtMota.Text = row.Cells[6].Value?.ToString() ?? "";
 
                 if (erpScore != null)
                 {
@@ -362,7 +375,8 @@ namespace QuanLySinhVien
                 return;
             }
 
-            string mssv = cboStudent.SelectedValue.ToString();
+            // 🛠️ SỬA LỖI TẠI ĐÂY: Đồng bộ chỉnh sửa ép kiểu int cho mssv tại hàm Fix
+            int mssv = int.Parse(cboStudent.SelectedValue.ToString());
             string mamh = cboCourse.SelectedValue.ToString();
 
             decimal qt = Convert.ToDecimal(txtQT.Text.Trim().Replace('.', ','));
@@ -377,12 +391,17 @@ namespace QuanLySinhVien
             if (coreScore.SaveScore())
             {
                 MessageBox.Show("Cập nhật thông tin điểm số sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DisplayScoreBoard(mssv);
+                DisplayScoreBoard(mssv.ToString());
             }
             else
             {
                 MessageBox.Show("Cập nhật điểm thất bại! Vui lòng kiểm tra lại kết nối cơ sở dữ liệu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void cboTrongSo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CalculateTotal();
         }
     }
 }

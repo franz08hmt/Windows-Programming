@@ -20,6 +20,7 @@ namespace QuanLySinhVien
         {
             InitializeComponent();
         }
+
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -34,26 +35,35 @@ namespace QuanLySinhVien
 
             pnl.Region = new Region(path);
         }
+
+        // 5.3 Sự kiện Load: Đồng bộ nạp dữ liệu danh sách SV cho CẢ 2 ô ComboBox ở 2 Tab
         private void f_RegisterCourse_Load(object sender, EventArgs e)
         {
             this.BackColor = Color.FromArgb(240, 244, 247);
 
-            if (dgvRegisterList != null)
-            {
-                dgvRegisterList.BackgroundColor = Color.White;
-                dgvRegisterList.BorderStyle = BorderStyle.None;
-                dgvRegisterList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            }
-
+            // 1. Gọi hàm nạp song song dữ liệu lên cboStudent (Tab 1) và comboBox2 (Tab 2)
             LoadStudentsToComboBox();
-            LoadCoursesToComboBox();
 
-            if (cboStudent.SelectedValue != null && cboStudent.SelectedValue.ToString() != "System.Data.DataRowView")
+            // 2. Thiết lập chọn sẵn Học kỳ 1 làm mặc định ban đầu nếu có dữ liệu Items
+            if (cboHky.Items.Count > 0)
             {
-                LoadRegisteredCourses(cboStudent.SelectedValue.ToString());
+                cboHky.SelectedIndex = 0;
             }
+
+            // 3. Nạp dữ liệu mặc định ban đầu cho cả 2 Tab nếu ComboBox đã sẵn sàng
+            if (cboStudent.SelectedValue != null && cboHky.SelectedItem != null &&
+                cboStudent.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                HienThiMonHocChuaDangKy();
+            }
+            if (comboBox2.SelectedValue != null && comboBox2.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                TaiDanhSachMonDaDangKy();
+            }
+
         }
 
+        // ✨ ĐỒNG BỘ: Nạp danh sách Sinh viên lên CẢ HAI ComboBox độc lập
         private void LoadStudentsToComboBox()
         {
             try
@@ -61,54 +71,298 @@ namespace QuanLySinhVien
                 string query = "SELECT MSSV, Lname + ' ' + Fname AS Hoten FROM Student";
                 SqlCommand cmd = new SqlCommand(query, db.getConnection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
 
-                cboStudent.DataSource = table;
+                // Nạp cho ô cboStudent (Của Tab 1)
+                DataTable table1 = new DataTable();
+                adapter.Fill(table1);
+                cboStudent.DataSource = table1;
                 cboStudent.DisplayMember = "Hoten";
                 cboStudent.ValueMember = "MSSV";
+
+                // Nạp cho ô comboBox2 (Của Tab 2)
+                DataTable table2 = new DataTable();
+                adapter.Fill(table2);
+                comboBox2.DataSource = table2;
+                comboBox2.DisplayMember = "Hoten";
+                comboBox2.ValueMember = "MSSV";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải danh sách sinh viên: " + ex.Message, "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải danh sách sinh viên lên các ComboBox: " + ex.Message, "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void LoadCoursesToComboBox()
+        // 🌟 CHỨC NĂNG CHÍNH ĐĂNG KÝ (Tab 1): Lấy mã SV từ cboStudent để chạy SQL EXCEPT loại trừ môn
+        private void HienThiMonHocChuaDangKy()
         {
+            if (cboStudent.SelectedValue == null || cboHky.SelectedItem == null ||
+                cboStudent.SelectedValue.ToString() == "System.Data.DataRowView") return;
+
+            lstBandau.Items.Clear();
+            string selectedMSSV = cboStudent.SelectedValue.ToString().Trim();
+            int selectedHky = int.Parse(cboHky.SelectedItem.ToString());
+
+            string sql = "(SELECT MaMH FROM Course WHERE Hky = @hky)" +
+                         " EXCEPT " +
+                         "(SELECT MaMH FROM DKMH WHERE MSSV = @mssv)";
+
             try
             {
-                string query = "SELECT MaMH, TenMH FROM Course";
-                SqlCommand cmd = new SqlCommand(query, db.getConnection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
+                SqlCommand cmd = new SqlCommand(sql, db.getConnection);
+                cmd.Parameters.AddWithValue("@hky", selectedHky);
+                cmd.Parameters.AddWithValue("@mssv", selectedMSSV);
 
-                cboCourse.DataSource = table;
-                cboCourse.DisplayMember = "TenMH";
-                cboCourse.ValueMember = "MaMH";
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    lstBandau.Items.Add(dt.Rows[i][0].ToString());
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải danh sách môn học: " + ex.Message, "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi thực thi dữ liệu loại trừ EXCEPT ở Tab 1: " + ex.Message, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            CapNhatTongTinChi();
         }
 
+        // ⚡ SỰ KIỆN TAB 1: Khi chọn sinh viên khác trên cboStudent (Tab 1)
         private void cboStudent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboStudent.SelectedValue != null && cboStudent.SelectedValue.ToString() != "System.Data.DataRowView")
+            if (cboStudent.SelectedValue == null || cboStudent.SelectedValue.ToString() == "System.Data.DataRowView") return;
+
+            lstKetqua.Items.Clear();
+            HienThiMonHocChuaDangKy();
+        }
+
+        private void cboHky_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lstKetqua.Items.Clear();
+            HienThiMonHocChuaDangKy();
+        }
+
+
+        #region 🔄 LOGIC ĐIỀU KHIỂN ĐIỀU HƯỚNG 4 NÚT LUÂN CHUYỂN DUAL LISTBOX
+
+        private void btnMoveSelected_Click(object sender, EventArgs e)
+        {
+            if (lstBandau.SelectedItem != null)
             {
-                LoadRegisteredCourses(cboStudent.SelectedValue.ToString());
+                string item = lstBandau.SelectedItem.ToString();
+                lstKetqua.Items.Add(item);
+                lstBandau.Items.Remove(item);
+                CapNhatTongTinChi();
             }
         }
 
-        private void LoadRegisteredCourses(string mssv)
+        private void btnMoveAll_Click(object sender, EventArgs e)
         {
+            foreach (var item in lstBandau.Items)
+            {
+                lstKetqua.Items.Add(item);
+            }
+            lstBandau.Items.Clear();
+            CapNhatTongTinChi();
+        }
+
+        private void btnRemoveSelected_Click(object sender, EventArgs e)
+        {
+            if (lstKetqua.SelectedItem != null)
+            {
+                string item = lstKetqua.SelectedItem.ToString();
+                lstBandau.Items.Add(item);
+                lstKetqua.Items.Remove(item);
+                CapNhatTongTinChi();
+            }
+        }
+
+        private void btnRemoveAll_Click(object sender, EventArgs e)
+        {
+            foreach (var item in lstKetqua.Items)
+            {
+                lstBandau.Items.Add(item);
+            }
+            lstKetqua.Items.Clear();
+            CapNhatTongTinChi();
+        }
+
+        #endregion
+
+
+        #region 🔧 CHỨC NĂNG NÂNG CAO TRIỂN KHAI TRÊN LISTBOX VÀ HẠN MỨC TC
+
+        private void lst_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox currentListBox = (ListBox)sender;
+            if (currentListBox.SelectedItem == null) return;
+
+            string maMH = currentListBox.SelectedItem.ToString();
+
+            Course courseInstance = new Course();
+            DataTable dt = courseInstance.GetCourseByMa(maMH);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                DataRow r = dt.Rows[0];
+                lblChiTietMon.Text = $"📖 Môn học: {r["TenMH"]}\r\n" +
+                                     $"🔹 Số tín chỉ: {r["SoTC"]} TC\r\n" +
+                                     $"⏱️ Thời lượng: {r["Tuan"]} tuần";
+            }
+        }
+
+        private void lstBandau_SelectedIndexChanged(object sender, EventArgs e) => lst_SelectedIndexChanged(sender, e);
+        private void lstKetqua_SelectedIndexChanged(object sender, EventArgs e) => lst_SelectedIndexChanged(sender, e);
+
+        private int TinhTongTinChiChonDangKy()
+        {
+            int tongTC = 0;
+            foreach (var item in lstKetqua.Items)
+            {
+                Course courseInstance = new Course();
+                DataTable dt = courseInstance.GetCourseByMa(item.ToString());
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    tongTC += Convert.ToInt32(dt.Rows[0]["SoTC"]);
+                }
+            }
+            return tongTC;
+        }
+
+        private void CapNhatTongTinChi()
+        {
+            int tong = TinhTongTinChiChonDangKy();
+            lblTongTC.Text = $"Tổng số tín chỉ đã chọn: {tong} / 24 TC";
+
+            if (tong > 24)
+                lblTongTC.ForeColor = Color.Red;
+            else
+                lblTongTC.ForeColor = Color.DarkGreen;
+        }
+
+        #endregion
+
+
+        // 🌟 CHỨC NĂNG LƯU ĐĂNG KÝ MÔN HỌC (Sử dụng cboStudent của Tab 1)
+        private void btn_Save_Click(object sender, EventArgs e)
+        {
+            if (cboStudent.SelectedValue == null || lstKetqua.Items.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn Sinh viên và nhặt các Môn học cần đăng ký vào giỏ hàng kết quả!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string mssv = cboStudent.SelectedValue.ToString().Trim();
+
+            int tongTC = TinhTongTinChiChonDangKy();
+            if (tongTC > 24)
+            {
+                MessageBox.Show($"Lưu dữ liệu thất bại! Tổng số tín chỉ ní lựa chọn đang là {tongTC} TC, đã vượt giới hạn tối đa cho phép của một học kỳ (Tối đa 24 TC).",
+                                "Vượt quá hạn mức học kỳ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            bool flag = true;
             try
             {
-                string query = "SELECT d.MaMH as 'Mã Môn', c.TenMH as 'Tên Môn Học', c.SoTC as 'Số Tín Chỉ' " +
-                               "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
-                               "WHERE d.MSSV = @mssv";
+                db.openConnection();
+
+                for (int i = 0; i < lstKetqua.Items.Count; i++)
+                {
+                    string maMH = lstKetqua.Items[i].ToString();
+
+                    string insertQuery = "INSERT INTO DKMH (MSSV, MaMH) VALUES (@mssv, @mamh)";
+                    SqlCommand cmdInsert = new SqlCommand(insertQuery, db.conn);
+                    cmdInsert.Parameters.AddWithValue("@mssv", mssv);
+                    cmdInsert.Parameters.AddWithValue("@mamh", maMH);
+
+                    if (cmdInsert.ExecuteNonQuery() <= 0)
+                    {
+                        flag = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                flag = false;
+                MessageBox.Show("Đã xảy ra sự cố trong quá trình lưu dữ liệu: " + ex.Message, "Lỗi truy vấn", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+
+            if (flag)
+            {
+                MessageBox.Show("Chúc mừng ní! Đã thực hiện Đăng Ký Môn Học Thành Công!", "Thành công tốt đẹp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                lstKetqua.Items.Clear();
+                HienThiMonHocChuaDangKy(); // Làm mới kho môn chưa đăng ký ở Tab 1
+                TaiDanhSachMonDaDangKy();   // Tự động quét cập nhật bảng DataGridView bên Tab 2 luôn
+            }
+            else
+            {
+                MessageBox.Show("Thao tác đăng ký thất bại! Vui lòng kiểm tra lại cấu trúc hệ thống.", "Lỗi thực thi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        // 🌟 NÂNG CAO [AI]: Kết nối Trợ lý AI Gemini (Dùng cboStudent của Tab 1)
+        private async void btn_AIExtra_Click(object sender, EventArgs e)
+        {
+            if (cboStudent.SelectedValue == null) return;
+            string mssv = cboStudent.SelectedValue.ToString().Trim();
+
+            lblChiTietMon.Text = "🤖 Trợ lý AI Gemini đang phân tích bảng điểm lịch sử quá khứ của ní, đợi vài giây nhé...";
+            btn_AIExtra.Enabled = false;
+
+            string lichSuDiem = "";
+            try
+            {
+                db.openConnection();
+                SqlCommand cmd = new SqlCommand("SELECT MaMH, Score FROM Score WHERE MSSV = @mssv", db.conn);
+                cmd.Parameters.AddWithValue("@mssv", mssv);
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    lichSuDiem += $"Môn: {r["MaMH"]} - Điểm: {r["Score"]}; ";
+                }
+                db.closeConnection();
+            }
+            catch { }
+
+            if (string.IsNullOrEmpty(lichSuDiem)) lichSuDiem = "Sinh viên năm nhất, chưa ghi nhận lịch sử điểm số môn cũ.";
+            string cacMonHocKyNayOpen = string.Join(", ", lstBandau.Items.Cast<string>());
+
+            string prompt = $"Sinh viên mang MSSV {mssv} có lịch sử điểm học tập các học phần cũ là: {lichSuDiem}. " +
+                            $"Học kỳ hiện tại hệ thống đang mở các môn học sau: {cacMonHocKyNayOpen}. " +
+                            $"Dựa vào triết lý thiết kế chương trình đào tạo kỹ thuật chuẩn CDIO quốc tế, hãy đưa ra 1 lời khuyên ngắn gọn (tối đa 3 dòng) " +
+                            $"tư vấn định hướng sinh viên này nên ưu tiên click chọn đăng ký học môn nào trước trong danh sách môn mở của học kỳ này.";
+
+            string aiGoiY = await AIService.AskChatGPTAsync(prompt);
+
+            lblChiTietMon.Text = $"🤖 [AI TƯ VẤN LỘ TRÌNH ĐÀO TẠO]:\r\n\r\n{aiGoiY}";
+            btn_AIExtra.Enabled = true;
+        }
+
+
+        #region 📋 LOGIC XỬ LÝ TAB 2 - MÔN ĐÃ ĐĂNG KÝ (Sử dụng comboBox2 riêng biệt của Tab 2)
+
+        // 🛠️ Hàm load bảng lấy mã SV trực tiếp từ comboBox2 (Tab 2)
+        private void TaiDanhSachMonDaDangKy()
+        {
+            if (comboBox2.SelectedValue == null || comboBox2.SelectedValue.ToString() == "System.Data.DataRowView") return;
+
+            string mssv = comboBox2.SelectedValue.ToString().Trim();
+
+            string query = "SELECT d.MaMH as 'Mã Môn', c.TenMH as 'Tên Môn Học', c.SoTC as 'Số Tín Chỉ' " +
+                           "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
+                           "WHERE d.MSSV = @mssv";
+
+            try
+            {
                 SqlCommand cmd = new SqlCommand(query, db.getConnection);
                 cmd.Parameters.AddWithValue("@mssv", mssv);
 
@@ -116,198 +370,64 @@ namespace QuanLySinhVien
                 DataTable table = new DataTable();
                 adapter.Fill(table);
 
-                if (dgvRegisterList != null)
-                    dgvRegisterList.DataSource = table;
+                if (dgvDaDangKy != null)
+                {
+                    dgvDaDangKy.DataSource = table;
+                    dgvDaDangKy.BackgroundColor = Color.White;
+                    dgvDaDangKy.BorderStyle = BorderStyle.None;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải danh sách môn đã đăng ký: " + ex.Message);
+                MessageBox.Show("Lỗi hệ thống khi tải danh sách môn đã đăng ký ở Tab 2: " + ex.Message, "Lỗi SQL");
             }
         }
 
-        private void btnRegister_Click(object sender, EventArgs e)
+        private void comboBox2_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (cboStudent.SelectedValue == null || cboCourse.SelectedValue == null)
+            if (comboBox2.SelectedValue == null || comboBox2.SelectedValue.ToString() == "System.Data.DataRowView") return;
+
+            TaiDanhSachMonDaDangKy(); 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedValue == null || dgvDaDangKy.CurrentRow == null)
             {
-                MessageBox.Show("Vui lòng chọn đầy đủ Sinh viên và Môn học!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhấp chọn một dòng môn học trong bảng dưới đây để hủy!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-    
-            string selectedMSSV = cboStudent.SelectedValue.ToString().Trim();
-            string selectedMaMH = cboCourse.SelectedValue.ToString().Trim();
+            string mssv = comboBox2.SelectedValue.ToString().Trim();
+            string mamh = dgvDaDangKy.CurrentRow.Cells["Mã Môn"].Value.ToString().Trim();
+            string tenmh = dgvDaDangKy.CurrentRow.Cells["Tên Môn Học"].Value.ToString().Trim();
 
             try
             {
-   
-                string checkQuery = @"
-            SELECT 
-                c1.Hky, 
-                c1.SoTC AS SoTCMonMoi,
-                (SELECT ISNULL(SUM(c2.SoTC), 0) 
-                 FROM DKMH d 
-                 JOIN Course c2 ON d.MaMH = c2.MaMH 
-                 WHERE d.MSSV = @mssv AND c2.Hky = c1.Hky) AS TongTCDaDangKy
-            FROM Course c1 
-            WHERE c1.MaMH = @mamh";
-
-                int hky = 0;
-                int soTCMonMoi = 0;
-                int tongTCDaDangKy = 0;
-
-                SqlCommand cmdCheck = new SqlCommand(checkQuery, db.getConnection);
-                cmdCheck.Parameters.AddWithValue("@mssv", selectedMSSV);
-                cmdCheck.Parameters.AddWithValue("@mamh", selectedMaMH);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmdCheck);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                if (dt.Rows.Count > 0)
-                {
-                    hky = Convert.ToInt32(dt.Rows[0]["Hky"]);
-                    soTCMonMoi = Convert.ToInt32(dt.Rows[0]["SoTCMonMoi"]);
-                    tongTCDaDangKy = Convert.ToInt32(dt.Rows[0]["TongTCDaDangKy"]);
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy thông tin môn học này trong hệ thống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-     
-                MessageBox.Show($"[KIỂM TRA DỮ LIỆU]:\n" +
-                                $"- Môn học này thuộc: Học kỳ {hky}\n" +
-                                $"- Số tín chỉ môn này: {soTCMonMoi} TC\n" +
-                                $"- Số tín chỉ ĐÃ ĐĂNG KÝ ở Học kỳ {hky} trước đó: {tongTCDaDangKy} TC\n" +
-                                $"- Tổng số sau khi cộng thêm: {tongTCDaDangKy + soTCMonMoi} TC",
-                                "Hệ thống theo dõi TC");
-
-       
-                if (tongTCDaDangKy + soTCMonMoi > 24)
-                {
-                    MessageBox.Show($"Không thể đăng ký! Trong Học kỳ {hky}, sinh viên này đã đăng ký {tongTCDaDangKy} TC.\n" +
-                                    $"Nếu đăng ký thêm môn này ({soTCMonMoi} TC) sẽ vượt quá giới hạn tối đa 24 TC của một học kỳ!",
-                                    "Cảnh báo vượt hạn mức tín chỉ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; 
-                }
-
-   
                 db.openConnection();
-                string query = "INSERT INTO DKMH (MSSV, MaMH) VALUES (@mssv, @mamh)";
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", selectedMSSV);
-                cmd.Parameters.AddWithValue("@mamh", selectedMaMH);
 
-                if (cmd.ExecuteNonQuery() > 0)
+                // 🌟 ĐÃ SỬA CHUẨN: Đổi thành 'Course_ID' trùng khớp hoàn toàn với bảng Score trong SQL Server của ní
+                string checkScoreQuery = "SELECT COUNT(*) FROM Score WHERE MSSV = @mssv AND Course_ID = @mamh";
+                SqlCommand cmdCheck = new SqlCommand(checkScoreQuery, db.conn);
+                cmdCheck.Parameters.AddWithValue("@mssv", mssv);
+                cmdCheck.Parameters.AddWithValue("@mamh", mamh);
+
+                int hasScore = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                // Nếu kết quả > 0 nghĩa là đã có điểm lưu trong DB -> Khóa xích chặn đứng, cấm hủy!
+                if (hasScore > 0)
                 {
-                    MessageBox.Show("Đăng ký môn học thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadRegisteredCourses(selectedMSSV); // Nạp lại bảng hiển thị
+                    MessageBox.Show($"Không thể hủy học phần! Môn học [{tenmh}] của sinh viên này đã được nhập điểm vào hệ thống dữ liệu. Không được phép chỉnh sửa hoặc xóa học phần đã hoàn thành!",
+                                    "Thao tác bị chặn", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return; // Ngắt hàm luôn
                 }
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 2627)
-                {
-                    MessageBox.Show("Sinh viên này đã đăng ký môn học này rồi!", "Trùng lịch học", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            finally
-            {
-                db.closeConnection();
-            }
-        }
 
-        private void label2_Click(object sender, EventArgs e) { }
-
-        private void dgvRegisterList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                string mamh = dgvRegisterList.Rows[e.RowIndex].Cells["Mã Môn"].Value.ToString();
-                string tenmh = dgvRegisterList.Rows[e.RowIndex].Cells["Tên Môn Học"].Value.ToString();
-                string mssv = cboStudent.SelectedValue.ToString();
-
-                DialogResult dr = MessageBox.Show($"Bạn có chắc chắn muốn HỦY đăng ký môn học [{tenmh}]?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                // Nếu kiểm tra an toàn (chưa có điểm), tiến hành hỏi xác nhận và xóa khỏi bảng DKMH
+                DialogResult dr = MessageBox.Show($"Bạn có chắc chắn muốn HỦY đăng ký học phần [{tenmh}] ({mamh}) không?",
+                                                  "Xác nhận hủy đăng ký", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (dr == DialogResult.Yes)
                 {
-                    try
-                    {
-                        db.openConnection();
-                        SqlCommand cmd = new SqlCommand("DELETE FROM DKMH WHERE MSSV = @mssv AND MaMH = @mamh", db.conn);
-                        cmd.Parameters.AddWithValue("@mssv", mssv);
-                        cmd.Parameters.AddWithValue("@mamh", mamh);
-
-                        if (cmd.ExecuteNonQuery() > 0)
-                        {
-                            MessageBox.Show("Hủy môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LoadRegisteredCourses(mssv);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        db.closeConnection();
-                    }
-                }
-            }
-        }
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            string currentUserName = Globals.GlobalUserName;
-            f_HomePage homeForm = new f_HomePage(currentUserName);
-            homeForm.Show();
-            this.Close();
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(panel1, 25, e);
-        }
-
-        private void btnUnregister_Click(object sender, EventArgs e)
-        {
-            if (cboStudent.SelectedValue == null || cboCourse.SelectedValue == null ||
-        cboStudent.SelectedValue.ToString() == "System.Data.DataRowView" ||
-        cboCourse.SelectedValue.ToString() == "System.Data.DataRowView")
-            {
-                MessageBox.Show("Vui lòng chọn đầy đủ Sinh viên và Môn học cần hủy đăng ký!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string mssv = cboStudent.SelectedValue.ToString().Trim();
-            string mamh = cboCourse.SelectedValue.ToString().Trim();
-            string tenmh = cboCourse.Text; 
-            DialogResult dr = MessageBox.Show($"Bạn có chắc chắn muốn HỦY đăng ký môn học [{tenmh}] cho sinh viên này không?",
-                                              "Xác nhận hủy đăng ký", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (dr == DialogResult.Yes)
-            {
-                try
-                {
-                    db.openConnection();
-
-                    string checkQuery = "SELECT COUNT(*) FROM DKMH WHERE MSSV = @mssv AND MaMH = @mamh";
-                    SqlCommand cmdCheck = new SqlCommand(checkQuery, db.conn);
-                    cmdCheck.Parameters.AddWithValue("@mssv", mssv);
-                    cmdCheck.Parameters.AddWithValue("@mamh", mamh);
-                    int isRegistered = Convert.ToInt32(cmdCheck.ExecuteScalar());
-
-                    if (isRegistered == 0)
-                    {
-                        MessageBox.Show("Sinh viên này chưa đăng ký môn học hiện tại, không thể thực hiện hủy!", "Thao tác không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
                     string deleteQuery = "DELETE FROM DKMH WHERE MSSV = @mssv AND MaMH = @mamh";
                     SqlCommand cmdDel = new SqlCommand(deleteQuery, db.conn);
                     cmdDel.Parameters.AddWithValue("@mssv", mssv);
@@ -315,19 +435,40 @@ namespace QuanLySinhVien
 
                     if (cmdDel.ExecuteNonQuery() > 0)
                     {
-                        MessageBox.Show($"Đã hủy thành công môn học [{tenmh}] khỏi danh sách đăng ký!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadRegisteredCourses(mssv);
+                        MessageBox.Show($"Đã hủy đăng ký thành công môn học [{tenmh}]!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Cập nhật làm mới lại giao diện hiển thị cả 2 Tab
+                        TaiDanhSachMonDaDangKy();
+                        HienThiMonHocChuaDangKy();
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Đã xảy ra lỗi hệ thống trong quá trình hủy môn: " + ex.Message, "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    db.closeConnection();
-                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình xác thực điểm số và hủy môn: " + ex.Message, "Lỗi hệ thống");
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
+
+        #endregion
+
+        private void btnBack_Click_1(object sender, EventArgs e)
+        {
+            string currentUserName = Globals.GlobalUserName;
+            f_HomePage homeForm = new f_HomePage(currentUserName);
+            homeForm.Show();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string currentUserName = Globals.GlobalUserName;
+            f_HomePage homeForm = new f_HomePage(currentUserName);
+            homeForm.Show();
+            this.Close();
         }
     }
 }

@@ -9,82 +9,70 @@ namespace QuanLySinhVien
     {
         private My_DB db = new My_DB();
 
-        // Đồng bộ chính xác thuộc tính theo cấu trúc bảng cơ sở dữ liệu thực tế
-        public string Mssv { get; set; }
-        public string Mamh { get; set; } // Map vào cột Course_ID trong cơ sở dữ liệu
+        public int Mssv { get; set; }
+        public string Mamh { get; set; }
         public decimal Diemqt { get; set; }
         public decimal Diemck { get; set; }
-        public decimal Diemtk { get; set; } // Map vào cột Score trong cơ sở dữ liệu
+        public decimal Diemtk { get; set; }
         public string XepLoai { get; set; }
         public string Mota { get; set; }
 
         public Score() { }
 
-        // Constructor nhận đầy đủ các tham số truyền sang từ giao diện nhập điểm
-        public Score(string mssv, string mamh, decimal qt, decimal ck, decimal tk, string xepLoai, string mota)
+        public Score(int mssv, string mamh, decimal qt, decimal ck, decimal tk, string xepLoai, string mota)
         {
-            this.Mssv = mssv;
-            this.Mamh = mamh;
-            this.Diemqt = qt;
-            this.Diemck = ck;
-            this.Diemtk = tk;
-            this.XepLoai = xepLoai;
-            this.Mota = mota;
+            Mssv = mssv; Mamh = mamh;
+            Diemqt = qt; Diemck = ck; Diemtk = tk;
+            XepLoai = xepLoai; Mota = mota;
         }
 
-        /// <summary>
-        /// Hàm thực hiện lưu hoặc cập nhật điểm số dựa trên cấu trúc bảng thực tế: MSSV, Course_ID, Score, Description, XepLoai, Mota
-        /// </summary>
+        public static decimal TinhDiemTK(decimal qt, decimal ck)
+            => Math.Round(qt * 0.4m + ck * 0.6m, 2);
+
+        public static string XepLoaiTheoTK(decimal tk)
+        {
+            if (tk >= 9.0m) return "Xuất sắc";
+            if (tk >= 8.0m) return "Giỏi";
+            if (tk >= 6.5m) return "Khá";
+            if (tk >= 5.0m) return "Trung bình";
+            return "Yếu";
+        }
+
         public bool SaveScore()
         {
             try
             {
                 db.openConnection();
 
-                string checkQuery = "SELECT COUNT(*) FROM Score WHERE MSSV = @mssv AND Course_ID = @mamh";
+                string checkQuery = "SELECT COUNT(*) FROM Score WHERE MSSV=@mssv AND MaMH=@mamh";
                 SqlCommand checkCmd = new SqlCommand(checkQuery, db.conn);
                 checkCmd.Parameters.AddWithValue("@mssv", Mssv);
                 checkCmd.Parameters.AddWithValue("@mamh", Mamh);
-
-                // ĐÃ TỐI ƯU: Sử dụng Convert.ToInt32 để tránh lỗi ép kiểu Object sang Int của SQL Driver
                 int exists = Convert.ToInt32(checkCmd.ExecuteScalar());
 
-                string query = "";
-                if (exists > 0)
-                {
-                    query = "UPDATE Score SET Score = @tk, Description = @desc, XepLoai = @xl, Mota = @mota WHERE MSSV = @mssv AND Course_ID = @mamh";
-                }
-                else
-                {
-                    query = "INSERT INTO Score (MSSV, Course_ID, Score, Description, XepLoai, Mota) VALUES (@mssv, @mamh, @tk, @desc, @xl, @mota)";
-                }
+                string query = exists > 0
+                    ? "UPDATE Score SET DiemQT=@qt, DiemCK=@ck, DiemTK=@tk, XepLoai=@xl, Mota=@mota WHERE MSSV=@mssv AND MaMH=@mamh"
+                    : "INSERT INTO Score (MSSV,MaMH,DiemQT,DiemCK,DiemTK,XepLoai,Mota) VALUES (@mssv,@mamh,@qt,@ck,@tk,@xl,@mota)";
 
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 cmd.Parameters.AddWithValue("@mssv", Mssv);
                 cmd.Parameters.AddWithValue("@mamh", Mamh);
+                cmd.Parameters.AddWithValue("@qt", Diemqt);
+                cmd.Parameters.AddWithValue("@ck", Diemck);
                 cmd.Parameters.AddWithValue("@tk", Diemtk);
-                cmd.Parameters.AddWithValue("@desc", $"QT: {Diemqt:F1} | CK: {Diemck:F1}");
                 cmd.Parameters.AddWithValue("@xl", XepLoai ?? "");
                 cmd.Parameters.AddWithValue("@mota", Mota ?? "");
 
                 return cmd.ExecuteNonQuery() > 0;
             }
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show($"Lỗi kết nối cơ sở dữ liệu:\n{sqlEx.Message}", "Lỗi SQL Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Lỗi hệ thống: " + ex.Message);
+                MessageBox.Show("Lỗi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             finally { db.closeConnection(); }
         }
 
-        /// <summary>
-        /// Nạp bảng hiển thị điểm chi tiết lên DataGridView theo từng MSSV sinh viên
-        /// </summary>
         public static DataTable GetStudentScoreBoard(string mssv)
         {
             My_DB db = new My_DB();
@@ -92,19 +80,21 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-
-                string query = @"SELECT s.Course_ID AS [Mã Môn], c.TenMH AS [Tên Môn], c.SoTC AS [Số Tín Chỉ], 
-                                s.Description AS [Điểm thành phần], s.Score AS [Điểm Tổng Kết],
-                                s.XepLoai AS [Xếp Loại], s.Mota AS [Ghi chú]
-                         FROM Score s 
-                         JOIN Course c ON s.Course_ID = c.MaMH
-                         WHERE s.MSSV = @mssv";
-
+                string query = @"
+                    SELECT s.MaMH    AS [Mã Môn],
+                           c.TenMH   AS [Tên Môn],
+                           c.SoTC    AS [Số TC],
+                           s.DiemQT  AS [Điểm QT],
+                           s.DiemCK  AS [Điểm CK],
+                           s.DiemTK  AS [Điểm TK],
+                           s.XepLoai AS [Xếp Loại],
+                           s.Mota    AS [Ghi Chú]
+                    FROM Score s
+                    JOIN Course c ON s.MaMH = c.MaMH
+                    WHERE s.MSSV = @mssv";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", mssv);
-
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
+                new SqlDataAdapter(cmd).Fill(dt);
             }
             catch { }
             finally { db.closeConnection(); }
@@ -117,36 +107,103 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-
-                string query = @"SELECT SUM(
-                                    CASE 
-                                        WHEN s.Score >= 8.5 THEN 4.0
-                                        WHEN s.Score >= 8.0 THEN 3.5
-                                        WHEN s.Score >= 7.0 THEN 3.0
-                                        WHEN s.Score >= 6.5 THEN 2.5
-                                        WHEN s.Score >= 5.5 THEN 2.0
-                                        WHEN s.Score >= 5.0 THEN 1.5
-                                        WHEN s.Score >= 4.0 THEN 1.0
-                                        ELSE 0.0
-                                    END * c.SoTC
-                                 ) / SUM(c.SoTC) 
-                                 FROM Score s 
-                                 JOIN Course c ON s.Course_ID = c.MaMH 
-                                 WHERE s.MSSV = @mssv
-                                 HAVING SUM(c.SoTC) > 0"; // <--- Chống bốc lỗi chia cho 0 ở đây ní ơi!
-
+                string query = @"
+                    SELECT SUM(
+                        CASE
+                            WHEN s.DiemTK >= 8.5 THEN 4.0
+                            WHEN s.DiemTK >= 8.0 THEN 3.5
+                            WHEN s.DiemTK >= 7.0 THEN 3.0
+                            WHEN s.DiemTK >= 6.5 THEN 2.5
+                            WHEN s.DiemTK >= 5.5 THEN 2.0
+                            WHEN s.DiemTK >= 5.0 THEN 1.5
+                            WHEN s.DiemTK >= 4.0 THEN 1.0
+                            ELSE 0.0
+                        END * c.SoTC
+                    ) / SUM(c.SoTC)
+                    FROM Score s
+                    JOIN Course c ON s.MaMH = c.MaMH
+                    WHERE s.MSSV = @mssv
+                    HAVING SUM(c.SoTC) > 0";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", mssv);
-
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
                 object result = cmd.ExecuteScalar();
-                if (result != DBNull.Value && result != null)
-                {
-                    return Math.Round(Convert.ToDecimal(result), 2);
-                }
-                return 0; // Trả về 0 nếu sinh viên chưa học môn nào thay vì crash app
+                return (result != null && result != DBNull.Value)
+                    ? Math.Round(Convert.ToDecimal(result), 2) : 0;
             }
             catch { return 0; }
             finally { db.closeConnection(); }
+        }
+
+        // ── Tuần 09: Thống kê ──────────────────────────
+
+        public static DataTable GetScoreStatistics()
+        {
+            My_DB db = new My_DB();
+            DataTable dt = new DataTable();
+            try
+            {
+                db.openConnection();
+                string query = @"
+                    SELECT st.MSSV,
+                           st.Fname + ' ' + st.Lname AS [Họ Tên],
+                           ROUND(AVG(s.DiemTK), 2)   AS [Điểm TB],
+                           CASE
+                               WHEN AVG(s.DiemTK) >= 9   THEN N'Xuất sắc'
+                               WHEN AVG(s.DiemTK) >= 8   THEN N'Giỏi'
+                               WHEN AVG(s.DiemTK) >= 6.5 THEN N'Khá'
+                               WHEN AVG(s.DiemTK) >= 5   THEN N'Trung bình'
+                               ELSE N'Yếu'
+                           END AS [Xếp Loại]
+                    FROM Student st
+                    JOIN Score s ON st.MSSV = s.MSSV
+                    GROUP BY st.MSSV, st.Fname, st.Lname
+                    ORDER BY AVG(s.DiemTK) DESC";
+                new SqlDataAdapter(new SqlCommand(query, db.conn)).Fill(dt);
+            }
+            catch { }
+            finally { db.closeConnection(); }
+            return dt;
+        }
+
+        public static DataTable GetCountByXepLoai()
+        {
+            My_DB db = new My_DB();
+            DataTable dt = new DataTable();
+            try
+            {
+                db.openConnection();
+                string query = @"
+                    SELECT XepLoai      AS [Xếp Loại],
+                           COUNT(*)     AS [Số Lượng]
+                    FROM Score
+                    WHERE XepLoai IS NOT NULL AND XepLoai != ''
+                    GROUP BY XepLoai";
+                new SqlDataAdapter(new SqlCommand(query, db.conn)).Fill(dt);
+            }
+            catch { }
+            finally { db.closeConnection(); }
+            return dt;
+        }
+
+        public static DataTable GetAvgScoreBySubject()
+        {
+            My_DB db = new My_DB();
+            DataTable dt = new DataTable();
+            try
+            {
+                db.openConnection();
+                string query = @"
+                    SELECT c.TenMH          AS [Môn Học],
+                           ROUND(AVG(s.DiemTK), 2) AS [Điểm TB]
+                    FROM Score s
+                    JOIN Course c ON s.MaMH = c.MaMH
+                    GROUP BY c.TenMH
+                    ORDER BY c.TenMH";
+                new SqlDataAdapter(new SqlCommand(query, db.conn)).Fill(dt);
+            }
+            catch { }
+            finally { db.closeConnection(); }
+            return dt;
         }
     }
 }

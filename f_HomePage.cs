@@ -73,37 +73,36 @@ namespace QuanLySinhVien
 
         private void HomePage_Load(object sender, EventArgs e)
         {
-            rtbChatHistory.AppendText("🤖 Trợ lý: Xin chào! Tôi có thể giúp gì cho bạn? (Ví dụ: Bạn có thể gõ 'Thêm SV', 'Xem danh sách', 'Có bao nhiêu sinh viên điểm cao?').\n\n");
+            rtbChatHistory.AppendText("🤖 Trợ lý AI: Xin chào! Tôi có thể giúp gì cho bạn? (Ní có thể gõ lệnh nhanh như 'Thêm SV', 'Xem danh sách' hoặc hỏi tôi bất cứ câu hỏi quản lý giáo dục nào nhé).\n\n");
 
             lblXinChao.Text = "Xin chào, " + userFullName;
             ThongKeHeThong();
         }
 
-        private string ProcessBotResponse(string userInput)
+        private async Task<string> ProcessBotResponseAsync(string userInput)
         {
             string input = userInput.ToLower().Trim();
             My_DB db = new My_DB();
 
             try
             {
-                // KỊCH BẢN 1: Điều hướng nhanh - Đồng bộ theo hàm chuẩn của ní
+
                 if (input.Contains("thêm sv") || input.Contains("them sinh vien"))
                 {
                     bttAdd_Click(null, null);
-                    return "redirect"; // Trả về cờ hiệu ngắt dòng chạy hiển thị Text
+                    return "redirect";
                 }
                 if (input.Contains("danh sách") || input.Contains("xem danh sach") || input.Contains("danh sach sv"))
                 {
                     bttList_Click(null, null);
-                    return "redirect"; // Trả về cờ hiệu ngắt dòng chạy hiển thị Text
+                    return "redirect";
                 }
                 if (input.Contains("quản lý môn") || input.Contains("them mon hoc"))
                 {
                     btnManageCourse_Click(null, null);
-                    return "redirect"; // Trả về cờ hiệu ngắt dòng chạy hiển thị Text
+                    return "redirect";
                 }
 
-                // KỊCH BẢN 2: Hỏi đáp dữ liệu thời gian thực (Hỏi số lượng SV điểm cao)
                 if (input.Contains("điểm cao") || input.Contains("diem cao") || input.Contains("sinh vien gioi"))
                 {
                     db.openConnection();
@@ -118,7 +117,6 @@ namespace QuanLySinhVien
                         return "🤖 Trợ lý: Hiện tại chưa có sinh viên nào đạt điểm tích lũy mức Giỏi (>= 8.0) ní ơi.";
                 }
 
-                // KỊCH BẢN 3: Hỏi tổng số lượng sinh viên hiện tại
                 if (input.Contains("bao nhiêu sinh viên") || input.Contains("tong so sv") || input.Contains("so luong sv"))
                 {
                     db.openConnection();
@@ -129,18 +127,22 @@ namespace QuanLySinhVien
                     return $"🤖 Trợ lý: Tổng số lượng sinh viên đang được quản lý trong hệ thống là: {count} sinh viên.";
                 }
 
-                // KỊCH BẢN 4: Lời chào xã giao
                 if (input.Contains("hello") || input.Contains("hi") || input.Contains("xin chào"))
                 {
                     return "🤖 Trợ lý: Xin chào ní! Tôi có thể hỗ trợ gì cho các thao tác quản lý hôm nay không?";
                 }
+
+                string promptDinhHuong = $"Bạn là trợ lý ảo thông minh tích hợp trong phần mềm quản lý sinh viên của trường đại học. " +
+                                         $"Người dùng hiện tại tên là {userFullName} đang hỏi câu sau, hãy trả lời ngắn gọn, tinh tế và chuyên nghiệp dưới 3 dòng văn bản nhé: {userInput}";
+
+                string kếtQuảAI = await AIService.AskChatGPTAsync(promptDinhHuong);
+                return kếtQuảAI;
+
             }
             catch (Exception ex)
             {
-                return "🤖 Trợ lý: Úi, đã xảy ra lỗi nhỏ khi tôi truy vấn cơ sở dữ liệu: " + ex.Message;
+                return "🤖 Trợ lý: Úi, đã xảy ra lỗi nhỏ khi tôi xử lý dữ liệu: " + ex.Message;
             }
-
-            return "🤖 Trợ lý: Tôi chưa hiểu rõ câu lệnh của bạn lắm. Ní có thể gõ lại các từ khóa như 'Thêm SV', 'Danh sách', hoặc 'Điểm cao' để tôi hỗ trợ nhé!";
         }
 
         private void bttAdd_Click(object sender, EventArgs e)
@@ -184,10 +186,7 @@ namespace QuanLySinhVien
             this.Close();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
 
         private void pnlTongSinhVien_Paint(object sender, PaintEventArgs e)
         {
@@ -225,32 +224,35 @@ namespace QuanLySinhVien
             this.Close();
         }
 
-        private void btnSendChat_Click(object sender, EventArgs e)
+        private async void btnSendChat_Click(object sender, EventArgs e)
         {
             string userText = txtChatInput.Text.Trim();
             if (string.IsNullOrEmpty(userText)) return;
 
-            // 1. Hiển thị tin nhắn của người dùng lên hộp thoại
+            // 1. Đổ nội dung người dùng gõ vào RichTextBox
             rtbChatHistory.SelectionColor = Color.Blue;
             rtbChatHistory.AppendText("👤 Bạn: " + userText + "\n");
-
-            // 2. Clear ô nhập liệu ngay để gõ câu tiếp theo
             txtChatInput.Clear();
 
-            // 3. Gọi xử lý Bot trả lời
-            string botResponse = ProcessBotResponse(userText);
+            // 2. Lưu lại vị trí hiện tại trước khi báo trạng thái chờ
+            int viTriTruocKhiAiChay = rtbChatHistory.TextLength;
 
-            // 4. BỘ CHẶN AN TOÀN: Nếu Bot phản hồi chuyển trang (Form đã bị đóng), ngắt code tại đây luôn
-            if (botResponse == "redirect" || this.IsDisposed)
-            {
-                return;
-            }
+            // Hiển thị trạng thái chờ tạm thời
+            rtbChatHistory.SelectionColor = Color.Gray;
+            rtbChatHistory.AppendText("🤖 Trợ lý AI đang suy nghĩ...\n");
 
-            // 5. Hiển thị câu trả lời của Bot lên hộp thoại (Chỉ chạy khi Form còn sống)
+            // 3. Gọi hàm xử lý lấy câu trả lời từ DB hoặc API Gemini
+            string botResponse = await ProcessBotResponseAsync(userText);
+
+            if (botResponse == "redirect" || this.IsDisposed) return;
+
+            // 4. XOÁ SẠCH DÒNG CHỜ: Cắt bỏ đoạn chữ "đang suy nghĩ..." dựa trên vị trí đã lưu, không sợ lỗi lệch byte icon nữa!
+            rtbChatHistory.Text = rtbChatHistory.Text.Substring(0, viTriTruocKhiAiChay);
+
+            // 5. Đổ kết quả phản hồi chuẩn lên giao diện
             rtbChatHistory.SelectionColor = Color.DarkGreen;
             rtbChatHistory.AppendText(botResponse + "\n\n");
 
-            // Tự động cuộn thanh cuộn xuống dòng tin nhắn mới nhất
             rtbChatHistory.ScrollToCaret();
             txtChatInput.Focus();
         }
@@ -262,6 +264,13 @@ namespace QuanLySinhVien
                 e.SuppressKeyPress = true;
                 btnSendChat_Click(sender, e);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            f_Statistic formThongKe = new f_Statistic();
+            formThongKe.ShowDialog();
+            this.Close();
         }
     }
 }

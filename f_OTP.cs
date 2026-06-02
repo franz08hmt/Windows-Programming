@@ -81,11 +81,11 @@ namespace QuanLySinhVien
         {
             try
             {
-                // 1. Tạo mã OTP mới ngẫu nhiên 6 số
+               
                 Random rand = new Random();
                 _otpCode = rand.Next(100000, 999999).ToString();
 
-                // 2. Thực thi lệnh cấu hình SMTP kết nối Server Google để gửi mail thực tế
+            
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
@@ -93,20 +93,20 @@ namespace QuanLySinhVien
 
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("hmtlqd249@gmail.com");
-                mail.To.Add(_email); // Gửi tới đúng email người nhận hiện tại
+                mail.To.Add(_email); 
                 mail.Subject = "Mã OTP mới đặt lại mật khẩu / đăng ký";
                 mail.Body = $"Mã OTP mới của bạn là: {_otpCode}\nMã có hiệu lực trong 5 phút.";
 
-                smtp.Send(mail); // Lệnh kích hoạt gửi mail đi tắp lự!
+                smtp.Send(mail); 
 
                 MessageBox.Show("Mã OTP mới đã được gửi lại vào Email của bạn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // 3. Khởi động lại bộ đếm ngược 5 phút như ban đầu
+          
                 _timeLeft = 300;
                 lblTimer.Text = "Còn lại: 05:00";
-                btnResend.Enabled = false; // Khóa lại nút gửi tiếp
+                btnResend.Enabled = false; 
                 txtOTP.Clear();
-                timerOTP.Start(); // Đếm ngược lại từ đầu
+                timerOTP.Start(); 
             }
             catch (Exception ex)
             {

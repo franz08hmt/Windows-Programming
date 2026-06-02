@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace QuanLySinhVien
@@ -12,7 +13,7 @@ namespace QuanLySinhVien
         public f_ManageCourse()
         {
             InitializeComponent();
-            // --- KÍCH HOẠT: Bộ bẫy lỗi gõ phím thời gian thực cho CẢ HAI TAB ngay khi mở form ---
+ 
             RegisterRealTimeValidation();
         }
 
@@ -55,7 +56,7 @@ namespace QuanLySinhVien
                 }
             };
 
-            // 2. Bẫy lỗi ô Tên môn học (Thêm)
+ 
             txtAddTen.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtAddTen.Text.Trim()))
                 {
@@ -67,7 +68,7 @@ namespace QuanLySinhVien
                 }
             };
 
-            // 3. Bẫy lỗi ô Số tín chỉ (Thêm)
+      
             nudAddSotc.ValueChanged += (s, e) => {
                 if (nudAddSotc.Value <= 0)
                 {
@@ -79,7 +80,7 @@ namespace QuanLySinhVien
                 }
             };
 
-            // 4. Bẫy lỗi ô Học kỳ (Thêm)
+       
             nudAddHky.ValueChanged += (s, e) => {
                 if (nudAddHky.Value < 1 || nudAddHky.Value > 3)
                 {
@@ -92,8 +93,6 @@ namespace QuanLySinhVien
             };
 
 
-            // ================== TAB CHỈNH SỬA ==================
-            // 5. Bẫy lỗi ô Tên môn học (Sửa)
             txtEditTen.TextChanged += (s, e) => {
                 if (string.IsNullOrEmpty(txtEditTen.Text.Trim()))
                 {
@@ -105,7 +104,7 @@ namespace QuanLySinhVien
                 }
             };
 
-            // 6. Bẫy lỗi ô Số tín chỉ (Sửa)
+         
             nudEditSotc.ValueChanged += (s, e) => {
                 if (nudEditSotc.Value <= 0)
                 {
@@ -117,7 +116,7 @@ namespace QuanLySinhVien
                 }
             };
 
-            // 7. Bẫy lỗi ô Học kỳ (Sửa)
+        
             nudEditHky.ValueChanged += (s, e) => {
                 if (nudEditHky.Value < 1 || nudEditHky.Value > 3)
                 {
@@ -132,7 +131,6 @@ namespace QuanLySinhVien
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Bộ lọc chặn an toàn Tab Thêm
             if (!string.IsNullOrEmpty(erpCourse.GetError(txtAddMa)) ||
                 !string.IsNullOrEmpty(erpCourse.GetError(txtAddTen)) ||
                 !string.IsNullOrEmpty(erpCourse.GetError(nudAddSotc)) ||
@@ -143,47 +141,62 @@ namespace QuanLySinhVien
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtAddMa.Text))
-            {
-                MessageBox.Show("Vui lòng nhập Mã môn học!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(txtAddTen.Text))
-            {
-                MessageBox.Show("Vui lòng nhập Tên môn học!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if ((int)nudAddSotc.Value <= 0)
-            {
-                MessageBox.Show("Số tín chỉ phải > 0!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if ((int)nudAddHky.Value < 1 || (int)nudAddHky.Value > 3)
-            {
-                MessageBox.Show("Học kỳ phải từ 1 đến 3!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            Course course = new Course();
+            course.Mamh = txtAddMa.Text.Trim();
+            course.Tenmh = txtAddTen.Text.Trim();
+            course.Tuan = (int)nudAddTuan.Value; 
+            course.Hocky = (int)nudAddHky.Value;   
+            course.Decription = txtAddMota.Text.Trim();
 
-            Course c = new Course
+            if (checkCoursName(course.Tenmh))
             {
-                Mamh = txtAddMa.Text.Trim(),
-                Tenmh = txtAddTen.Text.Trim(),
-                Sotc = (int)nudAddSotc.Value,
-                Tuan = (int)nudAddTuan.Value,
-                Hocky = (int)nudAddHky.Value,
-                Decription = txtAddMota.Text.Trim()
-            };
+                MessageBox.Show("Tên môn học đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if ((int)nudAddTuan.Value < 10)
+            {
+                MessageBox.Show("Số Tuần Học Không Hợp Lệ (tối thiểu 10)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else if (nudAddSotc.Value.ToString().All(char. IsDigit) && verif())
+            {
+                course.Sotc = (int)nudAddSotc.Value;
 
-            if (c.AddCourse())
-            {
-                MessageBox.Show("Thêm môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ClearTabAdd();
-                btnRefresh_Click(sender, e);
+                if (course.AddCourse())
+                {
+                    MessageBox.Show("Thêm khóa học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearTabAdd();
+                    btnRefresh_Click(sender, e);
+                }
+                else
+                {
+
+                    MessageBox.Show("Lỗi: " + (course.Exception ?? "Mã môn học có thể đã tồn tại."), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Thêm thất bại! Mã môn học có thể đã tồn tại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Dữ liệu không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        bool checkCoursName(string name)
+        {
+            Course course = new Course();
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Course WHERE TenMH LIKE @name");
+            cmd.Parameters.AddWithValue("@name", name);
+
+            DataTable dt = course.getCourse(cmd);
+            return dt != null && dt.Rows.Count > 0;
+        }
+
+        bool verif()
+        {
+            if (string.IsNullOrWhiteSpace(txtAddMa.Text) ||
+                string.IsNullOrWhiteSpace(txtAddTen.Text) ||
+                string.IsNullOrWhiteSpace(txtAddMota.Text))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void ClearTabAdd()
@@ -194,7 +207,7 @@ namespace QuanLySinhVien
             nudAddTuan.Value = 1;
             nudAddHky.Value = 1;
             txtAddMota.Clear();
-            if (erpCourse != null) erpCourse.Clear(); // Dọn sạch vết chấm đỏ
+            if (erpCourse != null) erpCourse.Clear(); 
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -218,7 +231,7 @@ namespace QuanLySinhVien
                 nudEditHky.Value = Convert.ToInt32(row["Hky"]);
                 txtEditMota.Text = row["Mota"].ToString();
 
-                // Đổ dữ liệu ra xong thì dọn lỗi đỏ cũ (nếu có) để người dùng sửa lại từ đầu
+              
                 if (erpCourse != null)
                 {
                     erpCourse.SetError(txtEditTen, "");
@@ -236,7 +249,7 @@ namespace QuanLySinhVien
         {
             if (string.IsNullOrWhiteSpace(txtEditMa.Text)) return;
 
-            // --- CHỨC NĂNG THÊM MỚI: Bộ lọc chặn an toàn khi bấm nút Sửa môn học ---
+         
             if (!string.IsNullOrEmpty(erpCourse.GetError(txtEditTen)) ||
                 !string.IsNullOrEmpty(erpCourse.GetError(nudEditSotc)) ||
                 !string.IsNullOrEmpty(erpCourse.GetError(nudEditHky)))
@@ -334,7 +347,7 @@ namespace QuanLySinhVien
             txtEditMota.Clear();
             if (erpCourse != null)
             {
-                // Xóa bỏ hoàn toàn các chấm đỏ lỗi cũ trên Tab Sửa sau khi Clear form
+      
                 erpCourse.SetError(txtEditTen, "");
                 erpCourse.SetError(nudEditSotc, "");
                 erpCourse.SetError(nudEditHky, "");
@@ -449,6 +462,90 @@ namespace QuanLySinhVien
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
             VeBoGocPanel(panel3, 25, e);
+        }
+
+        private async void btnAISuggest_Click(object sender, EventArgs e)
+        {
+            string tenMon = txtAddTen.Text.Trim();
+            int soTC = (int)nudAddSotc.Value;
+
+            // 1. Chặn nếu người dùng lười chưa gõ tên môn mà đã đòi gọi AI
+            if (string.IsNullOrEmpty(tenMon))
+            {
+                MessageBox.Show("Ní ơi, vui lòng nhập Tên môn học vào trước thì AI mới phân tích được chứ!",
+                                "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtAddTen.Focus();
+                return;
+            }
+
+            // 2. Chuyển giao diện sang trạng thái chờ
+            txtAddMota.Text = "🤖 Trợ lý AI đang tiến hành phân tích đề cương đào tạo chuẩn CDIO, ní đợi vài giây nhé...";
+            btnAISuggest.Enabled = false; // Khóa nút lại để người dùng không bấm liên tục làm treo lệnh
+
+            // 3. Xây dựng câu Prompt "ép" ChatGPT phải trả về đúng cấu trúc từ khóa cố định
+            // Việc ép cấu trúc giúp C# lát nữa dùng lệnh cắt chuỗi (Split) phân bổ vào đúng ô cực kỳ dễ dàng
+            string prompt = $"Hãy phân tích môn học mang tên '{tenMon}' hiện đang thiết lập {soTC} tín chỉ theo chuẩn khung CDIO. " +
+                            $"Yêu cầu bạn tính toán đưa ra đề xuất số tuần học phù hợp (môn nặng thực hành hoặc đồ án thì tuần dài hơn). " +
+                            $"Hãy trả về câu trả lời duy nhất khớp chính xác theo cấu trúc 3 dòng sau đây, không viết thêm lời chào hay giải thích gì khác:\n" +
+                            $"Tuan: [Chỉ ghi một con số nguyên số tuần từ 10 đến 15]\n" +
+                            $"Mota: [Ghi 3-4 câu mô tả đề cương môn học ngắn gọn, chuyên nghiệp, nêu rõ chuẩn đầu ra kiến thức kỹ năng đạt được]";
+
+            // 4. Gọi lệnh chạy ngầm bắn lên OpenAI (Chờ phản hồi mà không gây đơ giao diện nhờ từ khóa await)
+            string aiResult = await AIService.AskChatGPTAsync(prompt);
+
+            // 5. Tiếp nhận chuỗi phản hồi từ AI và bóc tách dữ liệu đổ lên Form
+            try
+            {
+                // Cắt toàn bộ văn bản trả về thành các dòng dựa vào ký tự xuống dòng '\n'
+                string[] lines = aiResult.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                string s_tuan = "";
+                string s_mota = "";
+
+                foreach (string line in lines)
+                {
+                    // Nếu dòng bắt đầu bằng chữ Tuan: thì cắt lấy phần số phía sau
+                    if (line.StartsWith("Tuan:"))
+                        s_tuan = line.Replace("Tuan:", "").Trim();
+
+                    // Nếu dòng bắt đầu bằng chữ Mota: thì cắt lấy đoạn mô tả văn bản
+                    if (line.StartsWith("Mota:"))
+                        s_mota = line.Replace("Mota:", "").Trim();
+                }
+
+                // 6. Đổ dữ liệu thông minh vừa bóc tách ngược lại các linh kiện trên giao diện
+
+                // Đổ số tuần đề xuất vào NumericUpDown ô số tuần học
+                if (!string.IsNullOrEmpty(s_tuan) && int.TryParse(s_tuan, out int soTuanDeXuat))
+                {
+                    // Ràng buộc bảo vệ: Nếu số tuần học AI đề xuất hợp lệ >= 10 thì mới gán
+                    if (soTuanDeXuat >= 10 && soTuanDeXuat <= 20)
+                    {
+                        nudAddTuan.Value = soTuanDeXuat;
+                    }
+                }
+
+                // Đổ văn bản mô tả vào ô RichTextBox/TextBox Mô tả chương trình môn học
+                if (!string.IsNullOrEmpty(s_mota))
+                {
+                    txtAddMota.Text = s_mota;
+                }
+                else
+                {
+                    // Phòng hờ trường hợp AI không trả về đúng cấu trúc, ta ném toàn bộ văn bản thô vào ô mô tả cho người dùng tự xem
+                    txtAddMota.Text = aiResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi bóc tách ngoài ý muốn, hiển thị nguyên văn chuỗi AI phản hồi
+                txtAddMota.Text = "[Lỗi xử lý chuỗi chữ của AI]: " + ex.Message + "\n\nKẾT QUẢ GỐC:\n" + aiResult;
+            }
+            finally
+            {
+                // 7. Hoàn tất quá trình, mở khóa lại nút bấm để sử dụng cho môn tiếp theo
+                btnAISuggest.Enabled = true;
+            }
         }
     }
 }

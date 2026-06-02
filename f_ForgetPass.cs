@@ -106,9 +106,7 @@ namespace QuanLySinhVien
 
         private void btnBackLogin_Click(object sender, EventArgs e)
         {
-            f_Login loginForm = new f_Login();
-
-            loginForm.Show();
+            
 
             this.Close();
         }

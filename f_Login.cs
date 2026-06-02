@@ -171,5 +171,10 @@ namespace QuanLySinhVien
         }
 
         private void txtUsername_TextChanged(object sender, EventArgs e) { }
+
+        private void rdStudent_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -107,7 +107,7 @@ namespace QuanLySinhVien
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            // Validation
+       
             if (string.IsNullOrEmpty(txtFname.Text) ||
                 string.IsNullOrEmpty(txtLname.Text) ||
                 string.IsNullOrEmpty(txtUsername.Text) ||
@@ -123,7 +123,7 @@ namespace QuanLySinhVien
             {
                 MessageBox.Show("Vui lòng kiểm tra lại thông tin. Mật khẩu phải đạt độ MẠNH và trùng khớp trước khi đăng ký!",
                                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Dừng lại, không chạy code insert database
+                return; 
             }
 
 
@@ -144,7 +144,7 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Kiểm tra username tồn tại
+      
             if (CheckUsernameExists(txtUsername.Text))
             {
                 MessageBox.Show("Username đã tồn tại! Vui lòng chọn tên khác.",
@@ -153,7 +153,6 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Kiểm tra email tồn tại
             if (CheckEmailExists(txtEmail.Text))
             {
                 MessageBox.Show("Email đã được sử dụng! Vui lòng dùng email khác.",
@@ -162,11 +161,11 @@ namespace QuanLySinhVien
                 return;
             }
 
-            // Gửi OTP
+      
             otpCode = GenerateOTP();
             SendOTP(txtEmail.Text, otpCode);
 
-            // Mở form OTP
+     
             f_OTP otpForm = new f_OTP(otpCode, txtEmail.Text.Trim());
 
             if (otpForm.ShowDialog() == DialogResult.OK)
@@ -191,7 +190,7 @@ namespace QuanLySinhVien
                 string msgv = (position == 1 ? "SV" : "HR") +
                               DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                // Chuyển ảnh sang byte[]
+        
                 byte[] picBytes = null;
                 if (ptbPicture.Image != null)
                 {
@@ -275,14 +274,13 @@ namespace QuanLySinhVien
 
         private void txtFname_TextChanged(object sender, EventArgs e)
         {
-            // Kiểm tra nếu chuỗi có chứa ký tự số
             if (txtFname.Text.Any(char.IsDigit))
             {
                 erp1.SetError(txtFname, "Họ không được chứa chữ số!");
             }
             else
             {
-                erp1.SetError(txtFname, ""); // Xóa thông báo lỗi nếu hợp lệ
+                erp1.SetError(txtFname, ""); 
             }
         }
 
@@ -318,30 +316,30 @@ namespace QuanLySinhVien
         {
             string pass = txtPassword.Text;
 
-            // 1. Kiểm tra độ dài tối thiểu
+      
             if (pass.Length < 8)
             {
                 erp1.SetError(txtPassword, "Mật khẩu quá ngắn! Phải từ 8 ký tự trở lên.");
                 return;
             }
 
-            // 2. Kiểm tra các điều kiện ký tự bằng LINQ (đã có using System.Linq)
+      
             bool hasUpper = pass.Any(char.IsUpper);
             bool hasLower = pass.Any(char.IsLower);
             bool hasDigit = pass.Any(char.IsDigit);
             bool hasSpecial = pass.Any(ch => !char.IsLetterOrDigit(ch));
 
-            // 3. Đánh giá nếu thiếu bất kỳ điều kiện nào thì tính là chưa đủ mạnh
+         
             if (!hasUpper || !hasLower || !hasDigit || !hasSpecial)
             {
                 erp1.SetError(txtPassword, "Mật khẩu yếu! Phải bao gồm cả chữ hoa, chữ thường, số và ký tự đặc biệt (VD: @, #, $).");
             }
             else
             {
-                erp1.SetError(txtPassword, ""); // Đạt chuẩn mật khẩu MẠNH
+                erp1.SetError(txtPassword, ""); 
             }
 
-            // Kích hoạt kiểm tra lại ô Xác nhận mật khẩu phòng trường hợp người dùng sửa mật khẩu chính sau khi đã nhập ô xác nhận
+         
             if (!string.IsNullOrEmpty(txtConfirmPassword.Text))
             {
                 txtConfirmPassword_TextChanged(sender, e);
@@ -376,11 +374,13 @@ namespace QuanLySinhVien
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            f_Login loginForm = new f_Login();
-
-            loginForm.Show();
 
             this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
