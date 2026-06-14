@@ -40,6 +40,7 @@
             this.rdHR = new System.Windows.Forms.RadioButton();
             this.lblTitle = new System.Windows.Forms.Label();
             this.rdStudent = new System.Windows.Forms.RadioButton();
+            this.rdAdmin = new System.Windows.Forms.RadioButton();
             this.lnkForgetPass = new System.Windows.Forms.LinkLabel();
             this.lnkRegister = new System.Windows.Forms.LinkLabel();
             this.lbLogin = new System.Windows.Forms.Label();
@@ -49,7 +50,6 @@
             this.picLoginIcon = new System.Windows.Forms.PictureBox();
             this.pctLogo = new System.Windows.Forms.PictureBox();
             this.lblDesigned = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.pnlPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctLock)).BeginInit();
@@ -70,10 +70,9 @@
             this.pnlPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlPassword.Controls.Add(this.pctLock);
             this.pnlPassword.Controls.Add(this.txtPassword);
-            this.pnlPassword.Location = new System.Drawing.Point(189, 235);
-            this.pnlPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlPassword.Location = new System.Drawing.Point(97, 268);
             this.pnlPassword.Name = "pnlPassword";
-            this.pnlPassword.Size = new System.Drawing.Size(200, 34);
+            this.pnlPassword.Size = new System.Drawing.Size(276, 36);
             this.pnlPassword.TabIndex = 11;
             // 
             // pctLock
@@ -81,9 +80,8 @@
             this.pctLock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(240)))), ((int)(((byte)(254)))));
             this.pctLock.Image = global::QuanLySinhVien.Properties.Resources.LockIcon2;
             this.pctLock.Location = new System.Drawing.Point(0, 0);
-            this.pctLock.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pctLock.Name = "pctLock";
-            this.pctLock.Size = new System.Drawing.Size(43, 32);
+            this.pctLock.Size = new System.Drawing.Size(43, 33);
             this.pctLock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pctLock.TabIndex = 10;
             this.pctLock.TabStop = false;
@@ -92,12 +90,10 @@
             // 
             this.txtPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(240)))), ((int)(((byte)(254)))));
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtPassword.ForeColor = System.Drawing.Color.Gray;
-            this.txtPassword.Location = new System.Drawing.Point(44, 8);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPassword.Location = new System.Drawing.Point(47, 7);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(152, 16);
+            this.txtPassword.Size = new System.Drawing.Size(228, 19);
             this.txtPassword.TabIndex = 3;
             this.txtPassword.Text = "●●●●●●●●●●";
             this.txtPassword.Enter += new System.EventHandler(this.txtPassword_Enter);
@@ -109,19 +105,17 @@
             this.pnlUserWrapper.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlUserWrapper.Controls.Add(this.pctUserIcon);
             this.pnlUserWrapper.Controls.Add(this.txtUsername);
-            this.pnlUserWrapper.Location = new System.Drawing.Point(190, 166);
-            this.pnlUserWrapper.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlUserWrapper.Location = new System.Drawing.Point(97, 179);
             this.pnlUserWrapper.Name = "pnlUserWrapper";
-            this.pnlUserWrapper.Size = new System.Drawing.Size(199, 35);
+            this.pnlUserWrapper.Size = new System.Drawing.Size(276, 36);
             this.pnlUserWrapper.TabIndex = 8;
             // 
             // pctUserIcon
             // 
             this.pctUserIcon.Image = global::QuanLySinhVien.Properties.Resources.UserIcon;
-            this.pctUserIcon.Location = new System.Drawing.Point(-1, -1);
-            this.pctUserIcon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pctUserIcon.Location = new System.Drawing.Point(-1, -2);
             this.pctUserIcon.Name = "pctUserIcon";
-            this.pctUserIcon.Size = new System.Drawing.Size(43, 35);
+            this.pctUserIcon.Size = new System.Drawing.Size(43, 37);
             this.pctUserIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pctUserIcon.TabIndex = 9;
             this.pctUserIcon.TabStop = false;
@@ -130,12 +124,11 @@
             // 
             this.txtUsername.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(240)))), ((int)(((byte)(254)))));
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.txtUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUsername.ForeColor = System.Drawing.Color.DimGray;
-            this.txtUsername.Location = new System.Drawing.Point(43, 7);
-            this.txtUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtUsername.Location = new System.Drawing.Point(43, 5);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(155, 18);
+            this.txtUsername.Size = new System.Drawing.Size(232, 24);
             this.txtUsername.TabIndex = 2;
             this.txtUsername.Text = "Họ và tên";
             this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
@@ -148,12 +141,11 @@
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(181, 322);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogin.Location = new System.Drawing.Point(97, 380);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(216, 41);
+            this.btnLogin.Size = new System.Drawing.Size(276, 48);
             this.btnLogin.TabIndex = 1;
             this.btnLogin.Text = "Đăng nhập";
             this.btnLogin.UseVisualStyleBackColor = false;
@@ -162,14 +154,12 @@
             // rdHR
             // 
             this.rdHR.AutoSize = true;
-            this.rdHR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.rdHR.Location = new System.Drawing.Point(267, 288);
-            this.rdHR.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rdHR.Location = new System.Drawing.Point(315, 332);
             this.rdHR.Name = "rdHR";
-            this.rdHR.Size = new System.Drawing.Size(136, 21);
+            this.rdHR.Size = new System.Drawing.Size(58, 24);
             this.rdHR.TabIndex = 5;
             this.rdHR.TabStop = true;
-            this.rdHR.Text = "Human Resource";
+            this.rdHR.Text = "HR";
             this.rdHR.UseVisualStyleBackColor = true;
             // 
             // lblTitle
@@ -177,36 +167,41 @@
             this.lblTitle.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblTitle.AutoSize = true;
             this.lblTitle.BackColor = System.Drawing.Color.White;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.lblTitle.Location = new System.Drawing.Point(139, 23);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTitle.Location = new System.Drawing.Point(91, 39);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(327, 37);
+            this.lblTitle.Size = new System.Drawing.Size(292, 32);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "ĐĂNG NHẬP HỆ THỐNG";
             // 
             // rdStudent
             // 
             this.rdStudent.AutoSize = true;
-            this.rdStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.rdStudent.Location = new System.Drawing.Point(181, 288);
-            this.rdStudent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rdStudent.Location = new System.Drawing.Point(192, 332);
             this.rdStudent.Name = "rdStudent";
-            this.rdStudent.Size = new System.Drawing.Size(75, 21);
+            this.rdStudent.Size = new System.Drawing.Size(91, 24);
             this.rdStudent.TabIndex = 4;
             this.rdStudent.TabStop = true;
             this.rdStudent.Text = "Student";
             this.rdStudent.UseVisualStyleBackColor = true;
-            this.rdStudent.CheckedChanged += new System.EventHandler(this.rdStudent_CheckedChanged);
+            // 
+            // rdAdmin
+            // 
+            this.rdAdmin.AutoSize = true;
+            this.rdAdmin.Location = new System.Drawing.Point(98, 332);
+            this.rdAdmin.Name = "rdAdmin";
+            this.rdAdmin.Size = new System.Drawing.Size(79, 24);
+            this.rdAdmin.TabIndex = 13;
+            this.rdAdmin.TabStop = true;
+            this.rdAdmin.Text = "Admin";
+            this.rdAdmin.UseVisualStyleBackColor = true;
             // 
             // lnkForgetPass
             // 
             this.lnkForgetPass.AutoSize = true;
-            this.lnkForgetPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lnkForgetPass.LinkColor = System.Drawing.Color.CadetBlue;
-            this.lnkForgetPass.Location = new System.Drawing.Point(281, 422);
-            this.lnkForgetPass.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lnkForgetPass.Location = new System.Drawing.Point(234, 446);
             this.lnkForgetPass.Name = "lnkForgetPass";
             this.lnkForgetPass.Size = new System.Drawing.Size(127, 20);
             this.lnkForgetPass.TabIndex = 7;
@@ -217,10 +212,8 @@
             // lnkRegister
             // 
             this.lnkRegister.AutoSize = true;
-            this.lnkRegister.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lnkRegister.LinkColor = System.Drawing.Color.CadetBlue;
-            this.lnkRegister.Location = new System.Drawing.Point(177, 422);
-            this.lnkRegister.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lnkRegister.Location = new System.Drawing.Point(127, 446);
             this.lnkRegister.Name = "lnkRegister";
             this.lnkRegister.Size = new System.Drawing.Size(88, 20);
             this.lnkRegister.TabIndex = 6;
@@ -231,30 +224,25 @@
             // lbLogin
             // 
             this.lbLogin.AutoSize = true;
-            this.lbLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
-            this.lbLogin.Location = new System.Drawing.Point(187, 144);
-            this.lbLogin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
+            this.lbLogin.Location = new System.Drawing.Point(95, 154);
             this.lbLogin.Name = "lbLogin";
-            this.lbLogin.Size = new System.Drawing.Size(111, 20);
+            this.lbLogin.Size = new System.Drawing.Size(116, 21);
             this.lbLogin.TabIndex = 10;
             this.lbLogin.Text = "Tên đăng nhập";
             // 
             // lbPassword
             // 
             this.lbPassword.AutoSize = true;
-            this.lbPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
-            this.lbPassword.Location = new System.Drawing.Point(186, 214);
-            this.lbPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
+            this.lbPassword.Location = new System.Drawing.Point(95, 243);
             this.lbPassword.Name = "lbPassword";
-            this.lbPassword.Size = new System.Drawing.Size(74, 20);
+            this.lbPassword.Size = new System.Drawing.Size(77, 21);
             this.lbPassword.TabIndex = 11;
             this.lbPassword.Text = "Mật khẩu";
             // 
             // pnlBackground
             // 
-            this.pnlBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlBackground.BackColor = System.Drawing.Color.White;
             this.pnlBackground.Controls.Add(this.lblSeparator);
             this.pnlBackground.Controls.Add(this.lbPassword);
@@ -262,36 +250,33 @@
             this.pnlBackground.Controls.Add(this.picLoginIcon);
             this.pnlBackground.Controls.Add(this.lnkRegister);
             this.pnlBackground.Controls.Add(this.lnkForgetPass);
+            this.pnlBackground.Controls.Add(this.rdAdmin);
             this.pnlBackground.Controls.Add(this.rdStudent);
             this.pnlBackground.Controls.Add(this.lblTitle);
             this.pnlBackground.Controls.Add(this.rdHR);
             this.pnlBackground.Controls.Add(this.btnLogin);
             this.pnlBackground.Controls.Add(this.pnlUserWrapper);
             this.pnlBackground.Controls.Add(this.pnlPassword);
-            this.pnlBackground.Location = new System.Drawing.Point(291, 85);
-            this.pnlBackground.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlBackground.Location = new System.Drawing.Point(266, 121);
             this.pnlBackground.Name = "pnlBackground";
-            this.pnlBackground.Size = new System.Drawing.Size(573, 450);
+            this.pnlBackground.Size = new System.Drawing.Size(450, 489);
             this.pnlBackground.TabIndex = 8;
             // 
             // lblSeparator
             // 
             this.lblSeparator.AutoSize = true;
-            this.lblSeparator.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.lblSeparator.Location = new System.Drawing.Point(269, 420);
-            this.lblSeparator.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSeparator.Location = new System.Drawing.Point(219, 446);
             this.lblSeparator.Name = "lblSeparator";
-            this.lblSeparator.Size = new System.Drawing.Size(14, 24);
+            this.lblSeparator.Size = new System.Drawing.Size(14, 20);
             this.lblSeparator.TabIndex = 12;
             this.lblSeparator.Text = "|";
             // 
             // picLoginIcon
             // 
             this.picLoginIcon.Image = global::QuanLySinhVien.Properties.Resources.LoginIcon;
-            this.picLoginIcon.Location = new System.Drawing.Point(263, 76);
-            this.picLoginIcon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.picLoginIcon.Location = new System.Drawing.Point(204, 88);
             this.picLoginIcon.Name = "picLoginIcon";
-            this.picLoginIcon.Size = new System.Drawing.Size(61, 53);
+            this.picLoginIcon.Size = new System.Drawing.Size(57, 50);
             this.picLoginIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLoginIcon.TabIndex = 9;
             this.picLoginIcon.TabStop = false;
@@ -300,10 +285,9 @@
             // 
             this.pctLogo.BackColor = System.Drawing.Color.Transparent;
             this.pctLogo.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
-            this.pctLogo.Location = new System.Drawing.Point(407, 560);
-            this.pctLogo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pctLogo.Location = new System.Drawing.Point(377, 614);
             this.pctLogo.Name = "pctLogo";
-            this.pctLogo.Size = new System.Drawing.Size(109, 75);
+            this.pctLogo.Size = new System.Drawing.Size(74, 57);
             this.pctLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pctLogo.TabIndex = 12;
             this.pctLogo.TabStop = false;
@@ -312,46 +296,29 @@
             // 
             this.lblDesigned.AutoSize = true;
             this.lblDesigned.BackColor = System.Drawing.Color.Transparent;
-            this.lblDesigned.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            this.lblDesigned.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
             this.lblDesigned.ForeColor = System.Drawing.Color.Gray;
-            this.lblDesigned.Location = new System.Drawing.Point(1251, 531);
-            this.lblDesigned.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDesigned.Location = new System.Drawing.Point(442, 634);
             this.lblDesigned.Name = "lblDesigned";
-            this.lblDesigned.Size = new System.Drawing.Size(223, 30);
+            this.lblDesigned.Size = new System.Drawing.Size(164, 21);
             this.lblDesigned.TabIndex = 12;
             this.lblDesigned.Text = "Designed by Group 3";
             // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DimGray;
-            this.label1.Location = new System.Drawing.Point(497, 586);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(232, 30);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "Designed by Group 3";
-            // 
             // f_Login
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(244)))), ((int)(((byte)(247)))));
             this.BackgroundImage = global::QuanLySinhVien.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1141, 681);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(978, 744);
             this.Controls.Add(this.lblDesigned);
             this.Controls.Add(this.pctLogo);
             this.Controls.Add(this.pnlBackground);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "f_Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Đăng Nhập Hệ Thống";
             this.Load += new System.EventHandler(this.f_Login_Load);
-            this.Click += new System.EventHandler(this.btnLogin_Click);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.pnlPassword.ResumeLayout(false);
             this.pnlPassword.PerformLayout();
@@ -376,6 +343,7 @@
         private System.Windows.Forms.PictureBox picLoginIcon;
         private System.Windows.Forms.LinkLabel lnkRegister;
         private System.Windows.Forms.LinkLabel lnkForgetPass;
+        private System.Windows.Forms.RadioButton rdAdmin;
         private System.Windows.Forms.RadioButton rdStudent;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.RadioButton rdHR;
@@ -389,7 +357,5 @@
         private System.Windows.Forms.PictureBox pctLogo;
         private System.Windows.Forms.Label lblDesigned;
         private System.Windows.Forms.Label lblSeparator;
-        private System.Windows.Forms.Label label1;
     }
 }
-

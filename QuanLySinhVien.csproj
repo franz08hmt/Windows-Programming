@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>packages\DocumentFormat.OpenXml.3.1.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>packages\DocumentFormat.OpenXml.Framework.3.1.1\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=5.8.14.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>packages\EPPlus.5.8.14\lib\net45\EPPlus.dll</HintPath>
     </Reference>
@@ -43,6 +49,9 @@
     </Reference>
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniWord, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MiniWord.0.9.2\lib\net45\MiniWord.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -74,19 +83,46 @@
     <Reference Include="Tesseract, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Tesseract.5.2.0\lib\net48\Tesseract.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIService.cs" />
+    <Compile Include="BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Classroom.cs" />
     <Compile Include="Course.cs" />
+    <Compile Include="f_AccountManage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_AccountManage.Designer.cs">
+      <DependentUpon>f_AccountManage.cs</DependentUpon>
+    </Compile>
     <Compile Include="f_AddStudent.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_AddStudent.Designer.cs">
       <DependentUpon>f_AddStudent.cs</DependentUpon>
     </Compile>
+    <Compile Include="f_AdminHandleRequest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_AdminHandleRequest.Designer.cs">
+      <DependentUpon>f_AdminHandleRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="f_Assign.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_Assign.Designer.cs">
+      <DependentUpon>f_Assign.cs</DependentUpon>
+    </Compile>
+    <Compile Include="f_Contact.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_Contact.Designer.cs">
+      <DependentUpon>f_Contact.cs</DependentUpon>
+    </Compile>
     <Compile Include="f_EditStudent.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_EditStudent.Designer.cs">
       <DependentUpon>f_EditStudent.cs</DependentUpon>
@@ -98,7 +134,7 @@
       <DependentUpon>f_ForgetPass.cs</DependentUpon>
     </Compile>
     <Compile Include="f_ListStudent.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_ListStudent.Designer.cs">
       <DependentUpon>f_ListStudent.cs</DependentUpon>
@@ -110,19 +146,19 @@
       <DependentUpon>f_Login.cs</DependentUpon>
     </Compile>
     <Compile Include="f_ManageClassroom.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_ManageClassroom.Designer.cs">
       <DependentUpon>f_ManageClassroom.cs</DependentUpon>
     </Compile>
     <Compile Include="f_ManageCourse.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_ManageCourse.Designer.cs">
       <DependentUpon>f_ManageCourse.cs</DependentUpon>
     </Compile>
     <Compile Include="f_ManageScore.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_ManageScore.Designer.cs">
       <DependentUpon>f_ManageScore.cs</DependentUpon>
@@ -146,16 +182,31 @@
       <DependentUpon>f_Register.cs</DependentUpon>
     </Compile>
     <Compile Include="f_RegisterCourse.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_RegisterCourse.Designer.cs">
       <DependentUpon>f_RegisterCourse.cs</DependentUpon>
     </Compile>
     <Compile Include="f_Statistic.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="f_Statistic.Designer.cs">
       <DependentUpon>f_Statistic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="f_StudentRequest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_StudentRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="f_StudentRequest.Designer.cs">
+      <DependentUpon>f_StudentRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="f_StudentScore.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="f_StudentScore.Designer.cs">
+      <DependentUpon>f_StudentScore.cs</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="f_HomePage.cs">
@@ -169,8 +220,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="Student.cs" />
+    <EmbeddedResource Include="f_AccountManage.resx">
+      <DependentUpon>f_AccountManage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="f_AddStudent.resx">
       <DependentUpon>f_AddStudent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_AdminHandleRequest.resx">
+      <DependentUpon>f_AdminHandleRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_Assign.resx">
+      <DependentUpon>f_Assign.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_Contact.resx">
+      <DependentUpon>f_Contact.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="f_EditStudent.resx">
       <DependentUpon>f_EditStudent.cs</DependentUpon>
@@ -183,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="f_Login.resx">
       <DependentUpon>f_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_ManageClassroom.resx">
+      <DependentUpon>f_ManageClassroom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="f_ManageCourse.resx">
       <DependentUpon>f_ManageCourse.cs</DependentUpon>
@@ -207,6 +273,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="f_Statistic.resx">
       <DependentUpon>f_Statistic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_StudentRequest.resx">
+      <DependentUpon>f_StudentRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_StudentScore.resx">
+      <DependentUpon>f_StudentScore.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
-    public partial class f_OTP : Form
+    public partial class f_OTP : BaseForm
     {
         private string _otpCode;
         private string _email;

@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
-    public partial class f_ListStudent : Form
+    public partial class f_ListStudent : UserControl
     {
         private DataView svView;
         private string _importFilePath = "";
@@ -26,6 +26,25 @@ namespace QuanLySinhVien
         public f_ListStudent()
         {
             InitializeComponent();
+            SetupEventHandlers();
+        }
+
+        private void SetupEventHandlers()
+        {
+            // Đăng ký tập trung các sự kiện hệ thống
+            this.Load += new EventHandler(f_ListStudent_Load);
+            txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged_1);
+            txtSearch.Enter += new EventHandler(txtSearch_Enter);
+            txtSearch.Leave += new EventHandler(txtSearch_Leave);
+            cboFilterGender.SelectedIndexChanged += new EventHandler(cboFilterGender_SelectedIndexChanged_1);
+            cboSortBy.SelectedIndexChanged += new EventHandler(cboSortBy_SelectedIndexChanged_1);
+            btnExport.Click += new EventHandler(btnExport_Click);
+
+            // 🛠️ ĐẤU MẠCH ĐỒ HỌA CHUẨN: Ép sự kiện DoubleClick gán trực tiếp vào lưới DataGridView
+            dgvStudents.CellDoubleClick += new DataGridViewCellEventHandler(dgvStudents_CellDoubleClick_1);
+
+            if (this.Controls.Find("btnChonFile", true).Length > 0)
+                this.Controls.Find("btnChonFile", true)[0].Click += new EventHandler(btnChonFile_Click);
         }
 
         private void f_ListStudent_Load(object sender, EventArgs e)
@@ -33,7 +52,41 @@ namespace QuanLySinhVien
             LoadData();
         }
 
- 
+        // 🛠️ HÀM KÍCH ĐÚP DÒNG BỌC THÉP: Tối ưu độc lập, dẹp sạch tình trạng đơ lag, delay giao diện
+        private void dgvStudents_CellDoubleClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvStudents.Rows[e.RowIndex];
+
+            // 1. Khởi tạo UserControl f_EditStudent mới
+            f_EditStudent editUC = new f_EditStudent();
+
+            // 2. Bốc tách chính xác dữ liệu từ Grid dòng được chọn
+            string mssv = row.Cells["MSSV"].Value?.ToString() ?? "";
+            string ho = row.Cells["Fname"].Value?.ToString() ?? "";
+            string ten = row.Cells["Lname"].Value?.ToString() ?? "";
+            string ngaysinh = row.Cells["Dob"].Value?.ToString() ?? "";
+            string gioitinh = row.Cells["Gder"].Value?.ToString() ?? "";
+            string dienthoai = row.Cells["Phone"].Value?.ToString() ?? "";
+            string email = row.Cells["Email"].Value?.ToString() ?? "";
+
+            // Đổ ngược thông tin lên bộ TextBox của Tab Sửa sinh viên lập tức
+            editUC.LayThongTinTuDanhSach(mssv, ho, ten, ngaysinh, gioitinh, dienthoai, email);
+
+            // 3. Tìm ô khung tranh pnlMainContent của f_HomePage để hoán đổi giao diện nhúng
+            Form homeForm = this.FindForm();
+            if (homeForm != null && homeForm.Controls.Find("pnlMainContent", true).Length > 0)
+            {
+                Panel pnlMain = homeForm.Controls.Find("pnlMainContent", true)[0] as Panel;
+
+                pnlMain.Controls.Clear();          // Dọn sạch lưới danh sách cũ ra khỏi màn hình
+                editUC.Dock = DockStyle.Fill;      // Phóng to linh kiện sửa full vùng trống Dashboard
+                pnlMain.Controls.Add(editUC);      // Đổ bộ giao diện sửa lên tấm nền
+                editUC.BringToFront();             // Đẩy lên bề nổi hiển thị mượt mà
+            }
+        }
+
         private void LoadData()
         {
             try
@@ -60,9 +113,6 @@ namespace QuanLySinhVien
                 }
 
                 dgvStudents.RowTemplate.Height = 60;
-                foreach (DataGridViewRow row in dgvStudents.Rows)
-                    row.Height = 60;
-
                 UpdateTotalCount();
             }
             catch (Exception ex)
@@ -83,15 +133,15 @@ namespace QuanLySinhVien
         {
             if (txtSearch.Text == "Tìm kiếm..." || svView == null) return;
 
-            string keyword = txtSearch.Text.Trim().Replace("'", "''"); 
+            string keyword = txtSearch.Text.Trim().Replace("'", "''");
             if (string.IsNullOrEmpty(keyword))
             {
-                svView.RowFilter = ""; 
+                svView.RowFilter = "";
             }
             else
             {
-          
-                svView.RowFilter = $"MSSV LIKE '%{keyword}%' OR Fname LIKE '%{keyword}%' OR Lname LIKE '%{keyword}%'";
+                // Ép kiểu cột số MSSV về chuỗi String để không bị nổ lỗi gạch đỏ gãy mạch lọc
+                svView.RowFilter = $"Convert(MSSV, 'System.String') LIKE '%{keyword}%' OR Fname LIKE '%{keyword}%' OR Lname LIKE '%{keyword}%'";
             }
             UpdateTotalCount();
         }
@@ -114,12 +164,16 @@ namespace QuanLySinhVien
             }
         }
 
-       
         private void cboFilterGender_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (svView == null) return;
             string selected = cboFilterGender.Text.Trim();
-            svView.RowFilter = (selected == "Tất cả" || string.IsNullOrEmpty(selected)) ? "" : $"Gder = '{selected}'";
+
+            if (selected == "Tất cả" || string.IsNullOrEmpty(selected))
+                svView.RowFilter = "";
+            else
+                svView.RowFilter = $"Gder = '{selected}'";
+
             UpdateTotalCount();
         }
 
@@ -133,15 +187,6 @@ namespace QuanLySinhVien
                 svView.Sort = "Lname ASC";
         }
 
-       
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            f_HomePage homeForm = new f_HomePage(Globals.GlobalUserName);
-            homeForm.Show();
-            this.Close();
-        }
-
-        
         private void btnExport_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog
@@ -188,7 +233,7 @@ namespace QuanLySinhVien
                 }
 
                 DialogResult dr = MessageBox.Show("Export thành công! Bạn có muốn mở file Excel vừa xuất lên không?",
-                                                  "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
                 {
                     System.Diagnostics.Process.Start(sfd.FileName);
@@ -197,7 +242,6 @@ namespace QuanLySinhVien
             catch (Exception ex) { MessageBox.Show("Lỗi Export: " + ex.Message); }
         }
 
-        
         private void btnChonFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog
@@ -216,7 +260,6 @@ namespace QuanLySinhVien
             PreviewExcelWithAI(_importFilePath);
         }
 
-      
         private async void PreviewExcelWithAI(string path)
         {
             try
@@ -234,13 +277,11 @@ namespace QuanLySinhVien
                     int endCol = ws.Dimension.End.Column;
                     int endRow = ws.Dimension.End.Row;
 
-              
                     for (int c = startCol; c <= endCol; c++)
                     {
                         excelHeaders.Add(ws.Cells[1, c].Text.Trim());
                     }
 
-        
                     for (int r = 2; r <= endRow; r++)
                     {
                         List<string> rowData = new List<string>();
@@ -258,12 +299,10 @@ namespace QuanLySinhVien
                         return;
                     }
 
-                 
                     string aiResponseJson = await CallGeminiToAnalyze(excelHeaders, excelRows);
 
                     if (!string.IsNullOrEmpty(aiResponseJson))
                     {
-                       
                         DataTable dtPreview = JsonConvert.DeserializeObject<DataTable>(aiResponseJson);
                         dgvPreview.DataSource = dtPreview;
 
@@ -286,7 +325,6 @@ namespace QuanLySinhVien
             }
         }
 
- 
         private async Task<string> CallGeminiToAnalyze(List<string> headers, List<List<string>> rows)
         {
             using (HttpClient client = new HttpClient())
@@ -333,7 +371,6 @@ namespace QuanLySinhVien
 
                     dynamic resultObj = JsonConvert.DeserializeObject(rawResult);
 
- 
                     if (resultObj.candidates != null && resultObj.candidates[0].content != null && resultObj.candidates[0].content.parts != null)
                     {
                         string cleanJson = resultObj.candidates[0].content.parts[0].text.ToString();
@@ -355,7 +392,6 @@ namespace QuanLySinhVien
                 }
             }
         }
-
 
         private void ProcessLocalBackup(List<string> headers, List<List<string>> rows)
         {
@@ -387,7 +423,6 @@ namespace QuanLySinhVien
             lblStatus.Text = "Đọc file ở chế độ Local (Không AI).";
             lblStatus.ForeColor = Color.DarkBlue;
         }
-
 
         private void dgvPreview_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
@@ -477,11 +512,6 @@ namespace QuanLySinhVien
 
         private void dgvPreview_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-        }
-
-        private void pnlSearch_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

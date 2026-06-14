@@ -1,580 +1,360 @@
 ﻿namespace QuanLySinhVien
 {
-    partial class f_RegisterCourse
+    partial class f_RegisterCourse : System.Windows.Forms.UserControl
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabDangKy = new System.Windows.Forms.TabPage();
-            this.btnRemoveAll = new System.Windows.Forms.Button();
-            this.btnMoveSelected = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lstKetqua = new System.Windows.Forms.ListBox();
-            this.lstBandau = new System.Windows.Forms.ListBox();
-            this.btnRemoveSelected = new System.Windows.Forms.Button();
-            this.btnMoveAll = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lblChiTietMon = new System.Windows.Forms.Label();
-            this.btn_AIExtra = new System.Windows.Forms.Button();
-            this.lblTongTC = new System.Windows.Forms.Label();
-            this.btn_Save = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cboHky = new System.Windows.Forms.ComboBox();
-            this.cboStudent = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.pnlHeader = new System.Windows.Forms.Panel();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.ptLgo = new System.Windows.Forms.PictureBox();
-            this.lblHethong = new System.Windows.Forms.Label();
+            this.cboStudent = new System.Windows.Forms.ComboBox();
+            this.lblBandau = new System.Windows.Forms.Label();
+            this.lblKetqua = new System.Windows.Forms.Label();
+            this.lstBandau = new System.Windows.Forms.ListBox();
+            this.lstKetqua = new System.Windows.Forms.ListBox();
+            this.btnMoveOne = new System.Windows.Forms.Button();
+            this.btnMoveAll = new System.Windows.Forms.Button();
+            this.btnRemoveOne = new System.Windows.Forms.Button();
+            this.btnRemoveAll = new System.Windows.Forms.Button();
+            this.lblMonInfo = new System.Windows.Forms.Label();
+            this.btnAISuggest = new System.Windows.Forms.Button();
+            this.btnAICheckConflict = new System.Windows.Forms.Button();
+            this.btnRegister = new System.Windows.Forms.Button();
+            this.btnUnregister = new System.Windows.Forms.Button();
+            this.btnSendRequest = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.tabDanhSachDaDK = new System.Windows.Forms.TabPage();
-            this.dgvDaDangKy = new System.Windows.Forms.DataGridView();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.btnHuyDangKy = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tabControl1.SuspendLayout();
-            this.tabDangKy.SuspendLayout();
+            this.dgvRegisterList = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblHethong = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRegisterList)).BeginInit();
             this.panel1.SuspendLayout();
-            this.pnlHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
-            this.tabDanhSachDaDK.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDaDangKy)).BeginInit();
-            this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabDangKy);
-            this.tabControl1.Controls.Add(this.tabDanhSachDaDK);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1141, 681);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tabDangKy
-            // 
-            this.tabDangKy.Controls.Add(this.btnRemoveAll);
-            this.tabDangKy.Controls.Add(this.btnMoveSelected);
-            this.tabDangKy.Controls.Add(this.label3);
-            this.tabDangKy.Controls.Add(this.lstKetqua);
-            this.tabDangKy.Controls.Add(this.lstBandau);
-            this.tabDangKy.Controls.Add(this.btnRemoveSelected);
-            this.tabDangKy.Controls.Add(this.btnMoveAll);
-            this.tabDangKy.Controls.Add(this.panel1);
-            this.tabDangKy.Controls.Add(this.pnlHeader);
-            this.tabDangKy.Controls.Add(this.label4);
-            this.tabDangKy.Location = new System.Drawing.Point(4, 22);
-            this.tabDangKy.Margin = new System.Windows.Forms.Padding(2);
-            this.tabDangKy.Name = "tabDangKy";
-            this.tabDangKy.Padding = new System.Windows.Forms.Padding(2);
-            this.tabDangKy.Size = new System.Drawing.Size(1133, 655);
-            this.tabDangKy.TabIndex = 0;
-            this.tabDangKy.Text = "Đăng ký môn học";
-            this.tabDangKy.UseVisualStyleBackColor = true;
-            // 
-            // btnRemoveAll
-            // 
-            this.btnRemoveAll.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.btnRemoveAll.Location = new System.Drawing.Point(518, 468);
-            this.btnRemoveAll.Margin = new System.Windows.Forms.Padding(2);
-            this.btnRemoveAll.Name = "btnRemoveAll";
-            this.btnRemoveAll.Size = new System.Drawing.Size(49, 70);
-            this.btnRemoveAll.TabIndex = 36;
-            this.btnRemoveAll.Text = "⇐";
-            this.btnRemoveAll.UseVisualStyleBackColor = true;
-            this.btnRemoveAll.Click += new System.EventHandler(this.btnRemoveAll_Click);
-            // 
-            // btnMoveSelected
-            // 
-            this.btnMoveSelected.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.btnMoveSelected.Location = new System.Drawing.Point(518, 290);
-            this.btnMoveSelected.Margin = new System.Windows.Forms.Padding(2);
-            this.btnMoveSelected.Name = "btnMoveSelected";
-            this.btnMoveSelected.Size = new System.Drawing.Size(49, 70);
-            this.btnMoveSelected.TabIndex = 33;
-            this.btnMoveSelected.Text = "⮕";
-            this.btnMoveSelected.UseVisualStyleBackColor = true;
-            this.btnMoveSelected.Click += new System.EventHandler(this.btnMoveSelected_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(589, 239);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(164, 25);
-            this.label3.TabIndex = 32;
-            this.label3.Text = "Môn sẽ đăng ký :";
-            // 
-            // lstKetqua
-            // 
-            this.lstKetqua.FormattingEnabled = true;
-            this.lstKetqua.Location = new System.Drawing.Point(594, 271);
-            this.lstKetqua.Margin = new System.Windows.Forms.Padding(2);
-            this.lstKetqua.Name = "lstKetqua";
-            this.lstKetqua.Size = new System.Drawing.Size(532, 381);
-            this.lstKetqua.TabIndex = 31;
-            this.lstKetqua.SelectedIndexChanged += new System.EventHandler(this.lstKetqua_SelectedIndexChanged);
-            // 
-            // lstBandau
-            // 
-            this.lstBandau.FormattingEnabled = true;
-            this.lstBandau.Location = new System.Drawing.Point(6, 271);
-            this.lstBandau.Margin = new System.Windows.Forms.Padding(2);
-            this.lstBandau.Name = "lstBandau";
-            this.lstBandau.Size = new System.Drawing.Size(485, 381);
-            this.lstBandau.TabIndex = 30;
-            this.lstBandau.SelectedIndexChanged += new System.EventHandler(this.lstBandau_SelectedIndexChanged);
-            // 
-            // btnRemoveSelected
-            // 
-            this.btnRemoveSelected.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemoveSelected.Location = new System.Drawing.Point(518, 558);
-            this.btnRemoveSelected.Margin = new System.Windows.Forms.Padding(2);
-            this.btnRemoveSelected.Name = "btnRemoveSelected";
-            this.btnRemoveSelected.Size = new System.Drawing.Size(49, 70);
-            this.btnRemoveSelected.TabIndex = 35;
-            this.btnRemoveSelected.Text = "⬅";
-            this.btnRemoveSelected.UseVisualStyleBackColor = true;
-            this.btnRemoveSelected.Click += new System.EventHandler(this.btnRemoveSelected_Click);
-            // 
-            // btnMoveAll
-            // 
-            this.btnMoveAll.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.btnMoveAll.Location = new System.Drawing.Point(518, 378);
-            this.btnMoveAll.Margin = new System.Windows.Forms.Padding(2);
-            this.btnMoveAll.Name = "btnMoveAll";
-            this.btnMoveAll.Size = new System.Drawing.Size(49, 70);
-            this.btnMoveAll.TabIndex = 34;
-            this.btnMoveAll.Text = "⇒";
-            this.btnMoveAll.UseVisualStyleBackColor = true;
-            this.btnMoveAll.Click += new System.EventHandler(this.btnMoveAll_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.panel1.Controls.Add(this.lblChiTietMon);
-            this.panel1.Controls.Add(this.btn_AIExtra);
-            this.panel1.Controls.Add(this.lblTongTC);
-            this.panel1.Controls.Add(this.btn_Save);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.cboHky);
-            this.panel1.Controls.Add(this.cboStudent);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(3, 64);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1123, 167);
-            this.panel1.TabIndex = 29;
-            // 
-            // lblChiTietMon
-            // 
-            this.lblChiTietMon.AutoSize = true;
-            this.lblChiTietMon.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.lblChiTietMon.Location = new System.Drawing.Point(4, 89);
-            this.lblChiTietMon.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblChiTietMon.Name = "lblChiTietMon";
-            this.lblChiTietMon.Size = new System.Drawing.Size(83, 19);
-            this.lblChiTietMon.TabIndex = 12;
-            this.lblChiTietMon.Text = "Thông báo: ";
-            // 
-            // btn_AIExtra
-            // 
-            this.btn_AIExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
-            this.btn_AIExtra.Location = new System.Drawing.Point(563, 13);
-            this.btn_AIExtra.Margin = new System.Windows.Forms.Padding(2);
-            this.btn_AIExtra.Name = "btn_AIExtra";
-            this.btn_AIExtra.Size = new System.Drawing.Size(140, 56);
-            this.btn_AIExtra.TabIndex = 11;
-            this.btn_AIExtra.Text = "✨ AI Gợi ý lộ trình CDIO";
-            this.btn_AIExtra.UseVisualStyleBackColor = true;
-            this.btn_AIExtra.Click += new System.EventHandler(this.btn_AIExtra_Click);
-            // 
-            // lblTongTC
-            // 
-            this.lblTongTC.AutoSize = true;
-            this.lblTongTC.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTongTC.Location = new System.Drawing.Point(707, 13);
-            this.lblTongTC.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTongTC.Name = "lblTongTC";
-            this.lblTongTC.Size = new System.Drawing.Size(110, 19);
-            this.lblTongTC.TabIndex = 10;
-            this.lblTongTC.Text = "Tổng số tín chỉ: ";
-            // 
-            // btn_Save
-            // 
-            this.btn_Save.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
-            this.btn_Save.Location = new System.Drawing.Point(413, 13);
-            this.btn_Save.Margin = new System.Windows.Forms.Padding(2);
-            this.btn_Save.Name = "btn_Save";
-            this.btn_Save.Size = new System.Drawing.Size(134, 56);
-            this.btn_Save.TabIndex = 9;
-            this.btn_Save.Text = "💾 Lưu đăng ký";
-            this.btn_Save.UseVisualStyleBackColor = true;
-            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(4, 63);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 21);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Chọn Học kỳ :";
-            // 
-            // cboHky
-            // 
-            this.cboHky.FormattingEnabled = true;
-            this.cboHky.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3"});
-            this.cboHky.Location = new System.Drawing.Point(135, 63);
-            this.cboHky.Margin = new System.Windows.Forms.Padding(2);
-            this.cboHky.Name = "cboHky";
-            this.cboHky.Size = new System.Drawing.Size(263, 21);
-            this.cboHky.TabIndex = 7;
-            this.cboHky.SelectedIndexChanged += new System.EventHandler(this.cboHky_SelectedIndexChanged);
-            // 
-            // cboStudent
-            // 
-            this.cboStudent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboStudent.FormattingEnabled = true;
-            this.cboStudent.Location = new System.Drawing.Point(135, 21);
-            this.cboStudent.Margin = new System.Windows.Forms.Padding(2);
-            this.cboStudent.Name = "cboStudent";
-            this.cboStudent.Size = new System.Drawing.Size(263, 21);
-            this.cboStudent.TabIndex = 3;
-            this.cboStudent.SelectedIndexChanged += new System.EventHandler(this.cboStudent_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(4, 16);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(12, 82);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(133, 21);
+            this.label2.Size = new System.Drawing.Size(198, 32);
             this.label2.TabIndex = 1;
             this.label2.Text = "Chọn Sinh viên :";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
-            // pnlHeader
+            // cboStudent
             // 
-            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.pnlHeader.Controls.Add(this.btnBack);
-            this.pnlHeader.Controls.Add(this.ptLgo);
-            this.pnlHeader.Controls.Add(this.lblHethong);
-            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Location = new System.Drawing.Point(2, 2);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1129, 58);
-            this.pnlHeader.TabIndex = 28;
+            this.cboStudent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.cboStudent.FormattingEnabled = true;
+            this.cboStudent.Location = new System.Drawing.Point(216, 82);
+            this.cboStudent.Name = "cboStudent";
+            this.cboStudent.Size = new System.Drawing.Size(593, 37);
+            this.cboStudent.TabIndex = 0;
+            this.cboStudent.SelectedIndexChanged += new System.EventHandler(this.cboStudent_SelectedIndexChanged);
             // 
-            // btnBack
+            // lblBandau
             // 
-            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.btnBack.FlatAppearance.BorderSize = 0;
-            this.btnBack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
-            this.btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBack.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
-            this.btnBack.ForeColor = System.Drawing.Color.White;
-            this.btnBack.Location = new System.Drawing.Point(1029, 0);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(2);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(100, 58);
-            this.btnBack.TabIndex = 3;
-            this.btnBack.Text = "⬅ Quay lại";
-            this.btnBack.UseVisualStyleBackColor = false;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click_1);
+            this.lblBandau.AutoSize = true;
+            this.lblBandau.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblBandau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblBandau.Location = new System.Drawing.Point(5, 143);
+            this.lblBandau.Name = "lblBandau";
+            this.lblBandau.Size = new System.Drawing.Size(297, 32);
+            this.lblBandau.TabIndex = 3;
+            this.lblBandau.Text = "Môn học có thể đăng ký:";
             // 
-            // ptLgo
+            // lblKetqua
             // 
-            this.ptLgo.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
-            this.ptLgo.Location = new System.Drawing.Point(0, 0);
-            this.ptLgo.Margin = new System.Windows.Forms.Padding(2);
-            this.ptLgo.Name = "ptLgo";
-            this.ptLgo.Size = new System.Drawing.Size(56, 58);
-            this.ptLgo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.ptLgo.TabIndex = 1;
-            this.ptLgo.TabStop = false;
+            this.lblKetqua.AutoSize = true;
+            this.lblKetqua.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblKetqua.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblKetqua.Location = new System.Drawing.Point(802, 143);
+            this.lblKetqua.Name = "lblKetqua";
+            this.lblKetqua.Size = new System.Drawing.Size(251, 32);
+            this.lblKetqua.TabIndex = 5;
+            this.lblKetqua.Text = "Môn học sẽ đăng ký:";
             // 
-            // lblHethong
+            // lstBandau
             // 
-            this.lblHethong.AutoSize = true;
-            this.lblHethong.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHethong.ForeColor = System.Drawing.Color.White;
-            this.lblHethong.Location = new System.Drawing.Point(54, 14);
-            this.lblHethong.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHethong.Name = "lblHethong";
-            this.lblHethong.Size = new System.Drawing.Size(225, 30);
-            this.lblHethong.TabIndex = 0;
-            this.lblHethong.Text = "ĐĂNG KÝ MÔN HỌC";
+            this.lstBandau.FormattingEnabled = true;
+            this.lstBandau.ItemHeight = 20;
+            this.lstBandau.Location = new System.Drawing.Point(9, 178);
+            this.lstBandau.Name = "lstBandau";
+            this.lstBandau.Size = new System.Drawing.Size(643, 224);
+            this.lstBandau.TabIndex = 1;
+            this.lstBandau.SelectedIndexChanged += new System.EventHandler(this.lstBandau_SelectedIndexChanged);
+            // 
+            // lstKetqua
+            // 
+            this.lstKetqua.FormattingEnabled = true;
+            this.lstKetqua.ItemHeight = 20;
+            this.lstKetqua.Location = new System.Drawing.Point(808, 178);
+            this.lstKetqua.Name = "lstKetqua";
+            this.lstKetqua.Size = new System.Drawing.Size(645, 224);
+            this.lstKetqua.TabIndex = 6;
+            this.lstKetqua.SelectedIndexChanged += new System.EventHandler(this.lstKetqua_SelectedIndexChanged);
+            // 
+            // btnMoveOne
+            // 
+            this.btnMoveOne.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(128)))));
+            this.btnMoveOne.FlatAppearance.BorderSize = 0;
+            this.btnMoveOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMoveOne.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnMoveOne.ForeColor = System.Drawing.Color.White;
+            this.btnMoveOne.Location = new System.Drawing.Point(22, 20);
+            this.btnMoveOne.Name = "btnMoveOne";
+            this.btnMoveOne.Size = new System.Drawing.Size(100, 38);
+            this.btnMoveOne.TabIndex = 2;
+            this.btnMoveOne.Text = "→";
+            this.btnMoveOne.UseVisualStyleBackColor = false;
+            this.btnMoveOne.Click += new System.EventHandler(this.btnMoveOne_Click);
+            // 
+            // btnMoveAll
+            // 
+            this.btnMoveAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(128)))));
+            this.btnMoveAll.FlatAppearance.BorderSize = 0;
+            this.btnMoveAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMoveAll.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnMoveAll.ForeColor = System.Drawing.Color.White;
+            this.btnMoveAll.Location = new System.Drawing.Point(22, 68);
+            this.btnMoveAll.Name = "btnMoveAll";
+            this.btnMoveAll.Size = new System.Drawing.Size(100, 38);
+            this.btnMoveAll.TabIndex = 3;
+            this.btnMoveAll.Text = "⇒";
+            this.btnMoveAll.UseVisualStyleBackColor = false;
+            this.btnMoveAll.Click += new System.EventHandler(this.btnMoveAll_Click);
+            // 
+            // btnRemoveOne
+            // 
+            this.btnRemoveOne.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnRemoveOne.FlatAppearance.BorderSize = 0;
+            this.btnRemoveOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRemoveOne.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnRemoveOne.ForeColor = System.Drawing.Color.Firebrick;
+            this.btnRemoveOne.Location = new System.Drawing.Point(22, 116);
+            this.btnRemoveOne.Name = "btnRemoveOne";
+            this.btnRemoveOne.Size = new System.Drawing.Size(100, 38);
+            this.btnRemoveOne.TabIndex = 4;
+            this.btnRemoveOne.Text = "←";
+            this.btnRemoveOne.UseVisualStyleBackColor = false;
+            this.btnRemoveOne.Click += new System.EventHandler(this.btnRemoveOne_Click);
+            // 
+            // btnRemoveAll
+            // 
+            this.btnRemoveAll.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnRemoveAll.FlatAppearance.BorderSize = 0;
+            this.btnRemoveAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRemoveAll.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnRemoveAll.ForeColor = System.Drawing.Color.Firebrick;
+            this.btnRemoveAll.Location = new System.Drawing.Point(22, 164);
+            this.btnRemoveAll.Name = "btnRemoveAll";
+            this.btnRemoveAll.Size = new System.Drawing.Size(100, 38);
+            this.btnRemoveAll.TabIndex = 5;
+            this.btnRemoveAll.Text = "⇐";
+            this.btnRemoveAll.UseVisualStyleBackColor = false;
+            this.btnRemoveAll.Click += new System.EventHandler(this.btnRemoveAll_Click);
+            // 
+            // lblMonInfo
+            // 
+            this.lblMonInfo.AutoSize = true;
+            this.lblMonInfo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
+            this.lblMonInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblMonInfo.Location = new System.Drawing.Point(6, 405);
+            this.lblMonInfo.Name = "lblMonInfo";
+            this.lblMonInfo.Size = new System.Drawing.Size(279, 28);
+            this.lblMonInfo.TabIndex = 11;
+            this.lblMonInfo.Text = "← Chọn môn để xem thông tin";
+            // 
+            // btnAISuggest
+            // 
+            this.btnAISuggest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(90)))), ((int)(((byte)(205)))));
+            this.btnAISuggest.FlatAppearance.BorderSize = 0;
+            this.btnAISuggest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAISuggest.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnAISuggest.ForeColor = System.Drawing.Color.White;
+            this.btnAISuggest.Location = new System.Drawing.Point(875, 450);
+            this.btnAISuggest.Name = "btnAISuggest";
+            this.btnAISuggest.Size = new System.Drawing.Size(230, 46);
+            this.btnAISuggest.TabIndex = 13;
+            this.btnAISuggest.Text = "🤖 AI Gợi ý môn học";
+            this.btnAISuggest.UseVisualStyleBackColor = false;
+            this.btnAISuggest.Click += new System.EventHandler(this.btnAISuggest_Click);
+            // 
+            // btnAICheckConflict
+            // 
+            this.btnAICheckConflict.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
+            this.btnAICheckConflict.FlatAppearance.BorderSize = 0;
+            this.btnAICheckConflict.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAICheckConflict.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnAICheckConflict.ForeColor = System.Drawing.Color.White;
+            this.btnAICheckConflict.Location = new System.Drawing.Point(1153, 451);
+            this.btnAICheckConflict.Name = "btnAICheckConflict";
+            this.btnAICheckConflict.Size = new System.Drawing.Size(230, 45);
+            this.btnAICheckConflict.TabIndex = 14;
+            this.btnAICheckConflict.Text = "⚠️ AI Kiểm tra trùng lịch";
+            this.btnAICheckConflict.UseVisualStyleBackColor = false;
+            // 
+            // btnRegister
+            // 
+            this.btnRegister.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+            this.btnRegister.FlatAppearance.BorderSize = 0;
+            this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegister.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnRegister.ForeColor = System.Drawing.Color.White;
+            this.btnRegister.Location = new System.Drawing.Point(70, 451);
+            this.btnRegister.Name = "btnRegister";
+            this.btnRegister.Size = new System.Drawing.Size(215, 45);
+            this.btnRegister.TabIndex = 7;
+            this.btnRegister.Text = "💾 LƯU ĐĂNG KÝ";
+            this.btnRegister.UseVisualStyleBackColor = false;
+            this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
+            // 
+            // btnUnregister
+            // 
+            this.btnUnregister.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnUnregister.FlatAppearance.BorderSize = 0;
+            this.btnUnregister.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnUnregister.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnUnregister.ForeColor = System.Drawing.Color.Firebrick;
+            this.btnUnregister.Location = new System.Drawing.Point(321, 450);
+            this.btnUnregister.Name = "btnUnregister";
+            this.btnUnregister.Size = new System.Drawing.Size(246, 45);
+            this.btnUnregister.TabIndex = 8;
+            this.btnUnregister.Text = "HỦY ĐĂNG KÝ";
+            this.btnUnregister.UseVisualStyleBackColor = false;
+            this.btnUnregister.Click += new System.EventHandler(this.btnUnregister_Click);
+            // 
+            // btnSendRequest
+            // 
+            this.btnSendRequest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(140)))), ((int)(((byte)(0)))));
+            this.btnSendRequest.FlatAppearance.BorderSize = 0;
+            this.btnSendRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSendRequest.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnSendRequest.ForeColor = System.Drawing.Color.White;
+            this.btnSendRequest.Location = new System.Drawing.Point(610, 450);
+            this.btnSendRequest.Name = "btnSendRequest";
+            this.btnSendRequest.Size = new System.Drawing.Size(220, 45);
+            this.btnSendRequest.TabIndex = 9;
+            this.btnSendRequest.Text = "📨 GỬI YÊU CẦU XÁC NHẬN";
+            this.btnSendRequest.UseVisualStyleBackColor = false;
+            this.btnSendRequest.Click += new System.EventHandler(this.btnSendRequest_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.label4.Location = new System.Drawing.Point(2, 239);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.label4.Location = new System.Drawing.Point(10, 500);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(189, 25);
-            this.label4.TabIndex = 27;
-            this.label4.Text = "Môn chưa đăng ký :";
+            this.label4.Size = new System.Drawing.Size(341, 30);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Danh sách môn học đã đăng ký:";
             // 
-            // tabDanhSachDaDK
+            // dgvRegisterList
             // 
-            this.tabDanhSachDaDK.Controls.Add(this.dgvDaDangKy);
-            this.tabDanhSachDaDK.Controls.Add(this.panel3);
-            this.tabDanhSachDaDK.Controls.Add(this.panel2);
-            this.tabDanhSachDaDK.Location = new System.Drawing.Point(4, 22);
-            this.tabDanhSachDaDK.Margin = new System.Windows.Forms.Padding(2);
-            this.tabDanhSachDaDK.Name = "tabDanhSachDaDK";
-            this.tabDanhSachDaDK.Padding = new System.Windows.Forms.Padding(2);
-            this.tabDanhSachDaDK.Size = new System.Drawing.Size(1133, 655);
-            this.tabDanhSachDaDK.TabIndex = 1;
-            this.tabDanhSachDaDK.Text = "Môn đã đăng ký";
-            this.tabDanhSachDaDK.UseVisualStyleBackColor = true;
+            this.dgvRegisterList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvRegisterList.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dgvRegisterList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvRegisterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvRegisterList.Location = new System.Drawing.Point(11, 533);
+            this.dgvRegisterList.Name = "dgvRegisterList";
+            this.dgvRegisterList.RowHeadersWidth = 62;
+            this.dgvRegisterList.RowTemplate.Height = 28;
+            this.dgvRegisterList.Size = new System.Drawing.Size(1436, 409);
+            this.dgvRegisterList.TabIndex = 10;
+            this.dgvRegisterList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRegisterList_CellDoubleClick);
             // 
-            // dgvDaDangKy
+            // panel1
             // 
-            this.dgvDaDangKy.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvDaDangKy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDaDangKy.Location = new System.Drawing.Point(0, 213);
-            this.dgvDaDangKy.Margin = new System.Windows.Forms.Padding(2);
-            this.dgvDaDangKy.Name = "dgvDaDangKy";
-            this.dgvDaDangKy.RowHeadersWidth = 62;
-            this.dgvDaDangKy.RowTemplate.Height = 28;
-            this.dgvDaDangKy.Size = new System.Drawing.Size(1131, 446);
-            this.dgvDaDangKy.TabIndex = 31;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(247)))));
+            this.panel1.Controls.Add(this.btnMoveOne);
+            this.panel1.Controls.Add(this.btnMoveAll);
+            this.panel1.Controls.Add(this.btnRemoveOne);
+            this.panel1.Controls.Add(this.btnRemoveAll);
+            this.panel1.Location = new System.Drawing.Point(658, 178);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(144, 224);
+            this.panel1.TabIndex = 4;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // panel3
+            // label3
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.panel3.Controls.Add(this.btnHuyDangKy);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.comboBox2);
-            this.panel3.Controls.Add(this.label9);
-            this.panel3.Location = new System.Drawing.Point(0, 58);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1131, 151);
-            this.panel3.TabIndex = 30;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 20);
+            this.label3.TabIndex = 2;
+            this.label3.Visible = false;
             // 
-            // btnHuyDangKy
+            // lblHethong
             // 
-            this.btnHuyDangKy.BackColor = System.Drawing.Color.White;
-            this.btnHuyDangKy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHuyDangKy.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnHuyDangKy.ForeColor = System.Drawing.Color.Firebrick;
-            this.btnHuyDangKy.Location = new System.Drawing.Point(762, 35);
-            this.btnHuyDangKy.Margin = new System.Windows.Forms.Padding(2);
-            this.btnHuyDangKy.Name = "btnHuyDangKy";
-            this.btnHuyDangKy.Size = new System.Drawing.Size(126, 45);
-            this.btnHuyDangKy.TabIndex = 13;
-            this.btnHuyDangKy.Text = "Hủy Đăng Ký";
-            this.btnHuyDangKy.UseVisualStyleBackColor = false;
-            this.btnHuyDangKy.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.label6.Location = new System.Drawing.Point(3, 118);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(494, 30);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Danh sách môn học đã đăng ký của Sinh viên:  ";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(465, 59);
-            this.comboBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(263, 21);
-            this.comboBox2.TabIndex = 3;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged_1);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.label9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label9.Location = new System.Drawing.Point(522, 14);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(155, 25);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "Chọn Sinh viên :";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(2, 2);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1129, 58);
-            this.panel2.TabIndex = 29;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(1029, 0);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 58);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "⬅ Quay lại";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(56, 58);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(54, 14);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(208, 30);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "MÔN ĐÃ ĐĂNG KÝ";
+            this.lblHethong.AutoSize = true;
+            this.lblHethong.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
+            this.lblHethong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblHethong.Location = new System.Drawing.Point(9, 19);
+            this.lblHethong.Name = "lblHethong";
+            this.lblHethong.Size = new System.Drawing.Size(410, 54);
+            this.lblHethong.TabIndex = 15;
+            this.lblHethong.Text = "ĐĂNG KÝ MÔN HỌC";
             // 
             // f_RegisterCourse
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(247)))));
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1141, 681);
-            this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Controls.Add(this.lblHethong);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cboStudent);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblBandau);
+            this.Controls.Add(this.lstBandau);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.lblKetqua);
+            this.Controls.Add(this.lstKetqua);
+            this.Controls.Add(this.lblMonInfo);
+            this.Controls.Add(this.btnAICheckConflict);
+            this.Controls.Add(this.btnRegister);
+            this.Controls.Add(this.btnUnregister);
+            this.Controls.Add(this.btnSendRequest);
+            this.Controls.Add(this.btnAISuggest);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.dgvRegisterList);
             this.Name = "f_RegisterCourse";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "f_RegisterCourse";
+            this.Size = new System.Drawing.Size(1462, 957);
             this.Load += new System.EventHandler(this.f_RegisterCourse_Load);
-            this.tabControl1.ResumeLayout(false);
-            this.tabDangKy.ResumeLayout(false);
-            this.tabDangKy.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRegisterList)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.pnlHeader.ResumeLayout(false);
-            this.pnlHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).EndInit();
-            this.tabDanhSachDaDK.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDaDangKy)).EndInit();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
-
-        #endregion
-
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabDangKy;
-        private System.Windows.Forms.Button btnRemoveAll;
-        private System.Windows.Forms.Button btnMoveSelected;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox lstKetqua;
-        private System.Windows.Forms.ListBox lstBandau;
-        private System.Windows.Forms.Button btnRemoveSelected;
-        private System.Windows.Forms.Button btnMoveAll;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lblChiTietMon;
-        private System.Windows.Forms.Button btn_AIExtra;
-        private System.Windows.Forms.Label lblTongTC;
-        private System.Windows.Forms.Button btn_Save;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cboHky;
-        private System.Windows.Forms.ComboBox cboStudent;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel pnlHeader;
-        private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.PictureBox ptLgo;
-        private System.Windows.Forms.Label lblHethong;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cboStudent;
+        private System.Windows.Forms.Label lblBandau;
+        private System.Windows.Forms.Label lblKetqua;
+        private System.Windows.Forms.ListBox lstBandau;
+        private System.Windows.Forms.ListBox lstKetqua;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btnMoveOne;
+        private System.Windows.Forms.Button btnMoveAll;
+        private System.Windows.Forms.Button btnRemoveOne;
+        private System.Windows.Forms.Button btnRemoveAll;
+        private System.Windows.Forms.Label lblMonInfo;    // ← NÂNG CAO
+        private System.Windows.Forms.Button btnAICheckConflict;
+        private System.Windows.Forms.Button btnRegister;
+        private System.Windows.Forms.Button btnUnregister;
+        private System.Windows.Forms.Button btnSendRequest;
+        private System.Windows.Forms.Button btnAISuggest;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TabPage tabDanhSachDaDK;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.DataGridView dgvDaDangKy;
-        private System.Windows.Forms.Button btnHuyDangKy;
+        private System.Windows.Forms.DataGridView dgvRegisterList;
+        private System.Windows.Forms.Label lblHethong;
     }
 }

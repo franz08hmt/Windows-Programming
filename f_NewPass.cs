@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
-    public partial class f_NewPass : Form
+    public partial class f_NewPass : BaseForm
     {
         private string _username;
 

@@ -17,8 +17,16 @@ namespace QuanLySinhVien
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-        
+            // Fix DPI Scaling - form tự scale theo màn hình
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                SetProcessDPIAware();
+            }
+
             Application.Run(new f_Login());
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
     }
 }

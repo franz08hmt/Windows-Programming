@@ -14,31 +14,6 @@ C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
 C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
 C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
 C:\WIPR_25-26\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_HomePage.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x86\leptonica-1.82.0.dll
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x86\tesseract50.dll
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x64\leptonica-1.82.0.dll
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x64\tesseract50.dll
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Tesseract.dll
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageCourse.resources
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
@@ -75,50 +50,135 @@ C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\bin\Debug\Newtonsoft.Json.xm
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
 C:\WIPR_25-26\W5\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\x86\leptonica-1.82.0.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\x86\tesseract50.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\x64\leptonica-1.82.0.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\x64\tesseract50.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\EPPlus.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Guna.UI2.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Newtonsoft.Json.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\System.ComponentModel.Annotations.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Tesseract.dll
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\EPPlus.xml
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\bin\Debug\Newtonsoft.Json.xml
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageCourse.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageScore.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_HomePage.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_RegisterCourse.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Statistic.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
-C:\Users\PC\Downloads\Windows-Programming-W5_31-5_endpart4\Windows-Programming-W5_31-5_endpart4\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\x86\leptonica-1.82.0.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\x86\tesseract50.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\x64\leptonica-1.82.0.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\x64\tesseract50.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\EPPlus.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Guna.UI2.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Newtonsoft.Json.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\System.ComponentModel.Annotations.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Tesseract.dll
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\EPPlus.xml
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\bin\Debug\Newtonsoft.Json.xml
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageCourse.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageScore.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_HomePage.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_RegisterCourse.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Statistic.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W4\Windows-Programming\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AccountManage.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\x86\leptonica-1.82.0.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\x86\tesseract50.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\x64\leptonica-1.82.0.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\x64\tesseract50.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\EPPlus.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Guna.UI2.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Newtonsoft.Json.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\System.ComponentModel.Annotations.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Tesseract.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\EPPlus.xml
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\Newtonsoft.Json.xml
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AccountManage.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageCourse.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageScore.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_HomePage.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_RegisterCourse.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Statistic.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageClassroom.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageRequest.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_StudentRequest.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddCourse.resources
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\MiniWord.dll
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.xml
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\WIPR_25-26\W5\Win Forms\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_StudentScore.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.AssemblyReference.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AccountManage.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AddStudent.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_AdminHandleRequest.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Assign.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Contact.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_EditStudent.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ForgetPass.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ListStudent.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Login.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageClassroom.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageCourse.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageScore.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_NewPass.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_OTP.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Register.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_HomePage.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_RegisterCourse.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Statistic.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_StudentRequest.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_StudentScore.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.Properties.Resources.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.GenerateResource.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.csproj.CoreCompileInputs.cache
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x86\leptonica-1.82.0.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x86\tesseract50.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x64\leptonica-1.82.0.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\x64\tesseract50.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe.config
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.exe
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\QuanLySinhVien.pdb
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.Framework.dll
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\EPPlus.dll
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Guna.UI2.dll
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\MiniWord.dll
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Newtonsoft.Json.dll
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Tesseract.dll
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\DocumentFormat.OpenXml.Framework.xml
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\EPPlus.xml
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
 C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\bin\Debug\Newtonsoft.Json.xml
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_ManageScore.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_RegisterCourse.resources
-C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.f_Statistic.resources
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySi.3CF0D20D.Up2Date
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.exe
+C:\Users\PC\Desktop\HK II 2025 - 2026\Windows Programming\Windows-Programming-week2\Windows-Programming-week2\W2\QuanLySinhVien\obj\Debug\QuanLySinhVien.pdb

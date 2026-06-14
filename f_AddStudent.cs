@@ -15,7 +15,7 @@ using Tesseract;
 
 namespace QuanLySinhVien
 {
-    public partial class f_AddStudent : Form
+    public partial class f_AddStudent : UserControl
     {
         byte[] studentImage = null;
         private SpeechRecognitionEngine recognizer = null;
@@ -32,6 +32,21 @@ namespace QuanLySinhVien
         {
             lstSuggest.Visible = false;
             lstSuggest.BringToFront();
+        }
+
+        private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            GraphicsPath path = new GraphicsPath();
+            path.StartFigure();
+            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius, 0, radius, radius), 270, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius, pnl.Height - radius, radius, radius), 0, 90);
+            path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
+            path.CloseFigure();
+
+            pnl.Region = new Region(path);
         }
 
         private void RegisterRealTimeValidation()
@@ -241,7 +256,6 @@ namespace QuanLySinhVien
                     cmd.Parameters.AddWithValue("@pic", studentImage == null ? (object)SqlBinary.Null : studentImage);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
                 }
                 else
                 {
@@ -294,18 +308,12 @@ namespace QuanLySinhVien
             txtMSSV.Focus();
         }
 
-        private void btnViewlist_Click(object sender, EventArgs e)
-        {
-            f_ListStudent listForm = new f_ListStudent();
-            listForm.Show();
-            this.Close();
-        }
-
         private void btnBack_Click(object sender, EventArgs e)
         {
-            f_HomePage homeForm = new f_HomePage(Globals.GlobalUserName);
-            homeForm.Show();
-            this.Close();
+        }
+
+        private void btnViewlist_Click(object sender, EventArgs e)
+        {
         }
 
         private void btnSpeech_Click(object sender, EventArgs e)
@@ -455,14 +463,14 @@ namespace QuanLySinhVien
                 pnl.Region = new Region(Path);
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void pnlForm_Paint(object sender, PaintEventArgs e)
         {
-
+            VeBoGocPanel(pnlForm, 25, e);
         }
 
-        private void cboGender_SelectedIndexChanged(object sender, EventArgs e)
+        private void pnlRight_Paint(object sender, PaintEventArgs e)
         {
-
+            VeBoGocPanel(pnlRight, 25, e);
         }
     }
 }

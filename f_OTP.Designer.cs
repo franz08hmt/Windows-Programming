@@ -53,19 +53,17 @@
             // 
             this.lblMessage.AutoSize = true;
             this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessage.Location = new System.Drawing.Point(134, 166);
-            this.lblMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMessage.Location = new System.Drawing.Point(201, 256);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(159, 13);
+            this.lblMessage.Size = new System.Drawing.Size(218, 21);
             this.lblMessage.TabIndex = 0;
             this.lblMessage.Text = "Nhập mã OTP đã gửi về email:";
             // 
             // txtOTP
             // 
-            this.txtOTP.Location = new System.Drawing.Point(190, 229);
-            this.txtOTP.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtOTP.Location = new System.Drawing.Point(285, 352);
             this.txtOTP.Name = "txtOTP";
-            this.txtOTP.Size = new System.Drawing.Size(146, 20);
+            this.txtOTP.Size = new System.Drawing.Size(217, 26);
             this.txtOTP.TabIndex = 1;
             this.txtOTP.TextChanged += new System.EventHandler(this.txtOTP_TextChanged);
             // 
@@ -74,10 +72,9 @@
             this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
             this.btnConfirm.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(151, 252);
-            this.btnConfirm.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnConfirm.Location = new System.Drawing.Point(227, 388);
             this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(111, 32);
+            this.btnConfirm.Size = new System.Drawing.Size(166, 50);
             this.btnConfirm.TabIndex = 2;
             this.btnConfirm.Text = "Xác nhận";
             this.btnConfirm.UseVisualStyleBackColor = false;
@@ -92,9 +89,8 @@
             this.pnlHeader.Controls.Add(this.lblXacnhanotp);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(533, 58);
+            this.pnlHeader.Size = new System.Drawing.Size(800, 90);
             this.pnlHeader.TabIndex = 16;
             // 
             // btnBackLogin
@@ -106,12 +102,11 @@
             this.btnBackLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBackLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBackLogin.ForeColor = System.Drawing.Color.White;
-            this.btnBackLogin.Location = new System.Drawing.Point(442, 0);
-            this.btnBackLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBackLogin.Location = new System.Drawing.Point(663, 0);
             this.btnBackLogin.Name = "btnBackLogin";
-            this.btnBackLogin.Size = new System.Drawing.Size(91, 58);
+            this.btnBackLogin.Size = new System.Drawing.Size(137, 90);
             this.btnBackLogin.TabIndex = 4;
-            this.btnBackLogin.Text = "⬅ Quay lại";
+            this.btnBackLogin.Text = "🡰 Quay lại";
             this.btnBackLogin.UseVisualStyleBackColor = false;
             this.btnBackLogin.Click += new System.EventHandler(this.btnBackLogin_Click);
             // 
@@ -124,10 +119,9 @@
             this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBack.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBack.ForeColor = System.Drawing.Color.White;
-            this.btnBack.Location = new System.Drawing.Point(561, 0);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBack.Location = new System.Drawing.Point(841, 0);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(91, 58);
+            this.btnBack.Size = new System.Drawing.Size(137, 90);
             this.btnBack.TabIndex = 3;
             this.btnBack.Text = "<- Quay lại";
             this.btnBack.UseVisualStyleBackColor = false;
@@ -136,9 +130,8 @@
             // 
             this.ptLgo.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
             this.ptLgo.Location = new System.Drawing.Point(0, 0);
-            this.ptLgo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ptLgo.Name = "ptLgo";
-            this.ptLgo.Size = new System.Drawing.Size(56, 58);
+            this.ptLgo.Size = new System.Drawing.Size(84, 90);
             this.ptLgo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptLgo.TabIndex = 1;
             this.ptLgo.TabStop = false;
@@ -146,22 +139,20 @@
             // lblXacnhanotp
             // 
             this.lblXacnhanotp.AutoSize = true;
-            this.lblXacnhanotp.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblXacnhanotp.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXacnhanotp.ForeColor = System.Drawing.Color.White;
-            this.lblXacnhanotp.Location = new System.Drawing.Point(58, 14);
-            this.lblXacnhanotp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblXacnhanotp.Location = new System.Drawing.Point(81, 22);
             this.lblXacnhanotp.Name = "lblXacnhanotp";
-            this.lblXacnhanotp.Size = new System.Drawing.Size(195, 32);
+            this.lblXacnhanotp.Size = new System.Drawing.Size(262, 45);
             this.lblXacnhanotp.TabIndex = 0;
             this.lblXacnhanotp.Text = "XÁC NHẬN OTP";
             // 
             // ptGmail
             // 
             this.ptGmail.Image = ((System.Drawing.Image)(resources.GetObject("ptGmail.Image")));
-            this.ptGmail.Location = new System.Drawing.Point(235, 62);
-            this.ptGmail.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ptGmail.Location = new System.Drawing.Point(353, 96);
             this.ptGmail.Name = "ptGmail";
-            this.ptGmail.Size = new System.Drawing.Size(67, 65);
+            this.ptGmail.Size = new System.Drawing.Size(100, 100);
             this.ptGmail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptGmail.TabIndex = 17;
             this.ptGmail.TabStop = false;
@@ -171,10 +162,9 @@
             this.lblTongQuan.AutoSize = true;
             this.lblTongQuan.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTongQuan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.lblTongQuan.Location = new System.Drawing.Point(203, 136);
-            this.lblTongQuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTongQuan.Location = new System.Drawing.Point(304, 209);
             this.lblTongQuan.Name = "lblTongQuan";
-            this.lblTongQuan.Size = new System.Drawing.Size(133, 25);
+            this.lblTongQuan.Size = new System.Drawing.Size(198, 38);
             this.lblTongQuan.TabIndex = 18;
             this.lblTongQuan.Text = "Nhập mã OTP";
             // 
@@ -183,10 +173,9 @@
             this.lblTimer.AutoSize = true;
             this.lblTimer.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTimer.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblTimer.Location = new System.Drawing.Point(227, 186);
-            this.lblTimer.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTimer.Location = new System.Drawing.Point(341, 286);
             this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(43, 13);
+            this.lblTimer.Size = new System.Drawing.Size(63, 21);
             this.lblTimer.TabIndex = 19;
             this.lblTimer.Text = "Còn lại";
             // 
@@ -195,20 +184,18 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.label3.Location = new System.Drawing.Point(227, 208);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(341, 320);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
+            this.label3.Size = new System.Drawing.Size(114, 21);
             this.label3.TabIndex = 20;
             this.label3.Text = "Mã OTP (6 số)";
             // 
             // btnResend
             // 
             this.btnResend.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnResend.Location = new System.Drawing.Point(266, 252);
-            this.btnResend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnResend.Location = new System.Drawing.Point(399, 388);
             this.btnResend.Name = "btnResend";
-            this.btnResend.Size = new System.Drawing.Size(111, 32);
+            this.btnResend.Size = new System.Drawing.Size(166, 50);
             this.btnResend.TabIndex = 21;
             this.btnResend.Text = "Gửi lại";
             this.btnResend.UseVisualStyleBackColor = true;
@@ -221,10 +208,10 @@
             // 
             // f_OTP
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(533, 292);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnResend);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblTimer);
@@ -234,7 +221,6 @@
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.txtOTP);
             this.Controls.Add(this.lblMessage);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "f_OTP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "f_OTP";

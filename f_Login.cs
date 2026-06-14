@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
-    public partial class f_Login : Form
+    public partial class f_Login : BaseForm
     {
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(
-        int nLeftRect,
-        int nTopRect,
-        int nRightRect,
-        int nBottomRect,
-        int nWidthEllipse,
-        int nHeightEllipse
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect,
+            int nWidthEllipse,
+            int nHeightEllipse
         );
 
         public f_Login()
@@ -24,7 +25,6 @@ namespace QuanLySinhVien
 
         private bool ValidateInput()
         {
-
             string userText = (txtUsername.Text == "Tên đăng nhập" || txtUsername.Text == "Họ và tên") ? "" : txtUsername.Text;
             string passText = (txtPassword.Text == "●●●●●●●●●●") ? "" : txtPassword.Text;
 
@@ -43,7 +43,8 @@ namespace QuanLySinhVien
             }
             else errorProvider1.SetError(txtPassword, "");
 
-            if (!rdStudent.Checked && !rdHR.Checked)
+            // Cập nhật kiểm tra phải chọn 1 trong 3 nút quyền
+            if (!rdAdmin.Checked && !rdStudent.Checked && !rdHR.Checked)
             {
                 MessageBox.Show("Vui lòng chọn loại tài khoản!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 valid = false;
@@ -55,16 +56,24 @@ namespace QuanLySinhVien
         {
             if (!ValidateInput()) return;
 
-            int position = rdStudent.Checked ? 1 : 2;
+            int position = 1;
+            if (rdAdmin.Checked) position = 0;
+            else if (rdStudent.Checked) position = 1;
+            else if (rdHR.Checked) position = 2;
 
             My_DB db = new My_DB();
             try
             {
                 db.openConnection();
-                string query = "SELECT * FROM Login " +
+
+                // FIX ENCODING: chỉ COLLATE trên cột VARCHAR (Username, Pass),
+                // KHÔNG COLLATE trên Fname/Lname vì đó là NVARCHAR → đọc sau
+                string query =
+                    "SELECT MSGV, Fname, Lname, position FROM Login " +
                     "WHERE Username = @user COLLATE SQL_Latin1_General_CP1_CS_AS " +
-                    "AND Pass = @pass COLLATE SQL_Latin1_General_CP1_CS_AS " +
+                    "AND Pass    = @pass COLLATE SQL_Latin1_General_CP1_CS_AS " +
                     "AND position = @pos AND VALID = 1";
+
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 cmd.Parameters.AddWithValue("@user", txtUsername.Text.Trim());
                 cmd.Parameters.AddWithValue("@pass", txtPassword.Text);
@@ -74,18 +83,17 @@ namespace QuanLySinhVien
 
                 if (reader.Read())
                 {
-                    string fullName = reader["Fname"].ToString() + " " + reader["Lname"].ToString();
-
-                    Globals.SetSession(
-                        reader["MSGV"].ToString(),
-                        fullName,
-                        position);
-
-                    MessageBox.Show("Đăng nhập thành công!\nXin chào: " + Globals.GlobalUserName,
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-             
+                    // Đọc NVARCHAR bằng GetString để giữ nguyên Unicode tiếng Việt
+                    string fname = reader.GetString(reader.GetOrdinal("Fname"));
+                    string lname = reader.GetString(reader.GetOrdinal("Lname"));
+                    string fullName = fname.Trim() + " " + lname.Trim();
+                    string msgv = reader["MSGV"].ToString();
                     reader.Close();
+
+                    Globals.SetSession(msgv, fullName, position);
+
+                    MessageBox.Show("Đăng nhập thành công!\nXin chào: " + fullName,
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     f_HomePage homeForm = new f_HomePage(fullName);
                     homeForm.Show();
@@ -93,29 +101,24 @@ namespace QuanLySinhVien
                 }
                 else
                 {
-                    MessageBox.Show("Sai thông tin đăng nhập hoặc không có quyền truy cập!",
-                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     reader.Close();
+                    MessageBox.Show("Sai thông tin đăng nhập hoặc tài khoản chưa được Admin phê duyệt!",
+                        "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi kết nối: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi kết nối: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
-            {
-                db.closeConnection();
-            }
+            finally { db.closeConnection(); }
         }
 
-      
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
             f_Register reg = new f_Register();
             reg.ShowDialog();
-            this.Show(); 
+            this.Show(); // Sau khi tắt form đăng ký sẽ hiển thị lại màn hình đăng nhập
         }
 
         private void lnkForgetPass_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -171,10 +174,5 @@ namespace QuanLySinhVien
         }
 
         private void txtUsername_TextChanged(object sender, EventArgs e) { }
-
-        private void rdStudent_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

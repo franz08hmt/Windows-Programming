@@ -14,7 +14,7 @@ using System.Drawing.Drawing2D;
 
 namespace QuanLySinhVien
 {
-    public partial class f_EditStudent : Form
+    public partial class f_EditStudent : UserControl
     {
         My_DB db = new My_DB();
         private bool openedFromList = false;
@@ -30,6 +30,21 @@ namespace QuanLySinhVien
         {
             InitializeComponent();
             RegisterRealTimeValidation();
+        }
+
+        private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            GraphicsPath path = new GraphicsPath();
+            path.StartFigure();
+            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius, 0, radius, radius), 270, 90);
+            path.AddArc(new Rectangle(pnl.Width - radius, pnl.Height - radius, radius, radius), 0, 90);
+            path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
+            path.CloseFigure();
+
+            pnl.Region = new Region(path);
         }
 
 
@@ -248,20 +263,12 @@ namespace QuanLySinhVien
             SetOriginalValues(ho, ten, gioitinh, dienthoai, email);
         }
 
-  
+
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (openedFromList)
-                this.Close();
-            else
-            {
-                f_HomePage homeForm = new f_HomePage(Globals.GlobalUserName);
-                homeForm.Show();
-                this.Close();
-            }
         }
 
-     
+
         private void dgvStudents_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -465,6 +472,11 @@ namespace QuanLySinhVien
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             BoGocPanel(panel1, 25);
+        }
+
+        private void pnlForm_Paint(object sender, PaintEventArgs e)
+        {
+            BoGocPanel(pnlForm, 25);
         }
     }
 }

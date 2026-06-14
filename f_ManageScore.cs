@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using OfficeOpenXml;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
-    public partial class f_ManageScore : Form
+    public partial class f_ManageScore : UserControl
     {
         public f_ManageScore()
         {
@@ -23,7 +21,6 @@ namespace QuanLySinhVien
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
             GraphicsPath path = new GraphicsPath();
             path.StartFigure();
             path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
@@ -31,7 +28,6 @@ namespace QuanLySinhVien
             path.AddArc(new Rectangle(pnl.Width - radius, pnl.Height - radius, radius, radius), 0, 90);
             path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
             path.CloseFigure();
-
             pnl.Region = new Region(path);
         }
 
@@ -41,16 +37,10 @@ namespace QuanLySinhVien
             txtTK.BackColor = Color.LightGray;
             txtXepLoai.ReadOnly = true;
             txtXepLoai.BackColor = Color.LightGray;
+            nudCKWeight.ReadOnly = true;
+            nudCKWeight.BackColor = Color.LightGray;
 
             LoadStudentCombo();
-            if (cboStudent.SelectedValue != null)
-            {
-                string mssv = cboStudent.SelectedValue.ToString();
-                LoadCoursesRegisteredByStudent(mssv);
-                DisplayScoreBoard(mssv);
-            }
-
-            if (cboTrongSo.Items.Count > 0) cboTrongSo.SelectedIndex = 0;
         }
 
         private void LoadStudentCombo()
@@ -67,11 +57,17 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-                string query = "SELECT c.MaMH, c.TenMH FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH WHERE d.MSSV = @mssv";
+                string query =
+                    "SELECT d.MaMH, c.TenMH " +
+                    "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
+                    "WHERE d.MSSV = @mssv " +
+                    "AND NOT EXISTS (" +
+                    "    SELECT 1 FROM Score s " +
+                    "    WHERE s.MSSV = d.MSSV AND s.MaMH = d.MaMH" +
+                    ")";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", mssv);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
+                new SqlDataAdapter(cmd).Fill(dt);
 
                 cboCourse.DataSource = dt;
                 cboCourse.DisplayMember = "TenMH";
@@ -88,32 +84,106 @@ namespace QuanLySinhVien
             dgvScores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             if (dt == null || dt.Rows.Count == 0)
-            {
-                txtQT.Clear();
-                txtCK.Clear();
-                txtTK.Clear();
-                txtXepLoai.Clear();
-                txtMota.Clear();
-            }
+                ClearInputFields();
 
-            decimal gpa4 = Score.CalculateGPA(mssv);
-            lblGPA.Text = $"ĐIỂM GPA TÍCH LŨY: {gpa4:F2} / 4.0";
+            decimal gpa = Score.CalculateGPA(mssv);
+            lblGPA.Text = $"ĐIỂM GPA TÍCH LŨY: {gpa:F2} / 4.0";
 
-            string xepLoaiHocLuc = "";
-            Color mauChu = Color.Black;
-
-            if (gpa4 >= 3.60m) { xepLoaiHocLuc = "Xuất sắc"; mauChu = Color.Purple; }
-            else if (gpa4 >= 3.20m) { xepLoaiHocLuc = "Giỏi"; mauChu = Color.DarkGreen; }
-            else if (gpa4 >= 2.50m) { xepLoaiHocLuc = "Khá"; mauChu = Color.Blue; }
-            else if (gpa4 >= 2.00m) { xepLoaiHocLuc = "Trung bình"; mauChu = Color.DarkOrange; }
-            else { xepLoaiHocLuc = "Yếu / Kém"; mauChu = Color.Red; }
+            string xepLoai; Color mau;
+            if (gpa >= 3.60m) { xepLoai = "Xuất sắc"; mau = Color.Purple; }
+            else if (gpa >= 3.20m) { xepLoai = "Giỏi"; mau = Color.DarkGreen; }
+            else if (gpa >= 2.50m) { xepLoai = "Khá"; mau = Color.Blue; }
+            else if (gpa >= 2.00m) { xepLoai = "Trung bình"; mau = Color.DarkOrange; }
+            else { xepLoai = "Yếu / Kém"; mau = Color.Red; }
 
             if (lblXepLoai != null)
             {
-                lblXepLoai.Text = $"XẾP LOẠI HỌC LỰC: {xepLoaiHocLuc}";
-                lblXepLoai.ForeColor = mauChu;
+                lblXepLoai.Text = $"XẾP LOẠI HỌC LỰC: {xepLoai}";
+                lblXepLoai.ForeColor = mau;
             }
         }
+
+        // ===================================================================
+        // TÍNH ĐIỂM TK THEO TRỌNG SỐ TÙY CHỈNH (nâng cao)
+        // ===================================================================
+        private void CalculateTotal()
+        {
+            string cleanQT = txtQT.Text.Trim();
+            string cleanCK = txtCK.Text.Trim();
+
+            if (string.IsNullOrEmpty(cleanQT) || string.IsNullOrEmpty(cleanCK))
+            {
+                txtTK.Clear(); txtXepLoai.Clear(); return;
+            }
+
+            if (decimal.TryParse(cleanQT, out decimal qt) &&
+                decimal.TryParse(cleanCK, out decimal ck))
+            {
+                if (qt < 0 || qt > 10 || ck < 0 || ck > 10)
+                {
+                    txtTK.Clear(); txtXepLoai.Clear(); return;
+                }
+
+                // Dùng trọng số tùy chỉnh từ nudQTWeight / nudCKWeight
+                decimal wQT = nudQTWeight.Value / 100m;
+                decimal wCK = nudCKWeight.Value / 100m;
+                decimal tk = Math.Round(qt * wQT + ck * wCK, 2);
+
+                txtTK.Text = tk.ToString("F2");
+                txtXepLoai.Text = Score.XepLoaiTheoTK(tk);
+            }
+            else { txtTK.Clear(); txtXepLoai.Clear(); }
+        }
+
+        // Khi đổi hệ số QT → CK tự cập nhật = 100 - QT
+        private void nudWeight_ValueChanged(object sender, EventArgs e)
+        {
+            nudCKWeight.Value = 100 - nudQTWeight.Value;
+            CalculateTotal();
+        }
+
+        private void RegisterRealTimeValidation()
+        {
+            txtQT.TextChanged += (s, e) => {
+                string text = txtQT.Text.Trim();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if (!decimal.TryParse(text, out decimal val))
+                        erpScore.SetError(txtQT, "Điểm không hợp lệ!");
+                    else if (val < 0 || val > 10)
+                        erpScore.SetError(txtQT, "Điểm phải từ 0 đến 10!");
+                    else
+                        erpScore.SetError(txtQT, "");
+                }
+                else erpScore.SetError(txtQT, "");
+                CalculateTotal();
+            };
+
+            txtCK.TextChanged += (s, e) => {
+                string text = txtCK.Text.Trim();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if (!decimal.TryParse(text, out decimal val))
+                        erpScore.SetError(txtCK, "Điểm không hợp lệ!");
+                    else if (val < 0 || val > 10)
+                        erpScore.SetError(txtCK, "Điểm phải từ 0 đến 10!");
+                    else
+                        erpScore.SetError(txtCK, "");
+                }
+                else erpScore.SetError(txtCK, "");
+                CalculateTotal();
+            };
+        }
+
+        private void ClearInputFields()
+        {
+            txtQT.Clear(); txtCK.Clear();
+            txtTK.Clear(); txtXepLoai.Clear();
+            txtMota.Clear();
+            erpScore?.Clear();
+        }
+
+        // ── Events ──────────────────────────────────────
 
         private void cboStudent_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -123,285 +193,342 @@ namespace QuanLySinhVien
                 string mssv = cboStudent.SelectedValue.ToString();
                 LoadCoursesRegisteredByStudent(mssv);
                 DisplayScoreBoard(mssv);
+                ClearInputFields();
+
+                // Nếu cboCourse trống (tất cả môn đã có điểm)
+                // thì hiện placeholder để user biết cần click vào bảng điểm để sửa
+                if (cboCourse.Items.Count == 0)
+                {
+                    System.Data.DataTable dtEmpty = new System.Data.DataTable();
+                    dtEmpty.Columns.Add("MaMH");
+                    dtEmpty.Columns.Add("TenMH");
+                    dtEmpty.Rows.Add("", "← Click vào bảng điểm để sửa");
+                    cboCourse.DataSource = dtEmpty;
+                    cboCourse.DisplayMember = "TenMH";
+                    cboCourse.ValueMember = "MaMH";
+                }
             }
         }
 
-        private void RegisterRealTimeValidation()
+        private void dgvScores_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            txtQT.TextChanged += (s, e) => {
-                string text = txtQT.Text.Trim();
-                if (string.IsNullOrEmpty(text))
-                {
-                    erpScore.SetError(txtQT, "");
-                }
-                else if (!decimal.TryParse(text, out decimal val))
-                {
-                    erpScore.SetError(txtQT, "Điểm quá trình không được chứa chữ hoặc ký tự đặc biệt!");
-                }
-                else if (val < 0 || val > 10)
-                {
-                    erpScore.SetError(txtQT, "Điểm số phải nằm trong khoảng từ 0 đến 10!");
-                }
-                else
-                {
-                    erpScore.SetError(txtQT, "");
-                }
-                CalculateTotal();
-            };
+            if (e.RowIndex < 0 || e.RowIndex >= dgvScores.Rows.Count - 1) return;
 
-            txtCK.TextChanged += (s, e) => {
-                string text = txtCK.Text.Trim();
-                if (string.IsNullOrEmpty(text))
-                {
-                    erpScore.SetError(txtCK, "");
-                }
-                else if (!decimal.TryParse(text, out decimal val))
-                {
-                    erpScore.SetError(txtCK, "Điểm cuối kỳ không được chứa chữ hoặc ký tự đặc biệt!");
-                }
-                else if (val < 0 || val > 10)
-                {
-                    erpScore.SetError(txtCK, "Điểm số phải nằm trong khoảng từ 0 đến 10!");
-                }
-                else
-                {
-                    erpScore.SetError(txtCK, "");
-                }
-                CalculateTotal();
-            };
-        }
+            DataGridViewRow row = dgvScores.Rows[e.RowIndex];
 
-        private void CalculateTotal()
-        {
-            string cleanQT = txtQT.Text.Trim();
-            string cleanCK = txtCK.Text.Trim();
+            // Lấy MaMH từ dòng được click
+            string maMH = row.Cells[0].Value?.ToString() ?? "";
+            string tenMH = row.Cells[1].Value?.ToString() ?? "";
 
-            if (string.IsNullOrEmpty(cleanQT) || string.IsNullOrEmpty(cleanCK))
+            // Thêm môn vào cboCourse nếu chưa có (trường hợp sửa điểm đã nhập)
+            if (!string.IsNullOrEmpty(maMH))
             {
-                txtTK.Clear();
-                txtXepLoai.Clear();
-                return;
+                // Tạo DataTable tạm chứa môn đang sửa để gán vào cboCourse
+                System.Data.DataTable dtTemp = new System.Data.DataTable();
+                dtTemp.Columns.Add("MaMH");
+                dtTemp.Columns.Add("TenMH");
+                dtTemp.Rows.Add(maMH, tenMH);
+
+                cboCourse.DataSource = dtTemp;
+                cboCourse.DisplayMember = "TenMH";
+                cboCourse.ValueMember = "MaMH";
+                cboCourse.SelectedIndex = 0;
             }
 
-            if (decimal.TryParse(cleanQT, out decimal qt) && decimal.TryParse(cleanCK, out decimal ck))
-            {
-                if (qt < 0 || qt > 10 || ck < 0 || ck > 10)
-                {
-                    txtTK.Clear();
-                    txtXepLoai.Clear();
-                    return;
-                }
+            txtQT.Text = row.Cells[3].Value?.ToString() ?? "";
+            txtCK.Text = row.Cells[4].Value?.ToString() ?? "";
+            txtTK.Text = row.Cells[5].Value?.ToString() ?? "";
+            txtXepLoai.Text = row.Cells[6].Value?.ToString() ?? "";
+            txtMota.Text = row.Cells[7].Value?.ToString() ?? "";
 
-                decimal heSoQT = 0.5m;
-                decimal heSoCK = 0.5m;
-
-                if (cboTrongSo.SelectedItem != null)
-                {
-                    string strTrongSo = cboTrongSo.SelectedItem.ToString();
-                    string[] mangHeSo = strTrongSo.Split('/');
-                    if (mangHeSo.Length == 2)
-                    {
-                        heSoQT = Convert.ToDecimal(mangHeSo[0]) / 100m;
-                        heSoCK = Convert.ToDecimal(mangHeSo[1]) / 100m;
-                    }
-                }
-
-                decimal tk = Math.Round((qt * heSoQT) + (ck * heSoCK), 2);
-                txtTK.Text = tk.ToString("F2");
-
-                if (tk >= 9.0m) txtXepLoai.Text = "Xuất sắc";
-                else if (tk >= 8.0m) txtXepLoai.Text = "Giỏi";
-                else if (tk >= 6.5m) txtXepLoai.Text = "Khá";
-                else if (tk >= 5.0m) txtXepLoai.Text = "Trung bình";
-                else txtXepLoai.Text = "Yếu";
-            }
-            else
-            {
-                txtTK.Clear();
-                txtXepLoai.Clear();
-            }
-        }
-
-        private void txtQT_TextChanged(object sender, EventArgs e) => CalculateTotal();
-        private void txtCK_TextChanged(object sender, EventArgs e) => CalculateTotal();
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            string currentUserName = Globals.GlobalUserName;
-            f_HomePage homeForm = new f_HomePage(currentUserName);
-            homeForm.Show();
-            this.Close();
-        }
-
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            txtQT.Clear();
-            txtCK.Clear();
-            txtTK.Clear();
-            txtXepLoai.Clear();
-            txtMota.Clear();
-            txtQT.Focus();
+            erpScore?.Clear();
         }
 
         private void btnSaveScore_Click(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboCourse.SelectedValue == null)
             {
-                MessageBox.Show("Vui lòng chọn đầy đủ Sinh viên và Môn học cần nhập điểm!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn đầy đủ Sinh viên và Môn học!", "Cảnh báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            if (!decimal.TryParse(txtQT.Text.Trim(), out decimal qt) || !decimal.TryParse(txtCK.Text.Trim(), out decimal ck))
+            if (!decimal.TryParse(txtQT.Text.Trim(), out decimal qt) ||
+                !decimal.TryParse(txtCK.Text.Trim(), out decimal ck))
             {
-                MessageBox.Show("Điểm quá trình và Điểm cuối kỳ phải là dữ liệu số hợp lệ!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Điểm QT và CK phải là số hợp lệ!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
             if (qt < 0 || qt > 10 || ck < 0 || ck > 10)
             {
-                MessageBox.Show("Điểm số nhập vào phải nằm trong thang điểm quy định từ 0 đến 10!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Điểm phải từ 0 đến 10!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!decimal.TryParse(txtTK.Text.Trim(), out decimal tk))
+            // [AI] Phát hiện bất thường: chênh lệch QT và CK quá 5 điểm
+            if (ck - qt > 5)
             {
-                MessageBox.Show("Hệ thống chưa ghi nhận được Điểm tổng kết. Vui lòng kiểm tra lại việc nhập Điểm quá trình và Điểm cuối kỳ!", "Lỗi xử lý", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DialogResult canh = MessageBox.Show(
+                    $"⚠️ AI PHÁT HIỆN BẤT THƯỜNG!\n\n" +
+                    $"Điểm CK ({ck:F1}) cao hơn Điểm QT ({qt:F1}) quá 5 điểm.\n" +
+                    $"Chênh lệch: {(ck - qt):F1} điểm\n\n" +
+                    $"Có thể do nhập sai dữ liệu. Bạn có chắc chắn muốn lưu không?",
+                    "AI Phát hiện bất thường",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+                if (canh != DialogResult.Yes) return;
             }
-
-            string xepLoai = txtXepLoai.Text.Trim();
-
-            // 🛠️ SỬA LỖI TẠI ĐÂY: Chuyển đổi mã sinh viên sang kiểu số nguyên (int)
-            if (!int.TryParse(cboStudent.SelectedValue.ToString(), out int mssv))
+            else if (qt - ck > 5)
             {
-                MessageBox.Show("Mã số sinh viên không hợp lệ (Phải là kiểu số)!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DialogResult canh = MessageBox.Show(
+                    $"⚠️ AI PHÁT HIỆN BẤT THƯỜNG!\n\n" +
+                    $"Điểm QT ({qt:F1}) cao hơn Điểm CK ({ck:F1}) quá 5 điểm.\n" +
+                    $"Chênh lệch: {(qt - ck):F1} điểm\n\n" +
+                    $"Có thể do nhập sai dữ liệu. Bạn có chắc chắn muốn lưu không?",
+                    "AI Phát hiện bất thường",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+                if (canh != DialogResult.Yes) return;
             }
 
+            // Dùng trọng số tùy chỉnh
+            decimal wQT = nudQTWeight.Value / 100m;
+            decimal wCK = nudCKWeight.Value / 100m;
+            decimal tk = Math.Round(qt * wQT + ck * wCK, 2);
+            string xepLoai = Score.XepLoaiTheoTK(tk);
+            int mssv = Convert.ToInt32(cboStudent.SelectedValue);
             string mamh = cboCourse.SelectedValue.ToString();
-            string mota = txtMota.Text.Trim();
 
-            // Khởi tạo lớp Score thành công với tham số đầu tiên là int mssv
-            Score coreScore = new Score(mssv, mamh, qt, ck, tk, xepLoai, mota);
+            Score s = new Score(mssv, mamh, qt, ck, tk, xepLoai, txtMota.Text.Trim());
 
-            if (coreScore.SaveScore())
+            if (s.SaveScore())
             {
-                MessageBox.Show("Đã thực hiện cập nhật và lưu thông tin điểm số thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    $"Lưu điểm thành công!\n" +
+                    $"Hệ số: QT {nudQTWeight.Value}% / CK {nudCKWeight.Value}%\n" +
+                    $"DiemTK = {tk:F2} — {xepLoai}",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DisplayScoreBoard(mssv.ToString());
+                LoadCoursesRegisteredByStudent(mssv.ToString());
+                ClearInputFields();
             }
             else
-            {
-                MessageBox.Show("Đã xảy ra lỗi hệ thống, không thể lưu điểm số.\nVui lòng kiểm tra lại cấu hình tên bảng hoặc tên cột trong cơ sở dữ liệu SQL Server!", "Thao tác thất bại", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(panel1, 25, e);
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(panel2, 25, e);
-        }
-
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(panel3, 25, e);
-        }
-
-        private void dgvScores_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < dgvScores.Rows.Count - 1)
-            {
-                DataGridViewRow row = dgvScores.Rows[e.RowIndex];
-
-                if (row.Cells[0].Value != null)
-                {
-                    cboCourse.SelectedValue = row.Cells[0].Value.ToString();
-                }
-
-                if (row.Cells[3].Value != null)
-                {
-                    string diemThanhPhan = row.Cells[3].Value.ToString();
-                    try
-                    {
-                        string[] phanDoan = diemThanhPhan.Split('|');
-                        if (phanDoan.Length == 2)
-                        {
-                            string qtPart = phanDoan[0].Replace("QT:", "").Trim();
-                            string ckPart = phanDoan[1].Replace("CK:", "").Trim();
-
-                            txtQT.Text = qtPart;
-                            txtCK.Text = ckPart;
-                        }
-                    }
-                    catch
-                    {
-                        txtQT.Text = diemThanhPhan;
-                        txtCK.Clear();
-                    }
-                }
-                else
-                {
-                    txtQT.Clear();
-                    txtCK.Clear();
-                }
-
-                txtTK.Text = row.Cells[4].Value?.ToString() ?? "";
-                txtXepLoai.Text = row.Cells[5].Value?.ToString() ?? "";
-                txtMota.Text = row.Cells[6].Value?.ToString() ?? "";
-
-                if (erpScore != null)
-                {
-                    erpScore.Clear();
-                }
-            }
+                MessageBox.Show("Lưu điểm thất bại!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnFix_Click(object sender, EventArgs e)
         {
-            if (erpScore != null && (!string.IsNullOrEmpty(erpScore.GetError(txtQT)) || !string.IsNullOrEmpty(erpScore.GetError(txtCK))))
+            btnSaveScore_Click(sender, e);
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            ClearInputFields();
+            if (cboStudent.SelectedValue != null)
             {
-                MessageBox.Show("Không thể thực hiện chỉnh sửa thông tin điểm số!\nVui lòng sửa lại dữ liệu bị báo lỗi đỏ trên giao diện.",
-                                "Thao tác bị chặn", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return;
-            }
-
-            if (cboStudent.SelectedValue == null || cboCourse.SelectedValue == null ||
-                string.IsNullOrEmpty(txtQT.Text.Trim()) || string.IsNullOrEmpty(txtCK.Text.Trim()))
-            {
-                MessageBox.Show("Vui lòng chọn môn học từ bảng điểm chi tiết và nhập đầy đủ điểm số trước khi bấm Sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 🛠️ SỬA LỖI TẠI ĐÂY: Đồng bộ chỉnh sửa ép kiểu int cho mssv tại hàm Fix
-            int mssv = int.Parse(cboStudent.SelectedValue.ToString());
-            string mamh = cboCourse.SelectedValue.ToString();
-
-            decimal qt = Convert.ToDecimal(txtQT.Text.Trim().Replace('.', ','));
-            decimal ck = Convert.ToDecimal(txtCK.Text.Trim().Replace('.', ','));
-            decimal tk = Convert.ToDecimal(txtTK.Text.Trim().Replace('.', ','));
-
-            string xepLoai = txtXepLoai.Text.Trim();
-            string mota = txtMota.Text.Trim();
-
-            Score coreScore = new Score(mssv, mamh, qt, ck, tk, xepLoai, mota);
-
-            if (coreScore.SaveScore())
-            {
-                MessageBox.Show("Cập nhật thông tin điểm số sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DisplayScoreBoard(mssv.ToString());
-            }
-            else
-            {
-                MessageBox.Show("Cập nhật điểm thất bại! Vui lòng kiểm tra lại kết nối cơ sở dữ liệu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mssv = cboStudent.SelectedValue.ToString();
+                LoadCoursesRegisteredByStudent(mssv);
+                DisplayScoreBoard(mssv);
             }
         }
 
-        private void cboTrongSo_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            CalculateTotal();
+        }
+
+        // ===================================================================
+        // IMPORT ĐIỂM TỪ EXCEL (nâng cao) — dùng EPPlus giống f_ListStudent
+        // ===================================================================
+        private void btnImportExcel_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "Excel Files|*.xlsx;*.xls",
+                Title = "Chọn file Excel chứa dữ liệu điểm"
+            };
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+
+            try
+            {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using (ExcelPackage pkg = new ExcelPackage(new FileInfo(ofd.FileName)))
+                {
+                    ExcelWorksheet ws = pkg.Workbook.Worksheets[0];
+                    if (ws.Dimension == null)
+                    {
+                        MessageBox.Show("File Excel trống!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Đọc header row 1 để map cột
+                    int colMSSV = -1, colMaMH = -1, colQT = -1, colCK = -1;
+                    for (int c = 1; c <= ws.Dimension.End.Column; c++)
+                    {
+                        string header = ws.Cells[1, c].Text.Trim().ToUpper();
+                        if (header == "MSSV") colMSSV = c;
+                        if (header == "MAMH") colMaMH = c;
+                        if (header == "DIEMQT") colQT = c;
+                        if (header == "DIEMCK") colCK = c;
+                    }
+
+                    if (colMSSV < 0 || colMaMH < 0 || colQT < 0 || colCK < 0)
+                    {
+                        MessageBox.Show(
+                            "File Excel cần có các cột: MSSV, MaMH, DiemQT, DiemCK\n" +
+                            "(không phân biệt hoa thường)",
+                            "Lỗi định dạng", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    int success = 0, fail = 0;
+                    decimal wQT = nudQTWeight.Value / 100m;
+                    decimal wCK = nudCKWeight.Value / 100m;
+
+                    for (int r = 2; r <= ws.Dimension.End.Row; r++)
+                    {
+                        try
+                        {
+                            string mssvStr = ws.Cells[r, colMSSV].Text.Trim();
+                            string mamh = ws.Cells[r, colMaMH].Text.Trim();
+                            string qtStr = ws.Cells[r, colQT].Text.Trim();
+                            string ckStr = ws.Cells[r, colCK].Text.Trim();
+
+                            if (string.IsNullOrEmpty(mssvStr) || string.IsNullOrEmpty(mamh)) { fail++; continue; }
+
+                            int mssv = Convert.ToInt32(mssvStr);
+                            decimal qt = Convert.ToDecimal(qtStr);
+                            decimal ck = Convert.ToDecimal(ckStr);
+
+                            if (qt < 0 || qt > 10 || ck < 0 || ck > 10) { fail++; continue; }
+
+                            decimal tk = Math.Round(qt * wQT + ck * wCK, 2);
+                            string xl = Score.XepLoaiTheoTK(tk);
+
+                            Score s = new Score(mssv, mamh, qt, ck, tk, xl, "Import từ Excel");
+                            if (s.SaveScore()) success++;
+                            else fail++;
+                        }
+                        catch { fail++; }
+                    }
+
+                    MessageBox.Show(
+                        $"Import hoàn tất!\n" +
+                        $"Hệ số: QT {nudQTWeight.Value}% / CK {nudCKWeight.Value}%\n" +
+                        $"Thành công: {success}  |  Thất bại/Lỗi: {fail}",
+                        "Kết quả Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Reload bảng điểm nếu đang chọn sinh viên
+                    if (cboStudent.SelectedValue != null)
+                    {
+                        string mssv = cboStudent.SelectedValue.ToString();
+                        DisplayScoreBoard(mssv);
+                        LoadCoursesRegisteredByStudent(mssv);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi đọc file Excel: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ===================================================================
+        // [AI] OCR NHẬN DẠNG CHỮ SỐ TỪ ẢNH BẢNG ĐIỂM (nâng cao)
+        // ===================================================================
+        private void btnOCRScore_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.tiff",
+                Title = "Chọn ảnh bảng điểm"
+            };
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+
+            try
+            {
+                btnOCRScore.Enabled = false;
+                btnOCRScore.Text = "⏳ Đang đọc...";
+
+                // Đọc ảnh và chạy OCR bằng Tesseract
+                using (var engine = new Tesseract.TesseractEngine(
+                    @"./tessdata", "eng", Tesseract.EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(ofd.FileName))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string rawText = page.GetText();
+
+                            // Parse ra các số thập phân từ text OCR
+                            var numbers = System.Text.RegularExpressions.Regex
+                                .Matches(rawText, @"\b\d+([.,]\d+)?\b")
+                                .Cast<System.Text.RegularExpressions.Match>()
+                                .Select(m => m.Value.Replace(",", "."))
+                                .Where(s => decimal.TryParse(s,
+                                    System.Globalization.NumberStyles.Any,
+                                    System.Globalization.CultureInfo.InvariantCulture,
+                                    out decimal val) && val >= 0 && val <= 10)
+                                .ToList();
+
+                            if (numbers.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "OCR không tìm thấy số điểm hợp lệ (0-10) trong ảnh.\n" +
+                                    "Vui lòng chụp ảnh rõ hơn và thử lại.",
+                                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+
+                            // Hiện kết quả và hỏi chọn điền vào ô nào
+                            string danhSachSo = string.Join(", ", numbers);
+                            string msg =
+                                $"OCR đọc được các số điểm: {danhSachSo}\n\n" +
+                                $"Raw text:\n{rawText}\n\n" +
+                                $"Bạn muốn điền vào:\n" +
+                                $"[Yes] Điểm QT = {(numbers.Count > 0 ? numbers[0] : "?")}  " +
+                                $"Điểm CK = {(numbers.Count > 1 ? numbers[1] : "?")}\n" +
+                                $"[No] Tự điền thủ công";
+
+                            DialogResult dr = MessageBox.Show(msg, "Kết quả OCR",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                            if (dr == DialogResult.Yes)
+                            {
+                                if (numbers.Count >= 1) txtQT.Text = numbers[0];
+                                if (numbers.Count >= 2) txtCK.Text = numbers[1];
+                                MessageBox.Show("Đã điền điểm từ OCR thành công!", "Thành công",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi OCR: " + ex.Message + "\n\n" +
+                    "Đảm bảo đã cài Tesseract và có thư mục tessdata trong thư mục project.",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnOCRScore.Enabled = true;
+                btnOCRScore.Text = "📷 OCR Đọc điểm từ ảnh";
+            }
+        }
+        private void panel1_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel1, 25, e);
+        private void panel2_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel2, 25, e);
+        private void panel3_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel3, 25, e);
+        private void txtQT_TextChanged(object sender, EventArgs e) { }
+        private void txtCK_TextChanged(object sender, EventArgs e) { }
+
+        private void dgvScores_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

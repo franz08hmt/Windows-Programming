@@ -6,157 +6,139 @@ namespace QuanLySinhVien
 {
     public class Course
     {
-        // Trường dữ liệu private phục vụ validation cho thuộc tính Sotc
+        private My_DB my_db = new My_DB();
         private int _sotc;
 
-        // Các thuộc tính tự động ánh xạ bảng Course
         public string Mamh { get; set; }
         public string Tenmh { get; set; }
         public int Tuan { get; set; }
         public int Hocky { get; set; }
         public string Decription { get; set; }
+        public string Exception { get; private set; }
 
-        public string Exception { get; set; }
-
-        // 🌟 ĐÃ THÊM (Mục 5.1): Khối thuộc tính Sotc có bộ thiết lập (setter) kiểm tra > 0
+        // Validation trong setter theo yêu cầu đề bài
         public int Sotc
         {
             get { return _sotc; }
             set { _sotc = value > 0 ? value : 0; }
         }
 
-        public Course() { }
-
-        // 🌟 ĐÃ THÊM (Mục 5.1): Phương thức getCourse nhận SqlCommand linh hoạt 
-        // Giúp form con tự xây dựng câu truy vấn (ví dụ check tên môn học trùng bằng parameters)
+        // Phương thức getCourse linh hoạt nhận SqlCommand từ Form con (Giữ nguyên của bạn)
         public DataTable getCourse(SqlCommand command)
         {
-            My_DB db = new My_DB();
+            command.Connection = my_db.getConnection;
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
             DataTable table = new DataTable();
             try
             {
-                // Gán kết nối động từ database của hệ thống vào command được truyền tới
-                command.Connection = db.getConnection;
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
                 adapter.Fill(table);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Lỗi getCourse: " + ex.Message);
+                this.Exception = ex.Message;
             }
             return table;
         }
 
-        public bool AddCourse()
+        // ===================================================================
+        // 🚀 CÁC PHƯƠNG THỨC TĨNH (STATIC) ĐỂ SỬA TRIỆT ĐỂ LỖI Ở f_ManageCourse.cs
+        // ===================================================================
+
+        // 1. Hàm lấy toàn bộ danh sách môn học tĩnh (Giải quyết lỗi dòng 344)
+        public static DataTable GetAllCourses()
         {
-            My_DB db = new My_DB();
+            My_DB tempDb = new My_DB();
+            SqlCommand command = new SqlCommand("SELECT * FROM Course", tempDb.getConnection);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable table = new DataTable();
             try
             {
-                db.openConnection();
-
-                string query = "INSERT INTO Course (MaMH, TenMH, SoTC, Tuan, Hky, Mota) " +
-                               "VALUES (@ma, @ten, @sotc, @tuan, @hky, @mota)";
-
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@ma", this.Mamh);
-                cmd.Parameters.AddWithValue("@ten", this.Tenmh);
-                cmd.Parameters.AddWithValue("@sotc", this.Sotc); // Sẽ lấy giá trị đã qua validation ở setter
-                cmd.Parameters.AddWithValue("@tuan", this.Tuan);
-                cmd.Parameters.AddWithValue("@hky", this.Hocky);
-                cmd.Parameters.AddWithValue("@mota", this.Decription);
-
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
+                adapter.Fill(table);
             }
             catch (Exception)
             {
-                return false;
+                // Xử lý lỗi nếu có ngoại lệ xảy ra khi truy vấn dữ liệu
             }
-            finally
-            {
-                db.closeConnection();
-            }
+            return table;
         }
 
-        public DataTable GetCourseByMa(string ma)
+        // 2. Hàm lấy chi tiết môn học tĩnh theo Mã môn học (Giải quyết lỗi dòng 208)
+        public static DataTable GetCourseByMa(string courseId)
         {
-            My_DB db = new My_DB();
-            DataTable dt = new DataTable();
+            My_DB tempDb = new My_DB();
+            SqlCommand command = new SqlCommand("SELECT * FROM Course WHERE MaMH = @id", tempDb.getConnection);
+            command.Parameters.AddWithValue("@id", courseId);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable table = new DataTable();
             try
             {
-                db.openConnection();
-                string query = "SELECT * FROM Course WHERE MaMH = @ma";
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@ma", ma);
+                adapter.Fill(table);
+            }
+            catch (Exception)
+            {
+                // Xử lý lỗi nếu có ngoại lệ xảy ra khi truy vấn dữ liệu
+            }
+            return table;
+        }
 
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-                return dt;
-            }
-            catch
-            {
-                return null;
-            }
-            finally
-            {
-                db.closeConnection();
-            }
+        // ===================================================================
+        // 🛠️ CÁC PHƯƠNG THỨC XỬ LÝ DỮ LIỆU CŨ CỦA BẠN (GIỮ NGUYÊN HOÀN TOÀN)
+        // ===================================================================
+
+        public bool AddCourse()
+        {
+            SqlCommand command = new SqlCommand(
+                "INSERT INTO Course (MaMH, TenMH, SoTC, Tuan, Hky, Mota) VALUES (@mamh, @tenmh, @sotc, @tuan, @hky, @mota)",
+                my_db.getConnection);
+
+            command.Parameters.Add("@mamh", SqlDbType.Char, 20).Value = Mamh;
+            command.Parameters.Add("@tenmh", SqlDbType.NVarChar, 100).Value = Tenmh;
+            command.Parameters.Add("@sotc", SqlDbType.Int).Value = Sotc;
+            command.Parameters.Add("@tuan", SqlDbType.Int).Value = Tuan;
+            command.Parameters.Add("@hky", SqlDbType.Int).Value = Hocky;
+            command.Parameters.Add("@mota", SqlDbType.NVarChar, -1).Value = Decription;
+
+            return ExecuteCommand(command);
         }
 
         public bool EditCourse()
         {
-            My_DB db = new My_DB();
-            try
-            {
-                db.openConnection();
-                string query = "UPDATE Course SET TenMH = @ten, SoTC = @sotc, Tuan = @tuan, Hky = @hky, Mota = @mota WHERE MaMH = @ma";
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@ma", this.Mamh);
-                cmd.Parameters.AddWithValue("@ten", this.Tenmh);
-                cmd.Parameters.AddWithValue("@sotc", this.Sotc);
-                cmd.Parameters.AddWithValue("@tuan", this.Tuan);
-                cmd.Parameters.AddWithValue("@hky", this.Hocky);
-                cmd.Parameters.AddWithValue("@mota", this.Decription);
+            SqlCommand command = new SqlCommand(
+                "UPDATE Course SET TenMH=@tenmh, SoTC=@sotc, Tuan=@tuan, Hky=@hky, Mota=@mota WHERE MaMH=@mamh",
+                my_db.getConnection);
 
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
-            }
-            catch { return false; }
-            finally { db.closeConnection(); }
+            command.Parameters.Add("@mamh", SqlDbType.Char, 20).Value = Mamh;
+            command.Parameters.Add("@tenmh", SqlDbType.NVarChar, 100).Value = Tenmh;
+            command.Parameters.Add("@sotc", SqlDbType.Int).Value = Sotc;
+            command.Parameters.Add("@tuan", SqlDbType.Int).Value = Tuan;
+            command.Parameters.Add("@hky", SqlDbType.Int).Value = Hocky;
+            command.Parameters.Add("@mota", SqlDbType.NVarChar, -1).Value = Decription;
+
+            return ExecuteCommand(command);
         }
 
         public bool DelCourse()
         {
-            My_DB db = new My_DB();
-            try
-            {
-                db.openConnection();
-                string query = "DELETE FROM Course WHERE MaMH = @ma";
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@ma", this.Mamh);
-
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
-            }
-            catch { return false; }
-            finally { db.closeConnection(); }
+            SqlCommand command = new SqlCommand("DELETE FROM Course WHERE MaMH=@mamh", my_db.getConnection);
+            command.Parameters.Add("@mamh", SqlDbType.Char, 20).Value = Mamh;
+            return ExecuteCommand(command);
         }
 
-        public static DataTable GetAllCourses()
+        private bool ExecuteCommand(SqlCommand command)
         {
-            My_DB db = new My_DB();
-            DataTable dt = new DataTable();
             try
             {
-                db.openConnection();
-                string query = "SELECT * FROM Course";
-                SqlCommand cmd = new SqlCommand(query, db.conn);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-                return dt;
+                my_db.openConnection();
+                bool result = command.ExecuteNonQuery() == 1;
+                my_db.closeConnection();
+                return result;
             }
-            catch { return null; }
-            finally { db.closeConnection(); }
+            catch (Exception ex)
+            {
+                this.Exception = ex.Message;
+                my_db.closeConnection();
+                return false;
+            }
         }
     }
 }

@@ -4,94 +4,95 @@ using System.Data.SqlClient;
 
 namespace QuanLySinhVien
 {
-    public class Classroom
+    class Classroom
     {
-        private My_DB db = new My_DB();
-
+        
         public string MaLop { get; set; }
         public string TenLop { get; set; }
         public int SiSo { get; set; }
         public string Gvcn { get; set; }
+
+        
         public string Exception { get; private set; }
 
+        private My_DB db = new My_DB();
+
+        
         public bool AddClassroom()
         {
-            string query = "INSERT INTO Classroom (MaLop, TenLop, SiSo, GVCN) VALUES (@malop, @tenlop, @siso, @gvcn)";
+            SqlCommand command = new SqlCommand("INSERT INTO Classroom (MaLop, TenLop, SiSo, GVCN) VALUES (@id, @name, @size, @teacher)", db.conn);
+            command.Parameters.AddWithValue("@id", MaLop);
+            command.Parameters.AddWithValue("@name", TenLop);
+            command.Parameters.AddWithValue("@size", SiSo);
+            command.Parameters.AddWithValue("@teacher", Gvcn);
+
+            return ExecuteCommand(command);
+        }
+
+        
+        public DataTable GetClassrooms(SqlCommand command = null)
+        {
+            if (command == null)
+            {
+                command = new SqlCommand("SELECT MaLop AS [Mã Lớp], TenLop AS [Tên Lớp], SiSo AS [Sĩ Số], GVCN AS [GV Chủ Nhiệm] FROM Classroom", db.conn);
+            }
+
+            DataTable table = new DataTable();
             try
             {
-                SqlCommand cmd = new SqlCommand(query, db.getConnection);
-                cmd.Parameters.AddWithValue("@malop", MaLop);
-                cmd.Parameters.AddWithValue("@tenlop", TenLop);
-                cmd.Parameters.AddWithValue("@siso", SiSo);
-                cmd.Parameters.AddWithValue("@gvcn", Gvcn);
-
                 db.openConnection();
-                bool result = cmd.ExecuteNonQuery() == 1;
-                db.closeConnection();
-                return result;
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                adapter.Fill(table);
             }
             catch (Exception ex)
             {
-                this.Exception = ex.Message;
-                return false;
+                Exception = ex.Message;
             }
-        }
-
-        public static DataTable GetClassrooms()
-        {
-            My_DB myDb = new My_DB();
-            DataTable dt = new DataTable();
-            try
+            finally
             {
-                string query = "SELECT MaLop as 'Mã Lớp', TenLop as 'Tên Lớp', SiSo as 'Sĩ Số', GVCN as 'GV Chủ Nhiệm' FROM Classroom";
-                SqlCommand cmd = new SqlCommand(query, myDb.getConnection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-            }
-            catch { }
-            return dt;
-        }
-
-        public bool EditClassroom()
-        {
-            string query = "UPDATE Classroom SET TenLop = @tenlop, SiSo = @siso, GVCN = @gvcn WHERE MaLop = @malop";
-            try
-            {
-                SqlCommand cmd = new SqlCommand(query, db.getConnection);
-                cmd.Parameters.AddWithValue("@malop", MaLop);
-                cmd.Parameters.AddWithValue("@tenlop", TenLop);
-                cmd.Parameters.AddWithValue("@siso", SiSo);
-                cmd.Parameters.AddWithValue("@gvcn", Gvcn);
-
-                db.openConnection();
-                bool result = cmd.ExecuteNonQuery() == 1;
                 db.closeConnection();
-                return result;
+            }
+            return table;
+        }
+
+        
+        public bool UpdateClassroom()
+        {
+            SqlCommand command = new SqlCommand("UPDATE Classroom SET TenLop = @name, SiSo = @size, GVCN = @teacher WHERE MaLop = @id", db.conn);
+            command.Parameters.AddWithValue("@id", MaLop);
+            command.Parameters.AddWithValue("@name", TenLop);
+            command.Parameters.AddWithValue("@size", SiSo);
+            command.Parameters.AddWithValue("@teacher", Gvcn);
+
+            return ExecuteCommand(command);
+        }
+
+        
+        public bool DeleteClassroom(string id)
+        {
+            SqlCommand command = new SqlCommand("DELETE FROM Classroom WHERE MaLop = @id", db.conn);
+            command.Parameters.AddWithValue("@id", id);
+
+            return ExecuteCommand(command);
+        }
+
+        
+        private bool ExecuteCommand(SqlCommand command)
+        {
+            try
+            {
+                db.openConnection();
+                int result = command.ExecuteNonQuery();
+                return result > 0;
             }
             catch (Exception ex)
             {
-                this.Exception = ex.Message;
+                Exception = ex.Message;
                 return false;
             }
-        }
-
-        public bool DelClassroom()
-        {
-            string query = "DELETE FROM Classroom WHERE MaLop = @malop";
-            try
+            finally
             {
-                SqlCommand cmd = new SqlCommand(query, db.getConnection);
-                cmd.Parameters.AddWithValue("@malop", MaLop);
-
-                db.openConnection();
-                bool result = cmd.ExecuteNonQuery() == 1;
                 db.closeConnection();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                this.Exception = ex.Message;
-                return false;
             }
         }
     }

@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace QuanLySinhVien
 {
-    public partial class f_ForgetPass : Form
+    public partial class f_ForgetPass : BaseForm
     {
         private string otpCode = "";
 
