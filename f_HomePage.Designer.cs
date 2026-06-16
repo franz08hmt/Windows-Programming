@@ -29,7 +29,9 @@
             this.btnStudentScore = new System.Windows.Forms.Button();
             this.btnStatistic = new System.Windows.Forms.Button();
             this.btnAccountManage = new System.Windows.Forms.Button();
+            this.btnReport = new System.Windows.Forms.Button();
             this.btnManageRequest = new System.Windows.Forms.Button();
+            this.btnDarkMode = new System.Windows.Forms.Button();
             this.bttLogout = new System.Windows.Forms.Button();
             this.pnlMainContent = new System.Windows.Forms.Panel();
             this.btnChangeImage = new System.Windows.Forms.Button();
@@ -104,12 +106,15 @@
             this.pnlSidebar.Controls.Add(this.button1);
             this.pnlSidebar.Controls.Add(this.btnStudentScore);
             this.pnlSidebar.Controls.Add(this.btnStatistic);
+            this.pnlSidebar.Controls.Add(this.btnReport);
             this.pnlSidebar.Controls.Add(this.btnAccountManage);
             this.pnlSidebar.Controls.Add(this.btnManageRequest);
+            this.pnlSidebar.Controls.Add(this.btnDarkMode);
             this.pnlSidebar.Controls.Add(this.bttLogout);
             this.pnlSidebar.Location = new System.Drawing.Point(0, 129);
             this.pnlSidebar.Name = "pnlSidebar";
             this.pnlSidebar.Size = new System.Drawing.Size(244, 919);
+            this.pnlSidebar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlSidebar.TabIndex = 1;
             // 
             // btnTrangChu
@@ -134,13 +139,13 @@
             this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
             this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.button4.Font = new System.Drawing.Font("Segoe UI Emoji", 9F, System.Drawing.FontStyle.Bold);
             this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(1, 1109);
+            this.button4.Location = new System.Drawing.Point(1, 1188);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(216, 73);
             this.button4.TabIndex = 16;
-            this.button4.Text = "📇Quản lý nhóm/danh bạ";
+            this.button4.Text = "📋 Quản lý nhóm/danh bạ";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -150,13 +155,13 @@
             this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
             this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.button3.Font = new System.Drawing.Font("Segoe UI Emoji", 9F, System.Drawing.FontStyle.Bold);
             this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(1, 1030);
+            this.button3.Location = new System.Drawing.Point(1, 1109);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(216, 73);
             this.button3.TabIndex = 15;
-            this.button3.Text = "👨‍🏫Quản lý giảng viên";
+            this.button3.Text = "🎓 Quản lý giảng viên";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -168,7 +173,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(3, 872);
+            this.button2.Location = new System.Drawing.Point(3, 951);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(216, 73);
             this.button2.TabIndex = 14;
@@ -320,7 +325,24 @@
             this.btnStatistic.Text = "📈 Thống kê";
             this.btnStatistic.UseVisualStyleBackColor = true;
             this.btnStatistic.Click += new System.EventHandler(this.btnStatistic_Click);
-            // 
+            //
+            // btnReport
+            //
+            this.btnReport.FlatAppearance.BorderSize = 0;
+            this.btnReport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
+            this.btnReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
+            this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnReport.ForeColor = System.Drawing.Color.White;
+            this.btnReport.Location = new System.Drawing.Point(0, 793);
+            this.btnReport.Name = "btnReport";
+            this.btnReport.Size = new System.Drawing.Size(216, 73);
+            this.btnReport.TabIndex = 20;
+            this.btnReport.Text = "📊 Báo cáo & Xuất";
+            this.btnReport.UseVisualStyleBackColor = true;
+            this.btnReport.Visible = false;
+            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            //
             // btnAccountManage
             // 
             this.btnAccountManage.FlatAppearance.BorderSize = 0;
@@ -329,7 +351,7 @@
             this.btnAccountManage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAccountManage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnAccountManage.ForeColor = System.Drawing.Color.White;
-            this.btnAccountManage.Location = new System.Drawing.Point(3, 793);
+            this.btnAccountManage.Location = new System.Drawing.Point(3, 872);
             this.btnAccountManage.Name = "btnAccountManage";
             this.btnAccountManage.Size = new System.Drawing.Size(216, 73);
             this.btnAccountManage.TabIndex = 8;
@@ -346,7 +368,7 @@
             this.btnManageRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnManageRequest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnManageRequest.ForeColor = System.Drawing.Color.White;
-            this.btnManageRequest.Location = new System.Drawing.Point(1, 951);
+            this.btnManageRequest.Location = new System.Drawing.Point(1, 1030);
             this.btnManageRequest.Name = "btnManageRequest";
             this.btnManageRequest.Size = new System.Drawing.Size(216, 73);
             this.btnManageRequest.TabIndex = 10;
@@ -355,8 +377,23 @@
             this.btnManageRequest.Visible = false;
             this.btnManageRequest.Click += new System.EventHandler(this.btnManageRequest_Click);
             // 
+            // btnDarkMode
+            //
+            this.btnDarkMode.FlatAppearance.BorderSize = 0;
+            this.btnDarkMode.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(40, 85, 155);
+            this.btnDarkMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDarkMode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnDarkMode.ForeColor = System.Drawing.Color.FromArgb(200, 220, 255);
+            this.btnDarkMode.Location = new System.Drawing.Point(0, 1261);
+            this.btnDarkMode.Name = "btnDarkMode";
+            this.btnDarkMode.Size = new System.Drawing.Size(216, 54);
+            this.btnDarkMode.TabIndex = 21;
+            this.btnDarkMode.Text = "🌙 Chế độ tối";
+            this.btnDarkMode.UseVisualStyleBackColor = true;
+            this.btnDarkMode.Click += new System.EventHandler(this.btnDarkMode_Click);
+            //
             // bttLogout
-            // 
+            //
             this.bttLogout.FlatAppearance.BorderSize = 0;
             this.bttLogout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
             this.bttLogout.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
@@ -385,6 +422,8 @@
             this.pnlMainContent.Location = new System.Drawing.Point(250, 91);
             this.pnlMainContent.Name = "pnlMainContent";
             this.pnlMainContent.Size = new System.Drawing.Size(1462, 957);
+            this.pnlMainContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlMainContent.AutoScroll = true;
             this.pnlMainContent.TabIndex = 11;
             // 
             // btnChangeImage
@@ -674,8 +713,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnStudentScore;
         private System.Windows.Forms.Button btnStatistic;
+        private System.Windows.Forms.Button btnReport;
         private System.Windows.Forms.Button btnAccountManage;
         private System.Windows.Forms.Button btnManageRequest;
+        private System.Windows.Forms.Button btnDarkMode;
         private System.Windows.Forms.Button bttLogout;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;

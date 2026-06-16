@@ -26,6 +26,10 @@ namespace QuanLySinhVien
             InitializeComponent();
             RegisterRealTimeValidation();
             SetupSuggestList();
+            this.Resize += f_AddStudent_Resize;
+            dtpDob.Format = DateTimePickerFormat.Custom;
+            dtpDob.CustomFormat = "dd/MM/yyyy";
+            ApplyResponsiveLayout();
         }
 
         private void SetupSuggestList()
@@ -471,6 +475,29 @@ namespace QuanLySinhVien
         private void pnlRight_Paint(object sender, PaintEventArgs e)
         {
             VeBoGocPanel(pnlRight, 25, e);
+        }
+
+        private void f_AddStudent_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int margin = 12;
+            int top = 90;
+            int spacing = 12;
+            int availableWidth = Math.Max(980, this.Width - margin * 2);
+            int availableHeight = Math.Max(500, this.Height - top - margin);
+
+            int leftWidth = (int)(availableWidth * 0.66);
+            int rightWidth = availableWidth - leftWidth - spacing;
+
+            pnlForm.Location = new Point(margin, top);
+            pnlForm.Size = new Size(leftWidth, availableHeight);
+
+            pnlRight.Location = new Point(margin + leftWidth + spacing, top);
+            pnlRight.Size = new Size(rightWidth, availableHeight);
         }
     }
 }

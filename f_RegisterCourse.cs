@@ -31,10 +31,21 @@ namespace QuanLySinhVien
         {
             try
             {
-                string query = "SELECT MSSV, CAST(MSSV AS VARCHAR) + ' - ' + Fname + ' ' + Lname AS HoTen FROM Student ORDER BY Lname";
+                string query = "SELECT MSSV, Fname, Lname FROM Student ORDER BY Lname";
                 SqlDataAdapter da = new SqlDataAdapter(query, db.getConnection);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
+
+                if (!dt.Columns.Contains("HoTen"))
+                {
+                    dt.Columns.Add("HoTen", typeof(string));
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    row["HoTen"] = row["Fname"].ToString() + " " + row["Lname"].ToString();
+                }
 
                 cboStudent.DataSource = dt;
                 cboStudent.DisplayMember = "HoTen";

@@ -19,6 +19,7 @@ namespace QuanLySinhVien
         public f_AdminHandleRequest()
         {
             InitializeComponent();
+            this.Resize += f_AdminHandleRequest_Resize;
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -64,6 +65,7 @@ namespace QuanLySinhVien
             cboStatusFilter.SelectedIndex = 0; // Mặc định bộ lọc "Tất cả"
 
             LoadRequestsData(); // Tải dữ liệu lên bảng DataGridView công khai cho Admin/HR xử lý
+            ApplyResponsiveLayout();
 
             // Đăng ký các sự kiện tìm kiếm thời gian thực
             txtSearch.TextChanged -= (s, ev) => LoadRequestsData(); // Hủy đăng ký cũ nếu có để tránh lặp sự kiện
@@ -74,24 +76,23 @@ namespace QuanLySinhVien
 
         private void LoadRequestsData()
         {
-            // Truy vấn lấy dữ liệu từ bảng StudentRequests
-            string query = "SELECT RequestID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
-                           "StudentName as 'Tên Sinh Viên', RequestDate as 'Ngày Gửi', " +
-                           "RequestContent as 'Nội Dung Yêu Cầu', Status as 'Trạng Thái' " +
+            string query = "SELECT ID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
+                           "TenSV as 'Tên Sinh Viên', NgayGui as 'Ngày Gửi', " +
+                           "NoiDung as 'Nội Dung Yêu Cầu', TrangThai as 'Trạng Thái' " +
                            "FROM StudentRequests WHERE 1=1";
 
             string statusSelected = cboStatusFilter.SelectedItem?.ToString() ?? "Tất cả";
-            if (statusSelected == "Chờ duyệt") query += " AND Status = 'Pending'";
-            else if (statusSelected == "Đã duyệt") query += " AND Status = 'Approved'";
-            else if (statusSelected == "Từ chối") query += " AND Status = 'Declined'";
+            if (statusSelected == "Chờ duyệt") query += " AND TrangThai = N'Chờ xử lý'";
+            else if (statusSelected == "Đã duyệt") query += " AND TrangThai = N'Đã duyệt'";
+            else if (statusSelected == "Từ chối") query += " AND TrangThai = N'Từ chối'";
 
             string keyword = txtSearch.Text.Trim();
             if (!string.IsNullOrEmpty(keyword))
             {
-                query += " AND (MSSV LIKE @key OR StudentName LIKE @key)";
+                query += " AND (CAST(MSSV AS NVARCHAR) LIKE @key OR TenSV LIKE @key)";
             }
 
-            query += " ORDER BY RequestDate DESC";
+            query += " ORDER BY NgayGui DESC";
 
             try
             {
@@ -104,6 +105,7 @@ namespace QuanLySinhVien
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Tên Sinh Viên", "Nội Dung Yêu Cầu", "Trạng Thái");
 
                 dgvRequests.DataSource = dt;
 
@@ -114,17 +116,7 @@ namespace QuanLySinhVien
                     dgvRequests.Columns["Tên Sinh Viên"].Width = 150;
                     dgvRequests.Columns["Ngày Gửi"].Width = 120;
                     dgvRequests.Columns["Nội Dung Yêu Cầu"].Width = 250;
-
-                    foreach (DataGridViewRow row in dgvRequests.Rows)
-                    {
-                        if (row.Cells["Trạng Thái"].Value != null)
-                        {
-                            string val = row.Cells["Trạng Thái"].Value.ToString();
-                            if (val == "Pending") row.Cells["Trạng Thái"].Value = "Chờ duyệt";
-                            else if (val == "Approved") row.Cells["Trạng Thái"].Value = "Đã duyệt";
-                            else if (val == "Declined") row.Cells["Trạng Thái"].Value = "Từ chối";
-                        }
-                    }
+                    // TrangThai đã lưu tiếng Việt trong DB, không cần convert
                 }
             }
             catch (Exception ex)
@@ -140,7 +132,7 @@ namespace QuanLySinhVien
                 DataGridViewRow row = dgvRequests.Rows[e.RowIndex];
                 selectedRequestID = Convert.ToInt32(row.Cells[0].Value);
 
-                string rawContent = row.Cells["Nội Dung Yêu Cầu"].Value?.ToString() ?? "";
+                string rawContent = VietnameseTextHelper.Normalize(row.Cells["Nội Dung Yêu Cầu"].Value?.ToString() ?? "");
                 txtRequestDetails.Text = rawContent.Replace(" -> ", Environment.NewLine + "➡️ ");
                 txtRequestDetails.ReadOnly = true;
             }
@@ -154,7 +146,7 @@ namespace QuanLySinhVien
                 return;
             }
 
-            string updateQuery = "UPDATE StudentRequests SET Status = 'Approved' WHERE RequestID = @id";
+            string updateQuery = "UPDATE StudentRequests SET TrangThai = N'Đã duyệt' WHERE ID = @id";
             ExecuteStatusUpdate(updateQuery, "Phê duyệt yêu cầu thành công tốt đẹp!");
         }
 
@@ -169,7 +161,7 @@ namespace QuanLySinhVien
             DialogResult confirm = MessageBox.Show("Ní có chắc chắn muốn TỪ CHỐI đơn đề nghị này của sinh viên không?", "Xác nhận từ chối", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
-                string updateQuery = "UPDATE StudentRequests SET Status = 'Declined' WHERE RequestID = @id";
+                string updateQuery = "UPDATE StudentRequests SET TrangThai = N'Từ chối' WHERE ID = @id";
                 ExecuteStatusUpdate(updateQuery, "Đã từ chối đơn đề nghị của sinh viên.");
             }
         }
@@ -227,6 +219,61 @@ namespace QuanLySinhVien
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void f_AdminHandleRequest_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int margin = 12;
+            int top = 90;
+            int inner = 20;
+            int gap = 16;
+            int availableWidth = Math.Max(980, this.Width - margin * 2);
+            int availableHeight = Math.Max(500, this.Height - top - margin);
+
+            panel3.Location = new Point(margin, top);
+            panel3.Size = new Size(availableWidth, availableHeight);
+
+            int leftWidth = (int)(panel3.ClientSize.Width * 0.52);
+            int rightWidth = panel3.ClientSize.Width - leftWidth - gap - inner * 2;
+            int rightX = leftWidth + gap + inner;
+            int contentTop = 122;
+            int buttonHeight = 73;
+            int buttonGap = 12;
+            int bottomPadding = 20;
+
+            label5.Location = new Point(inner, 24);
+            cboStatusFilter.Location = new Point(inner, 66);
+            cboStatusFilter.Width = leftWidth - inner;
+
+            label3.Location = new Point(inner, 122);
+            txtSearch.Location = new Point(inner, 163);
+            txtSearch.Width = leftWidth - inner;
+
+            dgvRequests.Location = new Point(inner, 247);
+            dgvRequests.Size = new Size(
+                leftWidth - inner,
+                panel3.ClientSize.Height - 247 - bottomPadding);
+
+            label1.AutoSize = false;
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            label1.Location = new Point(rightX, 40);
+            label1.Size = new Size(rightWidth, 45);
+
+            txtRequestDetails.Location = new Point(rightX, contentTop);
+            txtRequestDetails.Size = new Size(
+                rightWidth,
+                panel3.ClientSize.Height - contentTop - (buttonHeight * 2 + buttonGap + bottomPadding));
+
+            btnApprove.Location = new Point(rightX, panel3.ClientSize.Height - bottomPadding - buttonHeight * 2 - buttonGap);
+            btnApprove.Width = rightWidth;
+
+            btnDecline.Location = new Point(rightX, panel3.ClientSize.Height - bottomPadding - buttonHeight);
+            btnDecline.Width = rightWidth;
         }
     }
 }

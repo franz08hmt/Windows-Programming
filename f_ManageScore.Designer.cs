@@ -44,6 +44,7 @@
             this.dgvScores = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.lblGPA = new System.Windows.Forms.Label();
+            this.btnExportScorePDF = new System.Windows.Forms.Button();
             this.lblXepLoai = new System.Windows.Forms.Label();
             this.btnOCRScore = new System.Windows.Forms.Button();
             this.erpScore = new System.Windows.Forms.ErrorProvider(this.components);
@@ -413,6 +414,7 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.panel3.Controls.Add(this.lblGPA);
+            this.panel3.Controls.Add(this.btnExportScorePDF);
             this.panel3.Controls.Add(this.lblXepLoai);
             this.panel3.Controls.Add(this.btnOCRScore);
             this.panel3.Location = new System.Drawing.Point(822, 741);
@@ -426,18 +428,33 @@
             this.lblGPA.AutoSize = true;
             this.lblGPA.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblGPA.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.lblGPA.Location = new System.Drawing.Point(3, 12);
+            this.lblGPA.Location = new System.Drawing.Point(3, 0);
             this.lblGPA.Name = "lblGPA";
             this.lblGPA.Size = new System.Drawing.Size(278, 32);
             this.lblGPA.TabIndex = 0;
             this.lblGPA.Text = "ĐIỂM GPA TÍCH LŨY: --";
-            // 
+            //
+            // btnExportScorePDF
+            //
+            this.btnExportScorePDF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnExportScorePDF.FlatAppearance.BorderSize = 0;
+            this.btnExportScorePDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportScorePDF.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnExportScorePDF.ForeColor = System.Drawing.Color.White;
+            this.btnExportScorePDF.Location = new System.Drawing.Point(3, 38);
+            this.btnExportScorePDF.Name = "btnExportScorePDF";
+            this.btnExportScorePDF.Size = new System.Drawing.Size(100, 32);
+            this.btnExportScorePDF.TabIndex = 3;
+            this.btnExportScorePDF.Text = "Xuất PDF";
+            this.btnExportScorePDF.UseVisualStyleBackColor = false;
+            this.btnExportScorePDF.Click += new System.EventHandler(this.btnExportScorePDF_Click);
+            //
             // lblXepLoai
-            // 
+            //
             this.lblXepLoai.AutoSize = true;
             this.lblXepLoai.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblXepLoai.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblXepLoai.Location = new System.Drawing.Point(4, 69);
+            this.lblXepLoai.Location = new System.Drawing.Point(12, 87);
             this.lblXepLoai.Name = "lblXepLoai";
             this.lblXepLoai.Size = new System.Drawing.Size(191, 25);
             this.lblXepLoai.TabIndex = 1;
@@ -528,6 +545,7 @@
         private System.Windows.Forms.DataGridView dgvScores;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label lblGPA;
+        private System.Windows.Forms.Button btnExportScorePDF;
         private System.Windows.Forms.Label lblXepLoai;
         private System.Windows.Forms.Button btnOCRScore;
         private System.Windows.Forms.ErrorProvider erpScore;

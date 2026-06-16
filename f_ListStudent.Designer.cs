@@ -165,6 +165,7 @@
             this.btnExport.TabIndex = 5;
             this.btnExport.Text = "📤 Export Excel";
             this.btnExport.UseVisualStyleBackColor = false;
+            this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // tabControl1

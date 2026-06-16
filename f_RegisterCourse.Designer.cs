@@ -185,7 +185,6 @@
             this.btnAISuggest.TabIndex = 13;
             this.btnAISuggest.Text = "🤖 AI Gợi ý môn học";
             this.btnAISuggest.UseVisualStyleBackColor = false;
-            this.btnAISuggest.Click += new System.EventHandler(this.btnAISuggest_Click);
             // 
             // btnAICheckConflict
             // 

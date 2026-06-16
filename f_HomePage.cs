@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -23,18 +23,26 @@ namespace QuanLySinhVien
 
         private void ShowUserControl(UserControl uc)
         {
-            if (pnlMainContent != null)
-            {
-                // Tắt hiển thị toàn bộ các linh kiện thống kê gốc ẩn bên dưới panel
-                foreach (Control ctrl in pnlMainContent.Controls)
-                {
-                    ctrl.Visible = false;
-                }
+            if (pnlMainContent == null) return;
 
-                uc.Dock = DockStyle.Fill;
-                pnlMainContent.Controls.Add(uc);
-                uc.BringToFront();
-            }
+            foreach (Control c in pnlMainContent.Controls)
+                c.Visible = false;
+
+            uc.Dock = DockStyle.Fill;
+            pnlMainContent.Controls.Add(uc);
+            uc.BringToFront();
+            uc.Visible = true;       // Load event → data loads → form-specific colors set
+            ThemeManager.Apply(uc);  // re-apply SAU Load để override màu hardcode từ data load
+        }
+
+        private void btnDarkMode_Click(object sender, EventArgs e)
+        {
+            ThemeManager.Toggle();
+            btnDarkMode.Text = ThemeManager.IsDark ? "☀️ Chế độ sáng" : "🌙 Chế độ tối";
+
+            pnlMainContent.BackColor = ThemeManager.PageBg;
+            ThemeManager.Apply(pnlMainContent);
+            pnlMainContent.Invalidate(true);
         }
 
         private void HienThiTrangChuGoc()
@@ -96,6 +104,7 @@ namespace QuanLySinhVien
                 btnManageCourse.Visible = true;
                 button1.Visible = true;
                 btnStatistic.Visible = true;
+                btnReport.Visible = true;
                 btnAccountManage.Visible = true;
                 btnManageRequest.Visible = true;
                 btnStudentScore.Visible = true;
@@ -113,6 +122,7 @@ namespace QuanLySinhVien
                 btnManageCourse.Visible = true;
                 button1.Visible = true;
                 btnStatistic.Visible = true;
+                btnReport.Visible = true;
                 btnAccountManage.Visible = false;
                 btnManageRequest.Visible = false;
 
@@ -128,6 +138,7 @@ namespace QuanLySinhVien
                 bttFix.Visible = false;
                 btnManageCourse.Visible = false;
                 btnStatistic.Visible = false;
+                btnReport.Visible = false;
                 btnAccountManage.Visible = false;
                 btnManageClassroom.Visible = false;
 
@@ -164,24 +175,28 @@ namespace QuanLySinhVien
         private void LoadUserAccountInfoCard()
         {
             int position = Globals.GlobalPosition;
-            string username = Globals.GlobalUserName; // Lấy MSSV hoặc username từ Session
+            string userId = Globals.GlobalUserId;
+            string userFullName = Globals.GlobalUserName;
 
             try
             {
                 // 1. Trường hợp là Sinh viên (Position = 1) -> Moi ảnh đại diện từ bảng Student
-                if (position == 1 && !string.IsNullOrEmpty(username))
+                if (position == 1 && !string.IsNullOrEmpty(userId))
                 {
                     My_DB tempDb = new My_DB();
                     tempDb.openConnection();
-                    string query = "SELECT Fname, Lname, Pture FROM Student WHERE MSSV = @mssv";
+                    // Lấy thông tin sinh viên từ bảng Student bằng cách liên kết email với bảng Login qua MSGV
+                    string query = "SELECT s.Fname, s.Lname, s.Pture, s.MSSV FROM Student s JOIN Login l ON s.Email = l.Email WHERE l.MSGV = @msgv";
                     SqlCommand cmd = new SqlCommand(query, tempDb.conn);
-                    cmd.Parameters.AddWithValue("@mssv", username);
+                    cmd.Parameters.AddWithValue("@msgv", userId);
 
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        lblUserFullName.Text = reader["Lname"].ToString().Trim() + " " + reader["Fname"].ToString().Trim();
-                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + username + Environment.NewLine + "(Còn học)";
+                        string mssv = reader["MSSV"].ToString();
+                        lblUserFullName.Text = VietnameseTextHelper.Normalize(reader["Lname"].ToString().Trim()) + " " +
+                                               VietnameseTextHelper.Normalize(reader["Fname"].ToString().Trim());
+                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + mssv + Environment.NewLine + "(Còn học)";
 
                         // Kiểm tra ảnh đại diện sinh viên
                         if (reader["Pture"] != DBNull.Value && reader["Pture"] != null)
@@ -198,22 +213,28 @@ namespace QuanLySinhVien
                             picUserAvatar.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
                         }
                     }
+                    else
+                    {
+                        // Dự phòng nếu không tìm thấy liên kết Student
+                        lblUserFullName.Text = userFullName;
+                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + userId + Environment.NewLine + "(Còn học)";
+                        picUserAvatar.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
+                    }
                     reader.Close();
                     tempDb.closeConnection();
                 }
-                // 2. 🛠️ VỊ TRÍ SỬA ĐỔI CHÍ MẠNG: Dành cho Admin (0) và HR (2) -> Lôi ảnh từ bảng Login lên
+                // 2. Dành cho Admin (0) và HR (2) -> Lôi ảnh từ bảng Login lên
                 else
                 {
                     lblUserFullName.Text = position == 0 ? "Ban Quản Trị Hệ Thống" : "Phòng Nhân Sự (HR)";
-                    lblUserRoleMSSV.Text = "Cán bộ quản lý - " + username;
+                    lblUserRoleMSSV.Text = "Cán bộ quản lý - " + userFullName;
 
-                    // Khởi tạo luồng kết nối SQL phụ bốc ảnh Admin/HR thời gian thực
+                    // Khởi tạo luồng kết nối SQL phụ bốc ảnh Admin/HR thời gian thực qua MSGV
                     My_DB tempDb = new My_DB();
                     tempDb.openConnection();
-                    string query = "SELECT Pic FROM Login WHERE LOWER(Username) = LOWER(@un) OR LOWER(Username) = LOWER(@fn)";
+                    string query = "SELECT Pic FROM Login WHERE MSGV = @msgv";
                     SqlCommand cmd = new SqlCommand(query, tempDb.conn);
-                    cmd.Parameters.AddWithValue("@un", username);
-                    cmd.Parameters.AddWithValue("@fn", userFullName ?? "");
+                    cmd.Parameters.AddWithValue("@msgv", userId);
 
                     object result = cmd.ExecuteScalar();
                     tempDb.closeConnection();
@@ -263,7 +284,6 @@ namespace QuanLySinhVien
 
             ThongKeHeThong();
             ApplyPermissions();
-            btnChangeImage.Click += new EventHandler(btnChangeImage_Click);
 
             LoadUserAccountInfoCard();
         }
@@ -350,6 +370,15 @@ namespace QuanLySinhVien
         private void btnStatistic_Click(object sender, EventArgs e)
         {
             ShowUserControl(new f_Statistic());
+        }
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            ShowUserControl(new f_Report());
+        }
+
+        public void OpenReportForm()
+        {
+            ShowUserControl(new f_Report());
         }
         private void btnAccountManage_Click(object sender, EventArgs e)
         {
@@ -485,9 +514,9 @@ namespace QuanLySinhVien
         private void btnChangeImage_Click(object sender, EventArgs e)
         {
             int position = Globals.GlobalPosition;
-            string username = Globals.GlobalUserName;
+            string userId = Globals.GlobalUserId;
 
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(userId))
             {
                 MessageBox.Show("Không tìm thấy phiên đăng nhập hợp lệ để cập nhật ảnh!", "Thông báo");
                 return;
@@ -521,27 +550,29 @@ namespace QuanLySinhVien
 
                     if (position == 1) // Nếu là Sinh viên -> Cập nhật bảng Student
                     {
-                        cmd.CommandText = "UPDATE Student SET Pture = @pic WHERE MSSV = @username";
+                        cmd.CommandText = "UPDATE Student SET Pture = @pic WHERE Email = (SELECT Email FROM Login WHERE MSGV = @msgv)";
                     }
                     else // Nếu là Admin (0) hoặc HR (2) -> Cập nhật bảng Login
                     {
-                        cmd.CommandText = "UPDATE Login SET Pic = @pic WHERE LOWER(TRIM(Username)) = LOWER(@username)";
-                        cmd.Parameters.AddWithValue("@fullname", userFullName ?? "");
+                        cmd.CommandText = "UPDATE Login SET Pic = @pic WHERE MSGV = @msgv";
                     }
 
                     cmd.Parameters.Add(new SqlParameter("@pic", SqlDbType.Image) { Value = imageBytes });
-                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@msgv", userId);
 
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         MessageBox.Show("Đã cập nhật ảnh đại diện cá nhân mới thành công tốt đẹp!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
 
                         using (MemoryStream ms = new MemoryStream(imageBytes))
                         {
                             picUserAvatar.Image = Image.FromStream(ms);
                         }
                         LoadUserAccountInfoCard();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể cập nhật ảnh do không tìm thấy bản ghi tương ứng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     tempDb.closeConnection();
                 }

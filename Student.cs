@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
@@ -70,6 +70,7 @@ namespace QuanLySinhVien
                 string query = "SELECT MSSV, Fname, Lname, Dob, Gder, Phone, Email, Pture FROM Student";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, db.conn);
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname", "Gder", "Phone", "Email");
             }
             finally { db.closeConnection(); }
             return dt;
@@ -85,6 +86,7 @@ namespace QuanLySinhVien
                 string query = "SELECT MSSV, Lname FROM Student";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, db.conn);
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Lname");
                 return dt;
             }
             catch { return null; }
@@ -168,14 +170,14 @@ namespace QuanLySinhVien
                 {
                     return new Student(
                         Convert.ToInt32(reader["MSSV"]),
-                        reader["Fname"].ToString(),
-                        reader["Lname"].ToString(),
+                        VietnameseTextHelper.Normalize(reader["Fname"].ToString()),
+                        VietnameseTextHelper.Normalize(reader["Lname"].ToString()),
                         Convert.ToDateTime(reader["Dob"]),
-                        reader["Gder"].ToString(),
-                        reader["Phone"].ToString(),
-                        reader["Address"].ToString(),
-                        reader["Htown"].ToString(),
-                        reader["Email"].ToString(),
+                        VietnameseTextHelper.Normalize(reader["Gder"].ToString()),
+                        VietnameseTextHelper.Normalize(reader["Phone"].ToString()),
+                        VietnameseTextHelper.Normalize(reader["Address"].ToString()),
+                        VietnameseTextHelper.Normalize(reader["Htown"].ToString()),
+                        VietnameseTextHelper.Normalize(reader["Email"].ToString()),
                         reader["Pture"] == DBNull.Value ? null : (byte[])reader["Pture"]
                     );
                 }
@@ -198,6 +200,7 @@ namespace QuanLySinhVien
                 cmd.Parameters.AddWithValue("@kw", "%" + keyword + "%");
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname", "Gder", "Phone", "Email");
                 return dt;
             }
             catch { return new DataTable(); }
@@ -236,7 +239,7 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Student WHERE Gder = N'Nữ'", db.conn);
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Student WHERE Gder IN (N'Nữ', N'Nu')", db.conn);
                 return Convert.ToDouble(cmd.ExecuteScalar());
             }
             catch { return 0; }
@@ -249,7 +252,7 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Student WHERE Gder = N'Khác'", db.conn);
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Student WHERE Gder IN (N'Khác', N'Khac')", db.conn);
                 return Convert.ToDouble(cmd.ExecuteScalar());
             }
             catch { return 0; }
@@ -270,6 +273,7 @@ namespace QuanLySinhVien
                 cmd.Parameters.AddWithValue("@dob", dob.Date);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
                 return dt;
             }
             catch { return new DataTable(); }

@@ -1,4 +1,4 @@
-﻿namespace QuanLySinhVien
+namespace QuanLySinhVien
 {
     internal static class Globals
     {
@@ -14,7 +14,7 @@
         public static void SetSession(string id, string name, int position)
         {
             GlobalUserId = id;
-            GlobalUserName = name;
+            GlobalUserName = VietnameseTextHelper.Normalize(name);
             GlobalPosition = position;
         }
 

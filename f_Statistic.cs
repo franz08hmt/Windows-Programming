@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -20,14 +21,74 @@ namespace QuanLySinhVien
         private readonly Color panOtherColor = Color.FromArgb(40, 167, 69);
         private readonly string geminiApiKey = "Đừng push API lên git nhen";
 
+        private System.Windows.Forms.Button btnExportStatExcel;
+        private readonly Timer chartAnimationTimer = new Timer();
+        private readonly Dictionary<DataPoint, double> chartTargets = new Dictionary<DataPoint, double>();
+        private double chartAnimationProgress;
+
         public f_Statistic()
         {
             InitializeComponent();
+            AddExportButton();
+            ConfigureChartAnimation();
+            this.Resize += f_Statistic_Resize;
+        }
+
+        private void ConfigureChartAnimation()
+        {
+            chartAnimationTimer.Interval = 12;
+            chartAnimationTimer.Tick += ChartAnimationTimer_Tick;
+        }
+
+        private void AddExportButton()
+        {
+            btnExportStatExcel = new System.Windows.Forms.Button();
+            btnExportStatExcel.Text = "Xuất Excel thống kê";
+            btnExportStatExcel.Size = new System.Drawing.Size(150, 34);
+            btnExportStatExcel.BackColor = Color.FromArgb(40, 167, 69);
+            btnExportStatExcel.ForeColor = Color.White;
+            btnExportStatExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnExportStatExcel.FlatAppearance.BorderSize = 0;
+            btnExportStatExcel.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            btnExportStatExcel.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnExportStatExcel.Click += new EventHandler(btnExportStatExcel_Click);
+            // Đặt sau btnRefresh
+            this.Load += (s, e) => {
+                if (btnRefresh != null)
+                {
+                    btnExportStatExcel.Location = new System.Drawing.Point(
+                        btnRefresh.Right + 8, btnRefresh.Top);
+                    btnRefresh.Parent.Controls.Add(btnExportStatExcel);
+                }
+            };
+        }
+
+        private void btnExportStatExcel_Click(object sender, EventArgs e)
+        {
+            DataTable dtXepLoai = Score.GetCountByXepLoai();
+            DataTable dtGender = GetGenderStats();
+            ReportExportService.ExportStatisticsToExcel(dtXepLoai, dtGender);
+        }
+
+        private DataTable GetGenderStats()
+        {
+            My_DB db = new My_DB();
+            DataTable dt = new DataTable();
+            try
+            {
+                db.openConnection();
+                string q = "SELECT ISNULL(Gder, 'Khác') AS GioiTinh, COUNT(*) AS SoLuong FROM Student GROUP BY Gder";
+                new System.Data.SqlClient.SqlDataAdapter(q, db.conn).Fill(dt);
+            }
+            catch { }
+            finally { db.closeConnection(); }
+            return dt;
         }
 
         private void f_Statistic_Load(object sender, EventArgs e)
         {
             LoadStatisticData();
+            ApplyResponsiveLayout();
         }
 
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
@@ -50,6 +111,8 @@ namespace QuanLySinhVien
         // ===================================================================
         private void LoadStatisticData()
         {
+            EnsureStatisticSchemaAndDemoData();
+
             double total = Student.totalStudent();
             double male = Student.totalMaleStudent();
             double female = Student.totalFemaleStudent();
@@ -84,6 +147,295 @@ namespace QuanLySinhVien
 
             // Thống kê theo năm
             LoadThongKeNam();
+            StartChartAnimation();
+        }
+
+        private void EnsureStatisticSchemaAndDemoData()
+        {
+            My_DB db = new My_DB();
+            try
+            {
+                db.openConnection();
+
+                new SqlCommand(@"
+IF OBJECT_ID('dbo.Course', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Course (
+        MaMH CHAR(20) PRIMARY KEY,
+        TenMH NVARCHAR(100) NOT NULL,
+        SoTC INT NOT NULL,
+        Tuan INT NULL,
+        Hky INT NULL,
+        Mota NVARCHAR(MAX) NULL
+    );
+END", db.conn).ExecuteNonQuery();
+
+                new SqlCommand(@"
+IF OBJECT_ID('dbo.Score', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Score (
+        ID INT IDENTITY(1,1) PRIMARY KEY,
+        MSSV INT NOT NULL,
+        MaMH CHAR(20) NOT NULL,
+        DiemQT DECIMAL(4,2) NOT NULL,
+        DiemCK DECIMAL(4,2) NOT NULL,
+        DiemTK DECIMAL(4,2) NOT NULL,
+        XepLoai NVARCHAR(30) NULL,
+        Mota NVARCHAR(250) NULL
+    );
+END", db.conn).ExecuteNonQuery();
+
+                int studentCount = Convert.ToInt32(new SqlCommand("SELECT COUNT(*) FROM dbo.Student", db.conn).ExecuteScalar());
+                if (studentCount == 0)
+                {
+                    InsertStudentSeed(db.conn, 22110001, "Nguyễn", "An", new DateTime(2004, 2, 14), "Nam", "0901000001", "TP HCM", "Bình Định", "an@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 22110002, "Trần", "Bảo Ngọc", new DateTime(2004, 5, 9), "Nữ", "0901000002", "TP HCM", "Đồng Nai", "ngoc@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 23110003, "Lê", "Minh Khang", new DateTime(2005, 1, 22), "Nam", "0901000003", "TP HCM", "Long An", "khang@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 23110004, "Phạm", "Thanh Trúc", new DateTime(2005, 8, 18), "Nữ", "0901000004", "TP HCM", "Tây Ninh", "truc@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 24110005, "Võ", "Gia Huy", new DateTime(2006, 4, 3), "Nam", "0901000005", "TP HCM", "Bến Tre", "huy@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 24110006, "Đặng", "Khánh Linh", new DateTime(2006, 12, 2), "Nữ", "0901000006", "TP HCM", "Cần Thơ", "linh@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 25110007, "Bùi", "Hoàng Phúc", new DateTime(2007, 6, 27), "Nam", "0901000007", "TP HCM", "Đà Nẵng", "phuc@sv.hcmute.edu.vn");
+                    InsertStudentSeed(db.conn, 25110008, "Huỳnh", "Mai Chi", new DateTime(2007, 9, 15), "Khác", "0901000008", "TP HCM", "An Giang", "chi@sv.hcmute.edu.vn");
+                }
+
+                EnsureCourseSeed(db.conn, "CS101", "Lập trình C#", 3, 15, 1, "Nền tảng WinForms");
+                EnsureCourseSeed(db.conn, "DB201", "Cơ sở dữ liệu", 3, 15, 1, "SQL Server");
+                EnsureCourseSeed(db.conn, "WEB301", "Phát triển Web", 3, 15, 2, "ASP.NET");
+                EnsureCourseSeed(db.conn, "AI401", "Nhập môn AI", 3, 15, 2, "Phân tích dữ liệu");
+
+                EnsureBalancedDashboardData(db.conn);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khởi tạo dữ liệu thống kê: " + ex.Message);
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
+
+        private void EnsureBalancedDashboardData(SqlConnection conn)
+        {
+            BalanceYearBuckets(conn, 18);
+            EnsureScoresForExistingStudents(conn);
+        }
+
+        private void BalanceYearBuckets(SqlConnection conn, int targetPerYear)
+        {
+            int[] years = { 22, 23, 24, 25 };
+            foreach (int year in years)
+            {
+                int current = GetStudentCountByYear(conn, year);
+                int ordinal = 1;
+
+                while (current < targetPerYear)
+                {
+                    int mssv = year * 1000000 + 880000 + ordinal;
+                    while (StudentExists(conn, mssv))
+                    {
+                        ordinal++;
+                        mssv = year * 1000000 + 880000 + ordinal;
+                    }
+
+                    string gender = PickGenderForBalance(conn, ordinal);
+                    DashboardStudentSeed seed = new DashboardStudentSeed(
+                        mssv,
+                        PickLastName(ordinal),
+                        PickFirstName(gender, ordinal),
+                        new DateTime(2000 + year + 2, ((ordinal - 1) % 12) + 1, ((ordinal - 1) % 24) + 1),
+                        gender,
+                        BuildScoreProfile(ordinal));
+
+                    EnsureStudentSeed(conn, seed);
+                    EnsureScoreSet(conn, seed);
+                    current++;
+                    ordinal++;
+                }
+            }
+        }
+
+        private int GetStudentCountByYear(SqlConnection conn, int year)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Student WHERE LEFT(CAST(MSSV AS NVARCHAR(20)), 2) = @year", conn);
+            cmd.Parameters.AddWithValue("@year", year.ToString("00"));
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        private bool StudentExists(SqlConnection conn, int mssv)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Student WHERE MSSV = @mssv", conn);
+            cmd.Parameters.AddWithValue("@mssv", mssv);
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+        }
+
+        private string PickGenderForBalance(SqlConnection conn, int ordinal)
+        {
+            int male = CountGender(conn, "Nam");
+            int female = CountGender(conn, "Nữ");
+            int other = CountGender(conn, "Khác");
+
+            if (other * 8 < Math.Max(1, male + female + other)) return "Khác";
+            if (female < male) return "Nữ";
+            return ordinal % 2 == 0 ? "Nữ" : "Nam";
+        }
+
+        private int CountGender(SqlConnection conn, string gender)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Student WHERE Gder = @gender", conn);
+            cmd.Parameters.AddWithValue("@gender", gender);
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        private string PickLastName(int ordinal)
+        {
+            string[] values = { "Nguyễn", "Trần", "Lê", "Phạm", "Võ", "Đặng", "Bùi", "Huỳnh", "Đỗ", "Ngô", "Mai", "Cao" };
+            return values[(ordinal - 1) % values.Length];
+        }
+
+        private string PickFirstName(string gender, int ordinal)
+        {
+            string[] male = { "Hải Đăng", "Quốc Việt", "Gia Huy", "Tuấn Kiệt", "Minh Quân", "Nhật Minh", "Anh Khoa", "Hoàng Phúc" };
+            string[] female = { "Mai Anh", "Minh Châu", "Khánh Linh", "Bảo Trâm", "Ngọc Hân", "Thảo Vy", "Thanh Trúc", "Mai Chi" };
+            string[] other = { "Thanh Bình", "Minh An", "Gia Linh", "Bảo Khánh" };
+
+            if (gender == "Khác") return other[(ordinal - 1) % other.Length];
+            if (gender == "Nữ") return female[(ordinal - 1) % female.Length];
+            return male[(ordinal - 1) % male.Length];
+        }
+
+        private decimal[] BuildScoreProfile(int ordinal)
+        {
+            decimal[][] profiles =
+            {
+                new decimal[] { 9.2m, 9.0m, 8.8m, 9.3m },
+                new decimal[] { 8.4m, 8.1m, 8.6m, 8.2m },
+                new decimal[] { 7.2m, 7.5m, 7.0m, 7.8m },
+                new decimal[] { 6.1m, 5.8m, 6.4m, 5.6m },
+                new decimal[] { 4.8m, 5.1m, 4.6m, 5.3m },
+                new decimal[] { 8.9m, 9.1m, 8.7m, 9.0m },
+                new decimal[] { 7.9m, 8.0m, 8.3m, 7.7m },
+                new decimal[] { 6.7m, 6.9m, 7.1m, 6.5m },
+            };
+
+            return profiles[(ordinal - 1) % profiles.Length];
+        }
+
+        private void EnsureScoresForExistingStudents(SqlConnection conn)
+        {
+            DataTable students = new DataTable();
+            new SqlDataAdapter("SELECT MSSV FROM dbo.Student WHERE MSSV IS NOT NULL", conn).Fill(students);
+
+            int ordinal = 1;
+            foreach (DataRow row in students.Rows)
+            {
+                int mssv = Convert.ToInt32(row["MSSV"]);
+                DashboardStudentSeed seed = new DashboardStudentSeed(
+                    mssv,
+                    "",
+                    "",
+                    DateTime.Today,
+                    "Nam",
+                    BuildScoreProfile(ordinal));
+                EnsureScoreSet(conn, seed);
+                ordinal++;
+            }
+        }
+
+        private class DashboardStudentSeed
+        {
+            public int Mssv { get; }
+            public string Fname { get; }
+            public string Lname { get; }
+            public DateTime Dob { get; }
+            public string Gender { get; }
+            public decimal[] Scores { get; }
+
+            public DashboardStudentSeed(int mssv, string fname, string lname, DateTime dob, string gender, decimal[] scores)
+            {
+                Mssv = mssv;
+                Fname = fname;
+                Lname = lname;
+                Dob = dob;
+                Gender = gender;
+                Scores = scores;
+            }
+        }
+
+        private void EnsureStudentSeed(SqlConnection conn, DashboardStudentSeed seed)
+        {
+            SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM dbo.Student WHERE MSSV = @mssv", conn);
+            check.Parameters.AddWithValue("@mssv", seed.Mssv);
+            if (Convert.ToInt32(check.ExecuteScalar()) > 0) return;
+
+            InsertStudentSeed(conn, seed.Mssv, seed.Fname, seed.Lname, seed.Dob, seed.Gender, "09" + seed.Mssv.ToString().Substring(2, 8), "TP HCM", "HCMUTE", $"{seed.Mssv}@sv.hcmute.edu.vn");
+        }
+
+        private void EnsureCourseSeed(SqlConnection conn, string id, string name, int credits, int weeks, int semester, string description)
+        {
+            SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM dbo.Course WHERE MaMH = @id", conn);
+            check.Parameters.AddWithValue("@id", id);
+            if (Convert.ToInt32(check.ExecuteScalar()) > 0) return;
+
+            InsertCourseSeed(conn, id, name, credits, weeks, semester, description);
+        }
+
+        private void EnsureScoreSet(SqlConnection conn, DashboardStudentSeed seed)
+        {
+            string[] courses = { "CS101", "DB201", "WEB301", "AI401" };
+            for (int i = 0; i < courses.Length; i++)
+            {
+                SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM dbo.Score WHERE MSSV = @mssv AND RTRIM(MaMH) = @course", conn);
+                check.Parameters.AddWithValue("@mssv", seed.Mssv);
+                check.Parameters.AddWithValue("@course", courses[i]);
+                if (Convert.ToInt32(check.ExecuteScalar()) > 0) continue;
+
+                decimal target = seed.Scores[i];
+                decimal midterm = Math.Max(0, Math.Min(10, target - 0.2m));
+                decimal finalExam = Math.Max(0, Math.Min(10, target + 0.13m));
+                decimal totalScore = Score.TinhDiemTK(midterm, finalExam);
+                InsertScoreSeed(conn, seed.Mssv, courses[i], midterm, finalExam, totalScore, Score.XepLoaiTheoTK(totalScore));
+            }
+        }
+
+        private void InsertStudentSeed(SqlConnection conn, int mssv, string fname, string lname, DateTime dob, string gender, string phone, string address, string hometown, string email)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO dbo.Student (MSSV, Fname, Lname, Dob, Gder, Phone, Address, Htown, Email, Pture) VALUES (@mssv, @fn, @ln, @dob, @gender, @phone, @address, @hometown, @email, NULL)", conn);
+            cmd.Parameters.AddWithValue("@mssv", mssv);
+            cmd.Parameters.AddWithValue("@fn", fname);
+            cmd.Parameters.AddWithValue("@ln", lname);
+            cmd.Parameters.AddWithValue("@dob", dob);
+            cmd.Parameters.AddWithValue("@gender", gender);
+            cmd.Parameters.AddWithValue("@phone", phone);
+            cmd.Parameters.AddWithValue("@address", address);
+            cmd.Parameters.AddWithValue("@hometown", hometown);
+            cmd.Parameters.AddWithValue("@email", email);
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertCourseSeed(SqlConnection conn, string id, string name, int credits, int weeks, int semester, string description)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO dbo.Course (MaMH, TenMH, SoTC, Tuan, Hky, Mota) VALUES (@id, @name, @credits, @weeks, @semester, @description)", conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@credits", credits);
+            cmd.Parameters.AddWithValue("@weeks", weeks);
+            cmd.Parameters.AddWithValue("@semester", semester);
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertScoreSeed(SqlConnection conn, int mssv, string courseId, decimal midterm, decimal finalExam, decimal totalScore, string rank)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO dbo.Score (MSSV, MaMH, DiemQT, DiemCK, DiemTK, XepLoai, Mota) VALUES (@mssv, @course, @midterm, @finalExam, @totalScore, @rank, @note)", conn);
+            cmd.Parameters.AddWithValue("@mssv", mssv);
+            cmd.Parameters.AddWithValue("@course", courseId);
+            cmd.Parameters.AddWithValue("@midterm", midterm);
+            cmd.Parameters.AddWithValue("@finalExam", finalExam);
+            cmd.Parameters.AddWithValue("@totalScore", totalScore);
+            cmd.Parameters.AddWithValue("@rank", rank);
+            cmd.Parameters.AddWithValue("@note", "Dữ liệu mẫu dashboard");
+            cmd.ExecuteNonQuery();
         }
 
         // ===================================================================
@@ -96,10 +448,11 @@ namespace QuanLySinhVien
                 My_DB db = new My_DB();
                 db.openConnection();
                 string query =
-                    "SELECT LEFT(CAST(MSSV AS NVARCHAR), 2) AS NamNhapHoc, " +
+                    "SELECT LEFT(CAST(MSSV AS NVARCHAR(20)), 2) AS NamNhapHoc, " +
                     "COUNT(*) AS SoLuong " +
                     "FROM Student " +
-                    "GROUP BY LEFT(CAST(MSSV AS NVARCHAR), 2) " +
+                    "WHERE LEN(CAST(MSSV AS NVARCHAR(20))) >= 6 " +
+                    "GROUP BY LEFT(CAST(MSSV AS NVARCHAR(20)), 2) " +
                     "ORDER BY NamNhapHoc";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -129,33 +482,39 @@ namespace QuanLySinhVien
         {
             chartNam.Series.Clear();
             chartNam.Titles.Clear();
-            chartNam.Titles.Add("Số lượng sinh viên theo năm nhập học");
-            chartNam.Titles[0].Font = new Font("Segoe UI", 10f, FontStyle.Bold);
-            chartNam.Titles[0].ForeColor = Color.FromArgb(0, 61, 149);
+            chartNam.Titles.Add("Xu hướng sinh viên theo năm nhập học");
+            ApplyModernChartStyle(chartNam);
 
-            Series s = new Series("Số SV");
-            s.ChartType = SeriesChartType.Column;
-            s.Color = Color.FromArgb(0, 120, 215);
-            s.IsValueShownAsLabel = true;
-            s.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
-            s.LabelForeColor = Color.FromArgb(0, 61, 149);
+            Series area = new Series("Số SV");
+            area.ChartType = SeriesChartType.SplineArea;
+            area.Color = Color.FromArgb(80, 14, 165, 233);
+            area.BackGradientStyle = GradientStyle.TopBottom;
+            area.BackSecondaryColor = Color.FromArgb(12, 74, 110);
+            area.BorderWidth = 3;
+            area.BorderColor = Color.FromArgb(14, 165, 233);
+            area.MarkerStyle = MarkerStyle.Circle;
+            area.MarkerSize = 9;
+            area.MarkerColor = Color.White;
+            area.MarkerBorderWidth = 3;
+            area.MarkerBorderColor = Color.FromArgb(14, 165, 233);
+            area.IsValueShownAsLabel = true;
+            area.LabelFormat = "N0";
+            area.Font = new Font("Segoe UI Semibold", 9f, FontStyle.Bold);
+            area.LabelForeColor = Color.FromArgb(15, 23, 42);
 
             if (dt != null)
             {
                 foreach (DataRow row in dt.Rows)
                 {
-                    s.Points.AddXY(
-                        "20" + row["NamNhapHoc"].ToString(),
-                        Convert.ToInt32(row["SoLuong"]));
+                    string yearLabel = "20" + row["NamNhapHoc"].ToString();
+                    area.Points.AddXY(yearLabel, Convert.ToInt32(row["SoLuong"]));
                 }
             }
 
-            chartNam.Series.Add(s);
+            chartNam.Series.Add(area);
             chartNam.ChartAreas[0].AxisX.Interval = 1;
-            chartNam.ChartAreas[0].AxisX.LabelStyle.Font = new Font("Segoe UI", 9f);
-            chartNam.ChartAreas[0].AxisY.LabelStyle.Font = new Font("Segoe UI", 9f);
-            chartNam.ChartAreas[0].BackColor = Color.WhiteSmoke;
-            chartNam.BackColor = Color.White;
+            chartNam.Legends[0].Enabled = false;
+            ConfigureValueAxis(chartNam, GetMaxY(chartNam), true);
         }
 
         // ===================================================================
@@ -180,17 +539,25 @@ namespace QuanLySinhVien
         {
             chartGpa.Series.Clear();
             chartGpa.Titles.Clear();
-            chartGpa.Titles.Add("Phổ Điểm Học Lực");
-            chartGpa.Titles[0].Font = new Font("Segoe UI", 11f, FontStyle.Bold);
-            chartGpa.Titles[0].ForeColor = Color.FromArgb(0, 61, 149);
+            chartGpa.Titles.Add("Phổ điểm học lực");
+            ApplyModernChartStyle(chartGpa);
 
-            Series s = new Series("Học Lực");
+            Series s = new Series("Học lực");
             s.ChartType = SeriesChartType.Column;
             s.IsValueShownAsLabel = true;
-            s.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
-            s.LabelForeColor = Color.FromArgb(0, 61, 149);
+            s.LabelFormat = "N0";
+            s.Font = new Font("Segoe UI Semibold", 9f, FontStyle.Bold);
+            s.LabelForeColor = Color.FromArgb(15, 23, 42);
+            s["PointWidth"] = "0.48";
+            s["DrawingStyle"] = "Cylinder";
 
-            string[] colors = { "#8B0000", "#FF8C00", "#1E90FF", "#228B22", "#9932CC" };
+            Color[] colors = {
+                Color.FromArgb(239, 68, 68),
+                Color.FromArgb(245, 158, 11),
+                Color.FromArgb(59, 130, 246),
+                Color.FromArgb(34, 197, 94),
+                Color.FromArgb(139, 92, 246)
+            };
             int idx = 0;
             if (dtXepLoai != null)
             {
@@ -199,17 +566,15 @@ namespace QuanLySinhVien
                     int pt = s.Points.AddXY(
                         row["Xếp Loại"].ToString(),
                         Convert.ToInt32(row["Số Lượng"]));
-                    s.Points[pt].Color = ColorTranslator.FromHtml(colors[idx % colors.Length]);
+                    s.Points[pt].Color = colors[idx % colors.Length];
                     idx++;
                 }
             }
 
             chartGpa.Series.Add(s);
             chartGpa.ChartAreas[0].AxisX.Interval = 1;
-            chartGpa.ChartAreas[0].AxisX.LabelStyle.Font = new Font("Segoe UI", 9f);
-            chartGpa.ChartAreas[0].AxisY.LabelStyle.Font = new Font("Segoe UI", 9f);
-            chartGpa.ChartAreas[0].BackColor = Color.WhiteSmoke;
-            chartGpa.BackColor = Color.White;
+            chartGpa.Legends[0].Enabled = false;
+            ConfigureValueAxis(chartGpa, GetMaxY(chartGpa), true);
         }
 
         // ===================================================================
@@ -219,15 +584,18 @@ namespace QuanLySinhVien
         {
             chartPie.Series.Clear();
             chartPie.Titles.Clear();
-            chartPie.Titles.Add("Tỷ lệ Giới tính");
-            chartPie.Titles[0].Font = new Font("Segoe UI", 11f, FontStyle.Bold);
-            chartPie.Titles[0].ForeColor = Color.FromArgb(0, 61, 149);
+            chartPie.Titles.Add("Tỷ lệ giới tính");
+            ApplyModernChartStyle(chartPie);
 
             Series s = new Series("Giới tính");
-            s.ChartType = SeriesChartType.Pie;
+            s.ChartType = SeriesChartType.Doughnut;
             s.IsValueShownAsLabel = true;
             s["PieLabelStyle"] = "Outside";
-            s.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            s["DoughnutRadius"] = "62";
+            s["PieDrawingStyle"] = "SoftEdge";
+            s.Label = "#VALX: #PERCENT{P0}";
+            s.Font = new Font("Segoe UI Semibold", 9f, FontStyle.Bold);
+            s.LabelForeColor = Color.FromArgb(15, 23, 42);
 
             s.Points.AddXY("Nam", male);
             s.Points.AddXY("Nữ", female);
@@ -238,8 +606,81 @@ namespace QuanLySinhVien
             s.Points[2].Color = Color.FromArgb(40, 167, 69);
 
             chartPie.Series.Add(s);
-            chartPie.BackColor = Color.White;
-            chartPie.Legends[0].Font = new Font("Segoe UI", 9f);
+            chartPie.Legends[0].Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            chartPie.Legends[0].Docking = Docking.Right;
+            chartPie.Legends[0].Alignment = StringAlignment.Center;
+            chartPie.ChartAreas[0].Area3DStyle.Enable3D = true;
+            chartPie.ChartAreas[0].Area3DStyle.Inclination = 12;
+            chartPie.ChartAreas[0].Area3DStyle.Rotation = 8;
+        }
+
+        private double GetMaxY(Chart chart)
+        {
+            double max = 0;
+            foreach (Series series in chart.Series)
+                foreach (DataPoint point in series.Points)
+                    if (point.YValues.Length > 0)
+                        max = Math.Max(max, point.YValues[0]);
+            return max;
+        }
+
+        private void ConfigureValueAxis(Chart chart, double maxValue, bool integerLabels)
+        {
+            ChartArea area = chart.ChartAreas[0];
+            double max = Math.Max(1, maxValue);
+            double roundedMax = Math.Ceiling(max * 1.25);
+            double interval = Math.Max(1, Math.Ceiling(roundedMax / 5.0));
+
+            area.AxisY.Minimum = 0;
+            area.AxisY.Maximum = roundedMax;
+            area.AxisY.Interval = interval;
+            area.AxisY.LabelStyle.Format = integerLabels ? "N0" : "";
+            area.AxisY.IsStartedFromZero = true;
+        }
+
+        private void StartChartAnimation()
+        {
+            chartAnimationTimer.Stop();
+            chartTargets.Clear();
+
+            foreach (Chart chart in new[] { chartGpa, chartPie, chartNam })
+            {
+                foreach (Series series in chart.Series)
+                {
+                    foreach (DataPoint point in series.Points)
+                    {
+                        double target = point.YValues.Length > 0 ? point.YValues[0] : 0;
+                        chartTargets[point] = target;
+                        point.YValues[0] = 0.01;
+                    }
+                }
+                chart.Invalidate();
+            }
+
+            chartAnimationProgress = 0;
+            chartAnimationTimer.Start();
+        }
+
+        private void ChartAnimationTimer_Tick(object sender, EventArgs e)
+        {
+            chartAnimationProgress += 0.035;
+            double eased = 1 - Math.Pow(1 - Math.Min(chartAnimationProgress, 1), 3);
+
+            foreach (KeyValuePair<DataPoint, double> pair in chartTargets)
+            {
+                pair.Key.YValues[0] = Math.Max(0.01, pair.Value * eased);
+            }
+
+            chartGpa.Invalidate();
+            chartPie.Invalidate();
+            chartNam.Invalidate();
+
+            if (chartAnimationProgress >= 1)
+            {
+                foreach (KeyValuePair<DataPoint, double> pair in chartTargets)
+                    pair.Key.YValues[0] = pair.Value;
+                chartAnimationTimer.Stop();
+            }
         }
 
         // ===================================================================
@@ -295,7 +736,7 @@ namespace QuanLySinhVien
             {
                 My_DB db = new My_DB();
                 db.openConnection();
-                string query = "SELECT LEFT(CAST(MSSV AS NVARCHAR), 2) AS Nam, COUNT(*) AS SL FROM Student GROUP BY LEFT(CAST(MSSV AS NVARCHAR), 2) ORDER BY Nam";
+                string query = "SELECT LEFT(CAST(MSSV AS NVARCHAR(20)), 2) AS Nam, COUNT(*) AS SL FROM Student WHERE LEN(CAST(MSSV AS NVARCHAR(20))) >= 6 GROUP BY LEFT(CAST(MSSV AS NVARCHAR(20)), 2) ORDER BY Nam";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -482,45 +923,46 @@ namespace QuanLySinhVien
         // ===================================================================
         // HOVER EFFECTS
         // ===================================================================
+        private static Color HoverColor() =>
+            ThemeManager.IsDark ? Color.FromArgb(40, 55, 80) : Color.White;
+
         private void pnlMale_MouseEnter(object sender, EventArgs e)
         {
-            pnlMale.BackColor = Color.White;
+            Color h = HoverColor();
+            pnlMale.BackColor = h; lblMale.BackColor = h;
             lblMale.ForeColor = panMaleColor;
-            lblMale.BackColor = Color.White;
         }
         private void pnlMale_MouseLeave(object sender, EventArgs e)
         {
             pnlMale.BackColor = panMaleColor;
-            lblMale.ForeColor = Color.White;
-            lblMale.BackColor = panMaleColor;
+            lblMale.ForeColor = Color.White; lblMale.BackColor = panMaleColor;
         }
         private void pnlFemale_MouseEnter(object sender, EventArgs e)
         {
-            pnlFemale.BackColor = Color.White;
+            Color h = HoverColor();
+            pnlFemale.BackColor = h; lblFemale.BackColor = h;
             lblFemale.ForeColor = panFemaleColor;
-            lblFemale.BackColor = Color.White;
         }
         private void pnlFemale_MouseLeave(object sender, EventArgs e)
         {
             pnlFemale.BackColor = panFemaleColor;
-            lblFemale.ForeColor = Color.White;
-            lblFemale.BackColor = panFemaleColor;
+            lblFemale.ForeColor = Color.White; lblFemale.BackColor = panFemaleColor;
         }
         private void pnlOther_MouseEnter(object sender, EventArgs e)
         {
-            pnlOther.BackColor = Color.White;
+            Color h = HoverColor();
+            pnlOther.BackColor = h; lblOther.BackColor = h;
             lblOther.ForeColor = panOtherColor;
-            lblOther.BackColor = Color.White;
         }
         private void pnlOther_MouseLeave(object sender, EventArgs e)
         {
             pnlOther.BackColor = panOtherColor;
-            lblOther.ForeColor = Color.White;
-            lblOther.BackColor = panOtherColor;
+            lblOther.ForeColor = Color.White; lblOther.BackColor = panOtherColor;
         }
         private void pnlTotal_MouseEnter(object sender, EventArgs e)
         {
-            pnlTotal.BackColor = Color.White;
+            Color h = HoverColor();
+            pnlTotal.BackColor = h;
             lblTotalTitle.ForeColor = panTotalColor;
             lblTotal.ForeColor = panTotalColor;
         }
@@ -531,8 +973,90 @@ namespace QuanLySinhVien
             lblTotal.ForeColor = Color.White;
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e) { LoadStatisticData(); }
+        private void btnRefresh_Click(object sender, EventArgs e) { LoadStatisticData(); ApplyResponsiveLayout(); }
         private void btnBack_Click(object sender, EventArgs e) { }
+
+        private void f_Statistic_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            if (pnlCards == null || pnlContent == null || pnlRight == null)
+            {
+                return;
+            }
+
+            int gap = 15;
+            int cardCount = 4;
+            int cardWidth = Math.Max(180, (pnlCards.Width - gap * (cardCount + 1)) / cardCount);
+            int cardX = gap;
+            foreach (Panel card in new[] { pnlTotal, pnlMale, pnlFemale, pnlOther })
+            {
+                card.SetBounds(cardX, 6, cardWidth, 95);
+                cardX += cardWidth + gap;
+            }
+
+            int leftWidth = Math.Max(360, (int)(pnlContent.Width * 0.30));
+            pnlLeft.Width = leftWidth;
+
+            int tableWidth = pnlLeft.ClientSize.Width - 20;
+            dgvReport.Width = tableWidth;
+            dgvDetail.Width = tableWidth;
+            dgvNam.Width = tableWidth;
+
+            int chartGap = 12;
+            int chartHeight = Math.Max(180, (pnlRight.ClientSize.Height - chartGap * 4) / 3);
+            int chartWidth = pnlRight.ClientSize.Width - 20;
+
+            chartGpa.SetBounds(10, 10, chartWidth, chartHeight);
+            chartPie.SetBounds(10, chartGpa.Bottom + chartGap, chartWidth, chartHeight);
+            chartNam.SetBounds(10, chartPie.Bottom + chartGap, chartWidth, chartHeight);
+
+            if (btnRefresh != null)
+            {
+                btnRefresh.Location = new Point(pnlTop.Width - btnRefresh.Width - 10, btnRefresh.Top);
+            }
+
+            if (btnExportStatExcel != null && btnRefresh != null)
+            {
+                btnExportStatExcel.Location = new Point(btnRefresh.Left - btnExportStatExcel.Width - 8, btnRefresh.Top);
+            }
+        }
+
+        private void ApplyModernChartStyle(Chart chart)
+        {
+            chart.BackColor = Color.White;
+            chart.BorderlineColor = Color.FromArgb(216, 226, 240);
+            chart.BorderlineWidth = 1;
+            chart.BorderlineDashStyle = ChartDashStyle.Solid;
+            chart.AntiAliasing = AntiAliasingStyles.All;
+            chart.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+
+            if (chart.Titles.Count > 0)
+            {
+                chart.Titles[0].Font = new Font("Segoe UI Semibold", 12f, FontStyle.Bold);
+                chart.Titles[0].ForeColor = Color.FromArgb(15, 23, 42);
+            }
+
+            ChartArea area = chart.ChartAreas[0];
+            area.BackColor = Color.FromArgb(250, 252, 255);
+            area.BackGradientStyle = GradientStyle.TopBottom;
+            area.BackSecondaryColor = Color.White;
+            area.BorderColor = Color.Transparent;
+            area.BorderWidth = 1;
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisY.MajorGrid.LineColor = Color.FromArgb(230, 236, 246);
+            area.AxisX.LabelStyle.Font = new Font("Arial", 10f);
+            area.AxisY.LabelStyle.Font = new Font("Arial", 9f);
+            area.AxisX.LabelStyle.ForeColor = Color.FromArgb(71, 85, 105);
+            area.AxisY.LabelStyle.ForeColor = Color.FromArgb(71, 85, 105);
+            area.AxisX.LineColor = Color.FromArgb(203, 213, 225);
+            area.AxisY.LineColor = Color.FromArgb(203, 213, 225);
+            area.AxisX.MajorTickMark.LineColor = Color.FromArgb(203, 213, 225);
+            area.AxisY.MajorTickMark.LineColor = Color.FromArgb(203, 213, 225);
+        }
 
         private void pnlTotal_Paint(object sender, PaintEventArgs e)
         {

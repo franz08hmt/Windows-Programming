@@ -58,6 +58,7 @@
             this.panel3.Location = new System.Drawing.Point(3, 93);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1456, 846);
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.TabIndex = 22;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
@@ -71,6 +72,7 @@
             this.btnDecline.Size = new System.Drawing.Size(231, 73);
             this.btnDecline.TabIndex = 42;
             this.btnDecline.Text = "❌ TỪ CHỐI";
+            this.btnDecline.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right));
             this.btnDecline.UseVisualStyleBackColor = false;
             this.btnDecline.Click += new System.EventHandler(this.btnDecline_Click);
             // 
@@ -84,6 +86,7 @@
             this.btnApprove.Size = new System.Drawing.Size(231, 73);
             this.btnApprove.TabIndex = 41;
             this.btnApprove.Text = "✅ PHÊ DUYỆT";
+            this.btnApprove.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right));
             this.btnApprove.UseVisualStyleBackColor = false;
             this.btnApprove.Click += new System.EventHandler(this.btnApprove_Click);
             // 
@@ -95,6 +98,7 @@
             this.txtRequestDetails.Name = "txtRequestDetails";
             this.txtRequestDetails.ReadOnly = true;
             this.txtRequestDetails.Size = new System.Drawing.Size(545, 517);
+            this.txtRequestDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRequestDetails.TabIndex = 40;
             // 
             // dgvRequests

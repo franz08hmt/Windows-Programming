@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -22,7 +23,10 @@ namespace QuanLySinhVien
         private byte[] contactImage = null;
         private static readonly HttpClient httpClient = new HttpClient();
 
-        private int currentUserId = 1;
+        private string currentUserId => Globals.GlobalUserId ?? "0";
+
+        // xóa trước khi push GitHub:
+        private const string GEMINI_KEY_CONTACT = "";
 
         // Chuỗi placeholder cố định để so sánh logic
         private const string PLACEHOLDER_TEXT = "Tìm kiếm theo tên hoặc số điện thoại";
@@ -30,43 +34,292 @@ namespace QuanLySinhVien
         public f_Contact()
         {
             InitializeComponent();
+            ApplyContactModernTheme();
+            BuildImportAIButtons();
             SetupEventHandlers();
         }
 
         private void f_Contact_Load(object sender, EventArgs e)
         {
+            EnsureContactSchemaAndDemoData();
             LoadGroupsToComboBoxAndGrid();
             LoadContactList();
+            cboGroup_SelectedIndexChanged(null, null); // Áp dụng bộ lọc theo nhóm đang chọn
             SetupSuggestList();
-            SetupPlaceholderSearch(); // Khởi tạo giao diện placeholder ban đầu
+            SetupPlaceholderSearch();
+        }
+
+        private void EnsureContactSchemaAndDemoData()
+        {
+            try
+            {
+                db.openConnection();
+
+                new SqlCommand(@"
+IF OBJECT_ID('dbo.Groups','U') IS NULL
+    CREATE TABLE dbo.Groups (
+        ID INT IDENTITY(1,1) PRIMARY KEY,
+        Name NVARCHAR(100) NOT NULL,
+        UserID NVARCHAR(20) NOT NULL);", db.conn).ExecuteNonQuery();
+
+                new SqlCommand(@"
+IF OBJECT_ID('dbo.Contact','U') IS NULL
+    CREATE TABLE dbo.Contact (
+        ID INT IDENTITY(1,1) PRIMARY KEY,
+        Fname NVARCHAR(50) NOT NULL, Lname NVARCHAR(50) NOT NULL,
+        Dob DATETIME NULL, Gender NVARCHAR(10) NULL, Group_ID INT NULL,
+        Phone NVARCHAR(20) NULL, Address NVARCHAR(250) NULL,
+        Email NVARCHAR(100) NULL, Pic IMAGE NULL,
+        UserID NVARCHAR(20) NOT NULL);", db.conn).ExecuteNonQuery();
+
+                // Đảm bảo 4 nhóm mặc định tồn tại, lấy ID
+                int familyId  = EnsureGroupExists("Gia đình");
+                int classId   = EnsureGroupExists("Bạn cùng lớp");
+                int teacherId = EnsureGroupExists("Giảng viên");
+                int partnerId = EnsureGroupExists("Đối tác học tập");
+
+                // Chỉ seed nếu có ít hơn 12 liên hệ
+                SqlCommand countCmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Contact WHERE UserID=@uid", db.conn);
+                countCmd.Parameters.AddWithValue("@uid", currentUserId);
+                if (Convert.ToInt32(countCmd.ExecuteScalar()) >= 12) return;
+
+                // Gia đình — 4 liên hệ
+                InsertContact("Nguyễn", "Minh Anh",   new DateTime(2004,  3, 12), "Nữ",  familyId,  "0901234567", "Quận 1, TP HCM",        "minhanh@example.com");
+                InsertContact("Nguyễn", "Văn An",     new DateTime(1975,  6,  8), "Nam", familyId,  "0902345678", "Bình Dương",              "nvan@example.com");
+                InsertContact("Nguyễn", "Thị Bình",   new DateTime(1978,  9, 20), "Nữ",  familyId,  "0903456789", "Quận 1, TP HCM",        "ntbinh@example.com");
+                InsertContact("Trần",   "Gia Huy",    new DateTime(2006,  1, 15), "Nam", familyId,  "0904567890", "Thủ Đức, TP HCM",       "giahuy@example.com");
+
+                // Bạn cùng lớp — 5 liên hệ
+                InsertContact("Trần",   "Quốc Bảo",   new DateTime(2003,  7, 24), "Nam", classId,   "0912345678", "Thủ Đức, TP HCM",       "quocbao@example.com");
+                InsertContact("Hoàng",  "Thị Lan",    new DateTime(2004,  2, 14), "Nữ",  classId,   "0913456789", "Gò Vấp, TP HCM",        "thilan@example.com");
+                InsertContact("Vũ",     "Minh Đức",   new DateTime(2003, 11,  3), "Nam", classId,   "0914567890", "Quận 12, TP HCM",       "minhduc@example.com");
+                InsertContact("Đặng",   "Thùy Linh",  new DateTime(2004,  5, 30), "Nữ",  classId,   "0915678901", "Bình Thạnh, TP HCM",    "thuylinh@example.com");
+                InsertContact("Bùi",    "Văn Tuấn",   new DateTime(2003,  8, 22), "Nam", classId,   "0916789012", "Tân Bình, TP HCM",      "vantuan@example.com");
+
+                // Giảng viên — 3 liên hệ
+                InsertContact("Lê",     "Hoàng Nam",  new DateTime(1985, 11,  4), "Nam", teacherId, "0987654321", "HCMUTE, Thủ Đức",       "hoangnam@hcmute.edu.vn");
+                InsertContact("Phạm",   "Văn Hùng",   new DateTime(1980,  3, 17), "Nam", teacherId, "0988765432", "HCMUTE, Thủ Đức",       "vanhung@hcmute.edu.vn");
+                InsertContact("Trần",   "Thị Hoa",    new DateTime(1988,  7,  9), "Nữ",  teacherId, "0989876543", "HCMUTE, Thủ Đức",       "thihoa@hcmute.edu.vn");
+
+                // Đối tác học tập — 4 liên hệ
+                InsertContact("Phạm",   "Thanh Trúc", new DateTime(2004, 10, 18), "Nữ",  partnerId, "0933456789", "Bình Thạnh, TP HCM",    "thanhtruc@example.com");
+                InsertContact("Ngô",    "Minh Quân",  new DateTime(2003,  4, 25), "Nam", partnerId, "0934567890", "Quận 3, TP HCM",        "minhquan@example.com");
+                InsertContact("Lý",     "Thị Ngọc",   new DateTime(2004,  8, 11), "Nữ",  partnerId, "0935678901", "Quận 7, TP HCM",        "thingoc@example.com");
+                InsertContact("Đinh",   "Văn Tùng",   new DateTime(2003, 12,  5), "Nam", partnerId, "0936789012", "Nhà Bè, TP HCM",        "vantung@example.com");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khởi tạo dữ liệu danh bạ: " + ex.Message);
+            }
+            finally { db.closeConnection(); }
+        }
+
+        private int EnsureGroupExists(string name)
+        {
+            SqlCommand chk = new SqlCommand(
+                "SELECT TOP 1 ID FROM dbo.Groups WHERE Name=@n AND UserID=@uid", db.conn);
+            chk.Parameters.AddWithValue("@n",   name);
+            chk.Parameters.AddWithValue("@uid", currentUserId);
+            object existing = chk.ExecuteScalar();
+            return (existing != null) ? Convert.ToInt32(existing) : InsertContactGroup(name);
+        }
+
+        private int InsertContactGroup(string name)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO dbo.Groups (Name, UserID) VALUES (@name, @uid); SELECT CAST(SCOPE_IDENTITY() AS INT);", db.conn);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@uid", currentUserId);
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        private void InsertContact(string fname, string lname, DateTime dob, string gender, int groupId, string phone, string address, string email)
+        {
+            SqlCommand cmd = new SqlCommand(
+                "INSERT INTO dbo.Contact (Fname, Lname, Dob, Gender, Group_ID, Phone, Address, Email, Pic, UserID) " +
+                "VALUES (@fn, @ln, @dob, @gender, @gid, @phone, @address, @email, NULL, @uid)", db.conn);
+            cmd.Parameters.AddWithValue("@fn", fname);
+            cmd.Parameters.AddWithValue("@ln", lname);
+            cmd.Parameters.AddWithValue("@dob", dob);
+            cmd.Parameters.AddWithValue("@gender", gender);
+            cmd.Parameters.AddWithValue("@gid", groupId);
+            cmd.Parameters.AddWithValue("@phone", phone);
+            cmd.Parameters.AddWithValue("@address", address);
+            cmd.Parameters.AddWithValue("@email", email);
+            cmd.Parameters.AddWithValue("@uid", currentUserId);
+            cmd.ExecuteNonQuery();
+        }
+
+        private void ApplyContactModernTheme()
+        {
+            Color page = Color.FromArgb(242, 246, 252);
+            Color primary = Color.FromArgb(0, 61, 149);
+            Color text = Color.FromArgb(18, 31, 53);
+
+            tcbContact.Appearance = TabAppearance.FlatButtons;
+            tcbContact.ItemSize = new Size(170, 34);
+            tcbContact.SizeMode = TabSizeMode.Fixed;
+            tabPage1.BackColor = page;
+            tabPage2.BackColor = page;
+
+            foreach (Panel panel in new[] { panel1, panel2, panel3, panel4 })
+            {
+                panel.BackColor = Color.White;
+                panel.Padding = new Padding(14);
+                panel.Paint += CardPanel_Paint;
+            }
+
+            foreach (Label title in new[] { lblHethong, label17 })
+            {
+                title.ForeColor = primary;
+                title.Font = new Font("Segoe UI", 20f, FontStyle.Bold);
+            }
+
+            foreach (Label label in GetAllControls(this).OfType<Label>())
+            {
+                if (label == lblHethong || label == label17) continue;
+                label.ForeColor = text;
+            }
+
+            StyleContactGrid(dgvGroup);
+            StyleContactGrid(dgvContacts);
+
+            foreach (TextBox textbox in GetAllControls(this).OfType<TextBox>())
+            {
+                textbox.BorderStyle = BorderStyle.FixedSingle;
+                textbox.BackColor = Color.FromArgb(248, 250, 252);
+                textbox.ForeColor = text;
+                textbox.Font = new Font("Segoe UI", 11f);
+            }
+
+            foreach (ComboBox combo in GetAllControls(this).OfType<ComboBox>())
+            {
+                combo.FlatStyle = FlatStyle.Flat;
+                combo.BackColor = Color.FromArgb(248, 250, 252);
+                combo.ForeColor = text;
+                combo.Font = new Font("Segoe UI", 11f);
+            }
+
+            StyleActionButton(btnAddGroup, Color.FromArgb(20, 184, 166), Color.White);
+            StyleActionButton(btnDeleteGroup, Color.FromArgb(239, 68, 68), Color.White);
+            StyleActionButton(btnAddContact, Color.FromArgb(37, 99, 235), Color.White);
+            StyleActionButton(btnFixContact, Color.FromArgb(245, 158, 11), Color.White);
+            StyleActionButton(btnDeleteContact, Color.FromArgb(239, 68, 68), Color.White);
+            StyleActionButton(btnRefreshContact, Color.FromArgb(100, 116, 139), Color.White);
+            StyleActionButton(btnChooseImage, Color.FromArgb(0, 61, 149), Color.White);
+            StyleActionButton(bntSearchContact, Color.FromArgb(14, 165, 233), Color.White);
+            StyleActionButton(btnExportCSV, Color.FromArgb(16, 185, 129), Color.White);
+            StyleActionButton(btnImportCSV, Color.FromArgb(6, 182, 212), Color.White);
+            StyleActionButton(btnAISuggestGroup, Color.FromArgb(139, 92, 246), Color.White);
+
+            picContact.BackColor = Color.FromArgb(235, 242, 252);
+            picContact.SizeMode = PictureBoxSizeMode.Zoom;
+
+            // Fix ngày sinh hiển thị dạng "dd/MM/yyyy" thay vì dạng dài đầy đủ
+            dtpDob.Format = DateTimePickerFormat.Custom;
+            dtpDob.CustomFormat = "dd/MM/yyyy";
+
+            // Căn đều 4 nút hành động trong panel3 (panel3 width = 811)
+            // 4 × 180 + 3 × 12 + 2 × 27 = 720 + 36 + 54 = 810
+            int bw = 180, bh = 52, bY = 714, gap = 12, startX = 27;
+            btnAddContact.SetBounds(startX,                  bY, bw, bh);
+            btnFixContact.SetBounds(startX +   (bw + gap),   bY, bw, bh);
+            btnRefreshContact.SetBounds(startX + 2*(bw + gap), bY, bw, bh);
+            btnDeleteContact.SetBounds(startX + 3*(bw + gap), bY, bw, bh);
+
+            // Căn đều 2 nút quản lý nhóm trong panel1 (panel1 width = 523)
+            // 2 × 200 + 1 × 20 + 2 × 51 = 400 + 20 + 102 = 522
+            btnAddGroup.SetBounds(51, 233, 200, 55);
+            btnDeleteGroup.SetBounds(271, 233, 200, 55);
+        }
+
+        // Buttons created in Designer.cs — chỉ đăng ký event ở đây
+        private void BuildImportAIButtons()
+        {
+            btnImportCSV.Click += async (s, e) => await btnImportCSV_ClickAsync();
+            btnAISuggestGroup.Click += async (s, e) => await btnAISuggestGroup_ClickAsync();
+        }
+
+        private IEnumerable<Control> GetAllControls(Control parent)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                yield return control;
+                foreach (Control child in GetAllControls(control))
+                    yield return child;
+            }
+        }
+
+        private void StyleContactGrid(DataGridView dgv)
+        {
+            dgv.BackgroundColor = Color.White;
+            dgv.BorderStyle = BorderStyle.None;
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 61, 149);
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+            dgv.ColumnHeadersHeight = 38;
+            dgv.RowHeadersVisible = false;
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10f);
+            dgv.DefaultCellStyle.ForeColor = Color.FromArgb(30, 41, 59);
+            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
+            dgv.DefaultCellStyle.SelectionForeColor = Color.FromArgb(15, 23, 42);
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
+            dgv.GridColor = Color.FromArgb(226, 232, 240);
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        private void StyleActionButton(Button button, Color backColor, Color foreColor)
+        {
+            button.BackColor = backColor;
+            button.ForeColor = foreColor;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+            button.Cursor = Cursors.Hand;
+        }
+
+        private void CardPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            if (panel == null) return;
+
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            Rectangle rect = new Rectangle(0, 0, panel.Width - 1, panel.Height - 1);
+            using (GraphicsPath path = RoundedRect(rect, 12))
+            using (Pen pen = new Pen(Color.FromArgb(222, 231, 242), 1))
+            {
+                panel.Region = new Region(path);
+                e.Graphics.DrawPath(pen, path);
+            }
+        }
+
+        private GraphicsPath RoundedRect(Rectangle bounds, int radius)
+        {
+            int diameter = radius * 2;
+            GraphicsPath path = new GraphicsPath();
+            path.AddArc(bounds.X, bounds.Y, diameter, diameter, 180, 90);
+            path.AddArc(bounds.Right - diameter, bounds.Y, diameter, diameter, 270, 90);
+            path.AddArc(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(bounds.X, bounds.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
         private void SetupEventHandlers()
         {
-            this.Load += new EventHandler(f_Contact_Load);
-            btnAddGroup.Click += new EventHandler(btnAddGroup_Click);
-            btnDeleteGroup.Click += new EventHandler(btnDeleteGroup_Click);
-            btnChooseImage.Click += new EventHandler(btnChooseImage_Click);
+            // Chỉ đăng ký những sự kiện KHÔNG có trong Designer.cs
+            // (Load, btnAddGroup, btnDeleteGroup, btnChooseImage, bntSearchContact,
+            //  txtSearchContact.TextChanged, dgvGroup.CellClick, dgvContacts.CellClick,
+            //  txtAddress.TextChanged, lstSuggest.Click, btnFixContact, btnRefreshContact
+            //  đều đã được Designer.cs đăng ký → không đăng ký lại)
 
-            // Xử lý bộ lọc thời gian thực khi người dùng gõ
-            txtSearchContact.TextChanged += new EventHandler(txtSearchContact_TextChanged);
-
-            // 🛠️ ĐĂNG KÝ CÁC SỰ KIỆN MỚI CHO CHỨC NĂNG TÌM KIẾM THEO YÊU CẦU CỦA NÍ
             txtSearchContact.Enter += new EventHandler(txtSearchContact_Enter);
             txtSearchContact.Leave += new EventHandler(txtSearchContact_Leave);
             txtSearchContact.KeyDown += new KeyEventHandler(txtSearchContact_KeyDown);
-            bntSearchContact.Click += new EventHandler(bntSearchContact_Click);
-
-            btnExportCSV.Click += new EventHandler(btnExportCSV_Click);
-            dgvGroup.CellClick += new DataGridViewCellEventHandler(dgvGroup_CellClick);
-            dgvContacts.CellClick += new DataGridViewCellEventHandler(dgvContacts_CellClick);
-            txtAddress.TextChanged += new EventHandler(txtAddress_TextChanged);
-            lstSuggest.Click += new EventHandler(lstSuggest_Click);
 
             btnAddContact.Click += (s, e) => AddContact();
-            btnFixContact.Click += (s, e) => EditContact();
             btnDeleteContact.Click += (s, e) => DeleteContact();
-            btnRefreshContact.Click += (s, e) => RefreshContactForm();
 
             RegisterContactRealTimeValidation();
         }
@@ -206,26 +459,32 @@ namespace QuanLySinhVien
 
         private void LoadGroupsToComboBoxAndGrid()
         {
-            string query = "SELECT ID, Name FROM Groups WHERE UserID = @uid";
+            string query = "SELECT ID, Name FROM Groups WHERE UserID = @uid ORDER BY Name";
             try
             {
                 SqlCommand cmd = new SqlCommand(query, db.getConnection);
                 cmd.Parameters.AddWithValue("@uid", currentUserId);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
-                adapter.Fill(dt);
+                new SqlDataAdapter(cmd).Fill(dt);
 
+                // dgvGroup: chỉ hiển thị các nhóm thực (không có "Tất cả")
                 dgvGroup.DataSource = dt;
                 dgvGroup.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvGroup.Columns["ID"].HeaderText = "Mã nhóm";
                 dgvGroup.Columns["Name"].HeaderText = "Tên nhóm danh bạ";
 
-                cboGroup.DataSource = dt;
+                // cboGroup (tab Quản lý nhóm): thêm "Tất cả nhóm" (ID=0) lên đầu để lọc danh bạ
+                DataTable dtCbo = dt.Copy();
+                DataRow allRow = dtCbo.NewRow();
+                allRow["ID"] = 0;
+                allRow["Name"] = "— Tất cả nhóm —";
+                dtCbo.Rows.InsertAt(allRow, 0);
+                cboGroup.DataSource = dtCbo;
                 cboGroup.DisplayMember = "Name";
                 cboGroup.ValueMember = "ID";
 
-                DataTable dt2 = dt.Copy();
-                cboGroup2.DataSource = dt2;
+                // cboGroup2 (tab Quản lý danh bạ): chỉ các nhóm thực
+                cboGroup2.DataSource = dt.Copy();
                 cboGroup2.DisplayMember = "Name";
                 cboGroup2.ValueMember = "ID";
             }
@@ -621,6 +880,264 @@ namespace QuanLySinhVien
             EditContact();
         }
 
+        // ── Import CSV / vCard ────────────────────────────────────────────
+        private async Task btnImportCSV_ClickAsync()
+        {
+            using (var ofd = new OpenFileDialog
+            {
+                Title = "Chọn file danh bạ",
+                Filter = "CSV / vCard|*.csv;*.vcf|CSV|*.csv|vCard|*.vcf"
+            })
+            {
+                if (ofd.ShowDialog() != DialogResult.OK) return;
+
+                string path = ofd.FileName;
+                bool isVcf = path.EndsWith(".vcf", StringComparison.OrdinalIgnoreCase);
+
+                int imported = 0, skipped = 0;
+                List<string> errors = new List<string>();
+
+                try
+                {
+                    db.openConnection();
+                    // Pre-load groups for name→id resolution
+                    var groupMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                    using (var cmd = new SqlCommand("SELECT ID, Name FROM Groups WHERE UserID=@uid", db.conn))
+                    {
+                        cmd.Parameters.AddWithValue("@uid", currentUserId);
+                        using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
+                                groupMap[reader.GetString(1)] = reader.GetInt32(0);
+                    }
+
+                    if (isVcf)
+                        ImportVCard(path, groupMap, ref imported, ref skipped, errors);
+                    else
+                        ImportCsv(path, groupMap, ref imported, ref skipped, errors);
+
+                    LoadContactList();
+                    string msg = $"Nhập thành công {imported} liên hệ.";
+                    if (skipped > 0) msg += $"\nBỏ qua {skipped} dòng lỗi.";
+                    if (errors.Count > 0) msg += "\n" + string.Join("\n", errors.Take(5));
+                    MessageBox.Show(msg, "Kết quả nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi nhập file: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally { db.closeConnection(); }
+            }
+            await Task.CompletedTask;
+        }
+
+        private void ImportCsv(string path, Dictionary<string, int> groupMap,
+            ref int imported, ref int skipped, List<string> errors)
+        {
+            var lines = File.ReadAllLines(path, Encoding.UTF8);
+            // Detect separator: first line may use ; or ,
+            char sep = lines.Length > 0 && lines[0].Contains(';') ? ';' : ',';
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+                // Simple CSV split (no quoted-field multiline, but handle quoted fields on same line)
+                var cols = SplitCsvLine(line, sep);
+                if (cols.Length < 3) { skipped++; continue; }
+
+                try
+                {
+                    string fname   = GetCol(cols, 0);
+                    string lname   = GetCol(cols, 1);
+                    string dobStr  = GetCol(cols, 2);
+                    string gender  = GetCol(cols, 3, "Nam");
+                    string phone   = GetCol(cols, 4);
+                    string email   = GetCol(cols, 5);
+                    string address = GetCol(cols, 6);
+                    string groupName = GetCol(cols, 7);
+
+                    if (string.IsNullOrWhiteSpace(fname) && string.IsNullOrWhiteSpace(lname))
+                    { skipped++; continue; }
+
+                    DateTime dob = DateTime.TryParse(dobStr, out var d) ? d : new DateTime(2000, 1, 1);
+                    int groupId = ResolveOrCreateGroup(groupName, groupMap);
+
+                    InsertContact(fname, lname, dob, gender, groupId, phone, address, email);
+                    imported++;
+                }
+                catch (Exception ex) { skipped++; errors.Add($"Dòng {i + 1}: {ex.Message}"); }
+            }
+        }
+
+        private void ImportVCard(string path, Dictionary<string, int> groupMap,
+            ref int imported, ref int skipped, List<string> errors)
+        {
+            var lines = File.ReadAllLines(path, Encoding.UTF8);
+            string fname = "", lname = "", phone = "", email = "", address = "", dobStr = "", gender = "Nam";
+            bool inCard = false;
+
+            foreach (string raw in lines)
+            {
+                string line = raw.Trim();
+                if (line.Equals("BEGIN:VCARD", StringComparison.OrdinalIgnoreCase))
+                {
+                    fname = lname = phone = email = address = dobStr = "";
+                    gender = "Nam"; inCard = true; continue;
+                }
+                if (line.Equals("END:VCARD", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (inCard && (!string.IsNullOrEmpty(fname) || !string.IsNullOrEmpty(lname)))
+                    {
+                        try
+                        {
+                            DateTime dob = DateTime.TryParse(dobStr, out var d) ? d : new DateTime(2000, 1, 1);
+                            int gid = ResolveOrCreateGroup("", groupMap);
+                            InsertContact(fname, lname, dob, gender, gid, phone, address, email);
+                            imported++;
+                        }
+                        catch (Exception ex) { skipped++; errors.Add(ex.Message); }
+                    }
+                    inCard = false; continue;
+                }
+                if (!inCard) continue;
+
+                if (line.StartsWith("N:", StringComparison.OrdinalIgnoreCase))
+                {
+                    // N:Last;First;...
+                    var parts = line.Substring(2).Split(';');
+                    lname = parts.Length > 0 ? parts[0] : "";
+                    fname = parts.Length > 1 ? parts[1] : "";
+                }
+                else if (line.StartsWith("FN:", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(fname))
+                {
+                    var full = line.Substring(3).Trim().Split(' ');
+                    fname = full.Length > 0 ? full[0] : "";
+                    lname = full.Length > 1 ? string.Join(" ", full, 1, full.Length - 1) : "";
+                }
+                else if (line.StartsWith("TEL", StringComparison.OrdinalIgnoreCase))
+                    phone = line.Substring(line.IndexOf(':') + 1).Trim();
+                else if (line.StartsWith("EMAIL", StringComparison.OrdinalIgnoreCase))
+                    email = line.Substring(line.IndexOf(':') + 1).Trim();
+                else if (line.StartsWith("ADR", StringComparison.OrdinalIgnoreCase))
+                    address = line.Substring(line.IndexOf(':') + 1).Replace(";", ", ").Trim().TrimStart(',').Trim();
+                else if (line.StartsWith("BDAY:", StringComparison.OrdinalIgnoreCase))
+                    dobStr = line.Substring(5).Trim();
+            }
+        }
+
+        private int ResolveOrCreateGroup(string groupName, Dictionary<string, int> groupMap)
+        {
+            if (!string.IsNullOrWhiteSpace(groupName) && groupMap.TryGetValue(groupName, out int existing))
+                return existing;
+            // Default group: pick first available or create "Đã nhập"
+            if (groupMap.Count > 0)
+                return groupMap.Values.First();
+            using (var cmd = new SqlCommand(
+                "INSERT INTO dbo.Groups (Name, UserID) VALUES (@n, @uid); SELECT CAST(SCOPE_IDENTITY() AS INT)", db.conn))
+            {
+                cmd.Parameters.AddWithValue("@n", string.IsNullOrWhiteSpace(groupName) ? "Đã nhập" : groupName);
+                cmd.Parameters.AddWithValue("@uid", currentUserId);
+                int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                groupMap[groupName ?? "Đã nhập"] = newId;
+                return newId;
+            }
+        }
+
+        private static string[] SplitCsvLine(string line, char sep)
+        {
+            var result = new List<string>();
+            bool inQuotes = false;
+            var sb = new StringBuilder();
+            foreach (char c in line)
+            {
+                if (c == '"') { inQuotes = !inQuotes; continue; }
+                if (c == sep && !inQuotes) { result.Add(sb.ToString()); sb.Clear(); continue; }
+                sb.Append(c);
+            }
+            result.Add(sb.ToString());
+            return result.ToArray();
+        }
+
+        private static string GetCol(string[] cols, int idx, string defaultVal = "")
+            => idx < cols.Length ? cols[idx].Trim() : defaultVal;
+
+        // ── AI gợi ý nhóm ─────────────────────────────────────────────────
+        private async Task btnAISuggestGroup_ClickAsync()
+        {
+            if (dgvContacts.CurrentRow == null)
+            {
+                MessageBox.Show("Vui lòng chọn một liên hệ trong danh sách để AI gợi ý nhóm.", "Chưa chọn liên hệ");
+                return;
+            }
+
+            var row = dgvContacts.CurrentRow;
+            string fname  = row.Cells["Fname"]?.Value?.ToString()   ?? "";
+            string lname  = row.Cells["Lname"]?.Value?.ToString()   ?? "";
+            string email  = row.Cells["Email"]?.Value?.ToString()   ?? "";
+            string phone  = row.Cells["Phone"]?.Value?.ToString()   ?? "";
+            string gender = row.Cells["Gender"]?.Value?.ToString()  ?? "";
+
+            btnAISuggestGroup.Enabled = false;
+            btnAISuggestGroup.Text = "⏳ Đang hỏi AI...";
+            try
+            {
+                string groups = string.Join(", ", GetUserGroups());
+                string prompt =
+                    $"Bạn là trợ lý phân loại danh bạ. Dựa vào thông tin: " +
+                    $"Tên: {fname} {lname}, Email: {email}, SĐT: {phone}, Giới tính: {gender}. " +
+                    $"Các nhóm hiện có: {groups}. " +
+                    $"Hãy gợi ý nhóm phù hợp nhất và giải thích ngắn gọn lý do (1-2 câu). " +
+                    $"Trả lời bằng tiếng Việt.";
+
+                string reply = await CallGeminiAsync(prompt);
+                MessageBox.Show(reply, $"AI gợi ý nhóm cho {fname} {lname}",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối AI: " + ex.Message, "Lỗi AI");
+            }
+            finally
+            {
+                btnAISuggestGroup.Enabled = true;
+                btnAISuggestGroup.Text = "🤖 AI gợi ý nhóm";
+            }
+        }
+
+        private List<string> GetUserGroups()
+        {
+            var list = new List<string>();
+            try
+            {
+                db.openConnection();
+                using (var cmd = new SqlCommand("SELECT Name FROM Groups WHERE UserID=@uid", db.conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", currentUserId);
+                    using (var r = cmd.ExecuteReader())
+                        while (r.Read()) list.Add(r.GetString(0));
+                }
+            }
+            catch { }
+            finally { db.closeConnection(); }
+            return list.Count > 0 ? list : new List<string> { "Gia đình", "Bạn cùng lớp", "Giảng viên", "Đối tác học tập" };
+        }
+
+        private async Task<string> CallGeminiAsync(string prompt)
+        {
+            string url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY_CONTACT}";
+            var body = new JObject(
+                new JProperty("contents", new JArray(
+                    new JObject(new JProperty("parts", new JArray(
+                        new JObject(new JProperty("text", prompt))))))));
+
+            var content = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(url, content);
+            string json = await response.Content.ReadAsStringAsync();
+            var obj = JObject.Parse(json);
+            return obj["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString()
+                   ?? "AI không trả lời được.";
+        }
+
         private void cboGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Kiểm tra an toàn xem ComboBox đã nạp dữ liệu xong chưa
@@ -633,9 +1150,7 @@ namespace QuanLySinhVien
 
                 // 2. Thực thi chuỗi truy vấn có điều kiện lọc theo phân quyền tài khoản cá nhân
                 // (Mã nguồn SQL này chính là nội dung cốt lõi ní cần bôi đen để chụp hình 15)
-                string queryFilter = $"SELECT c.ID, c.Fname, c.Lname, c.Dob, c.Gender, g.Name AS 'TenNhom', c.Phone, c.Email, c.Address, c.Pic, c.Group_ID " +
-                                     $"FROM Contact c LEFT JOIN Groups g ON c.Group_ID = g.ID " +
-                                     $"WHERE c.Group_ID = @gid AND c.UserID = @uid";
+                
 
                 // 3. Sử dụng kịch bản lọc an toàn DataView RowFilter để tránh nghẽn mạch kết nối Database
                 if (selectedGroupId == "0" || string.IsNullOrEmpty(selectedGroupId))

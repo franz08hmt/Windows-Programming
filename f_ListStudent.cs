@@ -23,28 +23,31 @@ namespace QuanLySinhVien
         // API Key 
         private readonly string apiKey = "Điền API zô, push lên thì xóa đi git nó quét";
 
+        private System.Windows.Forms.Button btnExportPDF;
+
         public f_ListStudent()
         {
             InitializeComponent();
-            SetupEventHandlers();
+            AddExportPDFButton();
         }
 
-        private void SetupEventHandlers()
+        private void AddExportPDFButton()
         {
-            // Đăng ký tập trung các sự kiện hệ thống
-            this.Load += new EventHandler(f_ListStudent_Load);
-            txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged_1);
-            txtSearch.Enter += new EventHandler(txtSearch_Enter);
-            txtSearch.Leave += new EventHandler(txtSearch_Leave);
-            cboFilterGender.SelectedIndexChanged += new EventHandler(cboFilterGender_SelectedIndexChanged_1);
-            cboSortBy.SelectedIndexChanged += new EventHandler(cboSortBy_SelectedIndexChanged_1);
-            btnExport.Click += new EventHandler(btnExport_Click);
-
-            // 🛠️ ĐẤU MẠCH ĐỒ HỌA CHUẨN: Ép sự kiện DoubleClick gán trực tiếp vào lưới DataGridView
-            dgvStudents.CellDoubleClick += new DataGridViewCellEventHandler(dgvStudents_CellDoubleClick_1);
-
-            if (this.Controls.Find("btnChonFile", true).Length > 0)
-                this.Controls.Find("btnChonFile", true)[0].Click += new EventHandler(btnChonFile_Click);
+            // Nút PDF đặt bên TRÁI btnExport, anchor Right để không bị cắt khi resize
+            btnExportPDF = new System.Windows.Forms.Button();
+            btnExportPDF.Text = "Xuất PDF";
+            btnExportPDF.Size = new System.Drawing.Size(100, btnExport.Height);
+            btnExportPDF.BackColor = System.Drawing.Color.FromArgb(192, 0, 0);
+            btnExportPDF.ForeColor = System.Drawing.Color.White;
+            btnExportPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnExportPDF.FlatAppearance.BorderSize = 0;
+            btnExportPDF.Font = btnExport.Font;
+            btnExportPDF.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnExportPDF.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            // Đặt bên trái btnExport (btnExport anchor right nên vị trí tương đối giữ nguyên)
+            btnExportPDF.Location = new System.Drawing.Point(btnExport.Left - 108, btnExport.Top);
+            btnExportPDF.Click += new EventHandler(btnExportPDF_Click);
+            btnExport.Parent.Controls.Add(btnExportPDF);
         }
 
         private void f_ListStudent_Load(object sender, EventArgs e)
@@ -94,6 +97,7 @@ namespace QuanLySinhVien
                 DataTable dt = Student.GetStudents();
                 if (dt == null) return;
 
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
                 svView = new DataView(dt);
                 dgvStudents.DataSource = svView;
 
@@ -240,6 +244,16 @@ namespace QuanLySinhVien
                 }
             }
             catch (Exception ex) { MessageBox.Show("Lỗi Export: " + ex.Message); }
+        }
+
+        private void btnExportPDF_Click(object sender, EventArgs e)
+        {
+            if (svView == null)
+            {
+                MessageBox.Show("Vui lòng tải dữ liệu trước khi xuất.", "Thông báo");
+                return;
+            }
+            ReportExportService.ExportStudentListToPDF(svView);
         }
 
         private void btnChonFile_Click(object sender, EventArgs e)

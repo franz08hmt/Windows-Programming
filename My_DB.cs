@@ -6,7 +6,7 @@ namespace QuanLySinhVien
     internal class My_DB
     {
         public SqlConnection conn = new SqlConnection(
-            @"Data Source=DESKTOP-VGDHF15\SQLEXPRESS01;Initial Catalog=QuanLySinhVien;Integrated Security=True;Encrypt=False");
+            @"Data Source=G15\SQLEXPRESS;Initial Catalog=QuanLySinhVien;Integrated Security=True;Encrypt=False");
 
         public SqlConnection getConnection
         {

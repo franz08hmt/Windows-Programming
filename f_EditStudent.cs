@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,6 +30,9 @@ namespace QuanLySinhVien
         {
             InitializeComponent();
             RegisterRealTimeValidation();
+            dtpDob.Format = DateTimePickerFormat.Custom;
+            dtpDob.CustomFormat = "dd/MM/yyyy";
+            this.Resize += f_EditStudent_Resize;
         }
 
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
@@ -63,6 +66,7 @@ namespace QuanLySinhVien
         private void f_EditStudent_Load_1(object sender, EventArgs e)
         {
             LoadData();
+            ApplyResponsiveLayout();
         }
 
 
@@ -276,16 +280,16 @@ namespace QuanLySinhVien
             DataGridViewRow row = dgvStudents.Rows[e.RowIndex];
 
             txtMSSV.Text = row.Cells["MSSV"].Value.ToString();
-            txtFname.Text = row.Cells["Fname"].Value.ToString();
-            txtLname.Text = row.Cells["Lname"].Value.ToString();
-            txtPhone.Text = row.Cells["Phone"].Value.ToString();
-            txtEmail.Text = row.Cells["Email"].Value.ToString();
+            txtFname.Text = VietnameseTextHelper.Normalize(row.Cells["Fname"].Value.ToString());
+            txtLname.Text = VietnameseTextHelper.Normalize(row.Cells["Lname"].Value.ToString());
+            txtPhone.Text = VietnameseTextHelper.Normalize(row.Cells["Phone"].Value.ToString());
+            txtEmail.Text = VietnameseTextHelper.Normalize(row.Cells["Email"].Value.ToString());
             txtMSSV.Enabled = false;
 
             if (row.Cells["Dob"].Value != DBNull.Value)
                 dtpDob.Value = Convert.ToDateTime(row.Cells["Dob"].Value);
 
-            cboGender.Text = row.Cells["Gder"].Value.ToString().Trim();
+            cboGender.Text = VietnameseTextHelper.Normalize(row.Cells["Gder"].Value.ToString().Trim());
 
             if (row.Cells["Pture"].Value != DBNull.Value && row.Cells["Pture"].Value != null)
             {
@@ -303,11 +307,11 @@ namespace QuanLySinhVien
 
     
             SetOriginalValues(
-                row.Cells["Fname"].Value.ToString(),
-                row.Cells["Lname"].Value.ToString(),
-                row.Cells["Gder"].Value.ToString(),
-                row.Cells["Phone"].Value.ToString(),
-                row.Cells["Email"].Value.ToString()
+                VietnameseTextHelper.Normalize(row.Cells["Fname"].Value.ToString()),
+                VietnameseTextHelper.Normalize(row.Cells["Lname"].Value.ToString()),
+                VietnameseTextHelper.Normalize(row.Cells["Gder"].Value.ToString()),
+                VietnameseTextHelper.Normalize(row.Cells["Phone"].Value.ToString()),
+                VietnameseTextHelper.Normalize(row.Cells["Email"].Value.ToString())
             );
         }
 
@@ -477,6 +481,29 @@ namespace QuanLySinhVien
         private void pnlForm_Paint(object sender, PaintEventArgs e)
         {
             BoGocPanel(pnlForm, 25);
+        }
+
+        private void f_EditStudent_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int margin = 12;
+            int top = 90;
+            int spacing = 12;
+            int availableWidth = Math.Max(900, this.Width - (margin * 2));
+            int availableHeight = Math.Max(400, this.Height - top - margin);
+
+            int leftWidth = (int)(availableWidth * 0.44);
+            int rightWidth = availableWidth - leftWidth - spacing;
+
+            dgvStudents.Location = new Point(margin, top);
+            dgvStudents.Size = new Size(leftWidth, availableHeight);
+
+            pnlForm.Location = new Point(margin + leftWidth + spacing, top);
+            pnlForm.Size = new Size(rightWidth, availableHeight);
         }
     }
 }

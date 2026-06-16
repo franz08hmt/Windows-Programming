@@ -305,6 +305,7 @@
             this.btnRefresh.Size = new System.Drawing.Size(166, 35);
             this.btnRefresh.TabIndex = 2;
             this.btnRefresh.Text = "🔄 Làm mới";
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -84,8 +84,8 @@ namespace QuanLySinhVien
                 if (reader.Read())
                 {
                     // Đọc NVARCHAR bằng GetString để giữ nguyên Unicode tiếng Việt
-                    string fname = reader.GetString(reader.GetOrdinal("Fname"));
-                    string lname = reader.GetString(reader.GetOrdinal("Lname"));
+                    string fname = VietnameseTextHelper.Normalize(reader.GetString(reader.GetOrdinal("Fname")));
+                    string lname = VietnameseTextHelper.Normalize(reader.GetString(reader.GetOrdinal("Lname")));
                     string fullName = fname.Trim() + " " + lname.Trim();
                     string msgv = reader["MSGV"].ToString();
                     reader.Close();

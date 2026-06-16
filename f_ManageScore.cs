@@ -18,6 +18,27 @@ namespace QuanLySinhVien
             RegisterRealTimeValidation();
         }
 
+        private void btnExportScorePDF_Click(object sender, EventArgs e)
+        {
+            if (cboStudent.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên trước khi xuất.", "Thông báo");
+                return;
+            }
+
+            string mssv = cboStudent.SelectedValue.ToString();
+            string studentName = cboStudent.Text;
+            DataTable dt = Score.GetStudentScoreBoard(mssv);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Sinh viên này chưa có điểm nào.", "Thông báo");
+                return;
+            }
+
+            ReportExportService.ExportScoreToPDF(dt, studentName, mssv);
+        }
+
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -45,8 +66,20 @@ namespace QuanLySinhVien
 
         private void LoadStudentCombo()
         {
-            cboStudent.DataSource = Student.GetStudents();
-            cboStudent.DisplayMember = "Lname";
+            DataTable dt = Student.GetStudents();
+            if (!dt.Columns.Contains("HoTen"))
+            {
+                dt.Columns.Add("HoTen", typeof(string));
+            }
+
+            foreach (DataRow row in dt.Rows)
+            {
+                row["HoTen"] = VietnameseTextHelper.Normalize(row["Fname"].ToString()) + " " +
+                               VietnameseTextHelper.Normalize(row["Lname"].ToString());
+            }
+
+            cboStudent.DataSource = dt;
+            cboStudent.DisplayMember = "HoTen";
             cboStudent.ValueMember = "MSSV";
         }
 

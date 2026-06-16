@@ -48,6 +48,8 @@
             this.bntSearchContact = new System.Windows.Forms.Button();
             this.txtTotalContact = new System.Windows.Forms.Label();
             this.btnExportCSV = new System.Windows.Forms.Button();
+            this.btnImportCSV = new System.Windows.Forms.Button();
+            this.btnAISuggestGroup = new System.Windows.Forms.Button();
             this.dgvContacts = new System.Windows.Forms.DataGridView();
             this.txtSearchContact = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -127,7 +129,7 @@
             this.lblHethong.AutoSize = true;
             this.lblHethong.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblHethong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.lblHethong.Location = new System.Drawing.Point(9, 19);
+            this.lblHethong.Location = new System.Drawing.Point(6, 3);
             this.lblHethong.Name = "lblHethong";
             this.lblHethong.Size = new System.Drawing.Size(337, 54);
             this.lblHethong.TabIndex = 3;
@@ -139,9 +141,9 @@
             this.panel2.Controls.Add(this.dgvGroup);
             this.panel2.Controls.Add(this.cboGroup);
             this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(535, 76);
+            this.panel2.Location = new System.Drawing.Point(535, 60);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(913, 832);
+            this.panel2.Size = new System.Drawing.Size(913, 848);
             this.panel2.TabIndex = 1;
             // 
             // dgvGroup
@@ -149,18 +151,18 @@
             this.dgvGroup.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGroup.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.dgvGroup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGroup.Location = new System.Drawing.Point(14, 113);
+            this.dgvGroup.Location = new System.Drawing.Point(14, 157);
             this.dgvGroup.Name = "dgvGroup";
             this.dgvGroup.RowHeadersWidth = 62;
             this.dgvGroup.RowTemplate.Height = 28;
-            this.dgvGroup.Size = new System.Drawing.Size(883, 702);
+            this.dgvGroup.Size = new System.Drawing.Size(883, 658);
             this.dgvGroup.TabIndex = 7;
             this.dgvGroup.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGroup_CellClick);
             // 
             // cboGroup
             // 
             this.cboGroup.FormattingEnabled = true;
-            this.cboGroup.Location = new System.Drawing.Point(14, 55);
+            this.cboGroup.Location = new System.Drawing.Point(14, 77);
             this.cboGroup.Name = "cboGroup";
             this.cboGroup.Size = new System.Drawing.Size(494, 38);
             this.cboGroup.TabIndex = 6;
@@ -170,7 +172,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(7, 14);
+            this.label3.Location = new System.Drawing.Point(16, 14);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(237, 38);
             this.label3.TabIndex = 5;
@@ -184,9 +186,9 @@
             this.panel1.Controls.Add(this.txtGroupName);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(6, 76);
+            this.panel1.Location = new System.Drawing.Point(6, 60);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(523, 405);
+            this.panel1.Size = new System.Drawing.Size(523, 421);
             this.panel1.TabIndex = 0;
             // 
             // btnDeleteGroup
@@ -223,7 +225,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 97);
+            this.label2.Location = new System.Drawing.Point(6, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(177, 32);
             this.label2.TabIndex = 1;
@@ -269,6 +271,8 @@
             this.panel4.Controls.Add(this.bntSearchContact);
             this.panel4.Controls.Add(this.txtTotalContact);
             this.panel4.Controls.Add(this.btnExportCSV);
+            this.panel4.Controls.Add(this.btnImportCSV);
+            this.panel4.Controls.Add(this.btnAISuggestGroup);
             this.panel4.Controls.Add(this.dgvContacts);
             this.panel4.Controls.Add(this.txtSearchContact);
             this.panel4.Controls.Add(this.label16);
@@ -300,13 +304,43 @@
             // btnExportCSV
             // 
             this.btnExportCSV.BackColor = System.Drawing.Color.Aquamarine;
-            this.btnExportCSV.Location = new System.Drawing.Point(444, 804);
+            this.btnExportCSV.Location = new System.Drawing.Point(493, 795);
             this.btnExportCSV.Name = "btnExportCSV";
-            this.btnExportCSV.Size = new System.Drawing.Size(178, 67);
+            this.btnExportCSV.Size = new System.Drawing.Size(129, 76);
             this.btnExportCSV.TabIndex = 9;
             this.btnExportCSV.Text = "💾 Xuất CSV";
             this.btnExportCSV.UseVisualStyleBackColor = false;
             this.btnExportCSV.Click += new System.EventHandler(this.btnExportCSV_Click);
+            // 
+            // btnImportCSV
+            // 
+            this.btnImportCSV.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(182)))), ((int)(((byte)(212)))));
+            this.btnImportCSV.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImportCSV.FlatAppearance.BorderSize = 0;
+            this.btnImportCSV.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImportCSV.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnImportCSV.ForeColor = System.Drawing.Color.White;
+            this.btnImportCSV.Location = new System.Drawing.Point(252, 795);
+            this.btnImportCSV.Name = "btnImportCSV";
+            this.btnImportCSV.Size = new System.Drawing.Size(113, 76);
+            this.btnImportCSV.TabIndex = 12;
+            this.btnImportCSV.Text = "📥 Nhập CSV";
+            this.btnImportCSV.UseVisualStyleBackColor = false;
+            // 
+            // btnAISuggestGroup
+            // 
+            this.btnAISuggestGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(92)))), ((int)(((byte)(246)))));
+            this.btnAISuggestGroup.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAISuggestGroup.FlatAppearance.BorderSize = 0;
+            this.btnAISuggestGroup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAISuggestGroup.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnAISuggestGroup.ForeColor = System.Drawing.Color.White;
+            this.btnAISuggestGroup.Location = new System.Drawing.Point(371, 795);
+            this.btnAISuggestGroup.Name = "btnAISuggestGroup";
+            this.btnAISuggestGroup.Size = new System.Drawing.Size(116, 76);
+            this.btnAISuggestGroup.TabIndex = 13;
+            this.btnAISuggestGroup.Text = "🤖 AI nhóm";
+            this.btnAISuggestGroup.UseVisualStyleBackColor = false;
             // 
             // dgvContacts
             // 
@@ -334,7 +368,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(5, 5);
+            this.label16.Location = new System.Drawing.Point(5, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(254, 38);
             this.label16.TabIndex = 6;
@@ -418,7 +452,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label11.Location = new System.Drawing.Point(397, 504);
+            this.label11.Location = new System.Drawing.Point(397, 496);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(92, 32);
             this.label11.TabIndex = 31;
@@ -453,7 +487,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label10.Location = new System.Drawing.Point(7, 504);
+            this.label10.Location = new System.Drawing.Point(7, 496);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(76, 32);
             this.label10.TabIndex = 29;
@@ -474,7 +508,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label9.Location = new System.Drawing.Point(7, 419);
+            this.label9.Location = new System.Drawing.Point(9, 403);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(132, 32);
             this.label9.TabIndex = 27;
@@ -495,7 +529,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label8.Location = new System.Drawing.Point(397, 418);
+            this.label8.Location = new System.Drawing.Point(397, 396);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(102, 32);
             this.label8.TabIndex = 25;
@@ -519,7 +553,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label7.Location = new System.Drawing.Point(395, 318);
+            this.label7.Location = new System.Drawing.Point(397, 292);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(130, 32);
             this.label7.TabIndex = 23;
@@ -543,7 +577,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label6.Location = new System.Drawing.Point(395, 215);
+            this.label6.Location = new System.Drawing.Point(397, 203);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(146, 32);
             this.label6.TabIndex = 21;
@@ -562,7 +596,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label4.Location = new System.Drawing.Point(395, 35);
+            this.label4.Location = new System.Drawing.Point(397, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 32);
             this.label4.TabIndex = 17;
@@ -583,7 +617,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label5.Location = new System.Drawing.Point(395, 125);
+            this.label5.Location = new System.Drawing.Point(394, 113);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(72, 32);
             this.label5.TabIndex = 19;
@@ -604,7 +638,7 @@
             this.btnChooseImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.btnChooseImage.FlatAppearance.BorderSize = 0;
             this.btnChooseImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChooseImage.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnChooseImage.Font = new System.Drawing.Font("Segoe UI Emoji", 11F, System.Drawing.FontStyle.Bold);
             this.btnChooseImage.ForeColor = System.Drawing.Color.White;
             this.btnChooseImage.Location = new System.Drawing.Point(96, 333);
             this.btnChooseImage.Name = "btnChooseImage";
@@ -785,6 +819,8 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button btnExportCSV;
+        private System.Windows.Forms.Button btnImportCSV;
+        private System.Windows.Forms.Button btnAISuggestGroup;
         private System.Windows.Forms.DataGridView dgvContacts;
         private System.Windows.Forms.TextBox txtSearchContact;
         private System.Windows.Forms.Label label16;
