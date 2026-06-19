@@ -87,6 +87,8 @@ namespace QuanLySinhVien
             LoadAssignList();
             LoadTeacherData();
             LoadData1();
+
+            dgvsuathongtin.CellClick += new DataGridViewCellEventHandler(this.dataGridView1_CellClick);
         }
 
         private bool ValidateInput()
@@ -160,7 +162,7 @@ namespace QuanLySinhVien
         {
             try
             {
-                string query = "SELECT MSGV, Fname, Lname, Dob, Gder, Phone, Email, Pic FROM Login WHERE position = 2 AND VALID = 'True'";
+                string query = "SELECT MSGV, Fname, Lname, Dob, Gder, Phone, Email, Address, Pic FROM Login WHERE position = 2 AND VALID = 'True'";
                 SqlCommand cmd = new SqlCommand(query, db.getConnection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -168,7 +170,6 @@ namespace QuanLySinhVien
 
                 dgvsuathongtin.DataSource = dt;
 
-                // Định cấu hình hiển thị cột cho dataGridView1
                 dgvsuathongtin.Columns["MSGV"].HeaderText = "Mã GV";
                 dgvsuathongtin.Columns["Fname"].HeaderText = "Họ";
                 dgvsuathongtin.Columns["Lname"].HeaderText = "Tên";
@@ -178,13 +179,23 @@ namespace QuanLySinhVien
                 dgvsuathongtin.Columns["Phone"].HeaderText = "Điện thoại";
                 dgvsuathongtin.Columns["Email"].HeaderText = "Email";
 
+                // 🛠️ SỬA LỖI 1: Ánh xạ chuẩn tên trường từ DataTable vào Grid để hiện Địa chỉ lên dòng
+                if (dgvsuathongtin.Columns["Address"] != null)
+                {
+                    dgvsuathongtin.Columns["Address"].HeaderText = "Địa chỉ";
+                    dgvsuathongtin.Columns["Address"].DataPropertyName = "Address";
+                }
+
                 if (dgvsuathongtin.Columns["Pic"] != null)
                 {
                     dgvsuathongtin.Columns["Pic"].HeaderText = "Hình ảnh";
                     ((DataGridViewImageColumn)dgvsuathongtin.Columns["Pic"]).ImageLayout = DataGridViewImageCellLayout.Zoom;
                 }
 
-                dgvsuathongtin.RowTemplate.Height = 50;
+                dgvsuathongtin.RowTemplate.Height = 40;
+                dgvsuathongtin.DefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
+                dgvsuathongtin.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+                dgvsuathongtin.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
             }
             catch (Exception ex)
             {
@@ -292,7 +303,7 @@ namespace QuanLySinhVien
             catch { }
         }
 
-        private void btnAssign_Click_1(object sender, EventArgs e)
+        private void btnAssign_Click(object sender, EventArgs e)
         {
             // 1. Kiểm tra ràng buộc lựa chọn trên giao diện
             if (cboHR.SelectedValue == null || cboCourse.SelectedValue == null)
@@ -360,7 +371,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnDeleteAssign_Click_1(object sender, EventArgs e)
+        private void btnDeleteAssign_Click(object sender, EventArgs e)
         {
             if (dgvAssign.CurrentRow == null)
             {
@@ -402,7 +413,7 @@ namespace QuanLySinhVien
         {
             try
             {
-                string query = "SELECT MSGV, Fname, Lname, Dob, Gder, Phone, Email, Pic FROM Login WHERE position = 2 AND VALID = 'True'";
+                string query = "SELECT MSGV, Fname, Lname, Dob, Gder, Phone, Email, Address, Pic FROM Login WHERE position = 2 AND VALID = 'True'";
                 SqlCommand cmd = new SqlCommand(query, db.getConnection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -413,7 +424,6 @@ namespace QuanLySinhVien
                 gvView = new DataView(dt);
                 dgvStudents.DataSource = gvView;
 
-                // Chuẩn hóa tiêu đề hiển thị
                 dgvStudents.Columns["MSGV"].HeaderText = "Mã GV";
                 dgvStudents.Columns["Fname"].HeaderText = "Họ";
                 dgvStudents.Columns["Lname"].HeaderText = "Tên";
@@ -423,13 +433,25 @@ namespace QuanLySinhVien
                 dgvStudents.Columns["Phone"].HeaderText = "Điện thoại";
                 dgvStudents.Columns["Email"].HeaderText = "Email";
 
+                // 🛠️ SỬA LỖI 3: Ánh xạ chuẩn DataPropertyName cột Địa chỉ cho bảng tab Danh sách (dgvStudents)
+                if (dgvStudents.Columns["Address"] != null)
+                {
+                    dgvStudents.Columns["Address"].HeaderText = "Địa chỉ";
+                    dgvStudents.Columns["Address"].DataPropertyName = "Address";
+                }
+
                 if (dgvStudents.Columns["Pic"] != null)
                 {
                     dgvStudents.Columns["Pic"].HeaderText = "Hình ảnh";
                     ((DataGridViewImageColumn)dgvStudents.Columns["Pic"]).ImageLayout = DataGridViewImageCellLayout.Zoom;
                 }
 
-                dgvStudents.RowTemplate.Height = 60;
+                // Đồng bộ phông chữ phẳng, dãn cách dòng mượt mà cho lưới dgvStudents
+                dgvStudents.RowTemplate.Height = 40;
+                dgvStudents.DefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
+                dgvStudents.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+                dgvStudents.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
+
                 UpdateTotalCount();
             }
             catch (Exception ex)
@@ -448,18 +470,7 @@ namespace QuanLySinhVien
         // THANH TÌM KIẾM GIẢNG VIÊN (Mã số, Họ, Tên)
         private void txtSearch_TextChanged_1(object sender, EventArgs e)
         {
-            if (txtSearch.Text == "Tìm kiếm..." || gvView == null) return;
 
-            string keyword = txtSearch.Text.Trim().Replace("'", "''");
-            if (string.IsNullOrEmpty(keyword))
-            {
-                gvView.RowFilter = "";
-            }
-            else
-            {
-                gvView.RowFilter = $"MSGV LIKE '%{keyword}%' OR Fname LIKE '%{keyword}%' OR Lname LIKE '%{keyword}%'";
-            }
-            UpdateTotalCount();
         }
 
         private void RegisterRealTimeValidation1()
@@ -578,7 +589,7 @@ namespace QuanLySinhVien
         }
 
         // 🛠️ VÁ LỖI 1: Thay thế bảng 'HR' thành bảng quản lý 'Login' đồng nhất với DB thực tế của ní
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click_1(object sender, EventArgs e)
         {
             if (!ValidateInput1())
             {
@@ -607,7 +618,7 @@ namespace QuanLySinhVien
                 if (cmd.ExecuteNonQuery() == 1)
                 {
                     MessageBox.Show("Thêm giảng viên mới vào hệ thống thành công tốt đẹp!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btnClear_Click(sender, e);
+                    btnClear_Click_1(sender, e);
                     LoadTeacherData(); // Làm tươi lại bảng hiển thị lập tức
                 }
             }
@@ -629,7 +640,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private void btnClear_Click_1(object sender, EventArgs e)
         {
             txtMSGV.Clear(); txtFname.Clear(); txtLname.Clear();
             dtpDob.Value = DateTime.Now;
@@ -694,7 +705,7 @@ namespace QuanLySinhVien
             catch { lstSuggest.Visible = false; }
         }
 
-        private void btnSpeech_Click(object sender, EventArgs e)
+        private void btnSpeech_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -829,7 +840,7 @@ namespace QuanLySinhVien
             return GraphPath;
         }
 
-        private void btnViewlist_Click(object sender, EventArgs e)
+        private void btnViewlist_Click_1(object sender, EventArgs e)
         {
             tabControl1.SelectedIndex = 2;
         }
@@ -863,7 +874,6 @@ namespace QuanLySinhVien
         private void button3_Click(object sender, EventArgs e) {  }
         private void button1_Click(object sender, EventArgs e) { }
         private void button2_Click(object sender, EventArgs e) {  }
-        private void cboCourse_SelectedIndexChanged(object sender, EventArgs e) { }
         private void dgvAssign_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void cboHR_SelectedIndexChanged(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }
@@ -909,7 +919,7 @@ namespace QuanLySinhVien
                 gvView.Sort = "Lname ASC";
         }
 
-        private void btnExport_Click(object sender, EventArgs e)
+        private void btnExport_Click_1(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog
             {
@@ -1147,7 +1157,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvPreview_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvPreview_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
         }
@@ -1158,42 +1168,52 @@ namespace QuanLySinhVien
 
             DataGridViewRow row = dgvsuathongtin.Rows[e.RowIndex];
 
-            txtMSGV1.Text = row.Cells["MSGV"].Value.ToString();
-            textBox1.Text = row.Cells["Fname"].Value.ToString();
-            textBox2.Text = row.Cells["Lname"].Value.ToString();
-            textBox3.Text = row.Cells["Phone"].Value.ToString();
-            textBox4.Text = row.Cells["Email"].Value.ToString();
+            txtMSGV1.Text = row.Cells["MSGV"].Value?.ToString() ?? "";
+            textBox1.Text = row.Cells["Fname"].Value?.ToString() ?? "";
+            textBox2.Text = row.Cells["Lname"].Value?.ToString() ?? "";
+            textBox3.Text = row.Cells["Phone"].Value?.ToString() ?? "";
+            textBox4.Text = row.Cells["Email"].Value?.ToString() ?? "";
+
+            if (dgvsuathongtin.Columns.Contains("Address"))
+            {
+                txtAddress.Text = row.Cells["Address"].Value?.ToString() ?? "";
+            }
+
             txtMSGV1.Enabled = false;
 
-            if (row.Cells["Dob"].Value != DBNull.Value)
+            if (row.Cells["Dob"].Value != DBNull.Value && row.Cells["Dob"].Value != null)
                 dateTimePicker1.Value = Convert.ToDateTime(row.Cells["Dob"].Value);
 
-            comboBox1.Text = row.Cells["Gder"].Value.ToString().Trim();
+            comboBox1.Text = row.Cells["Gder"].Value?.ToString().Trim() ?? "";
 
+            // 🛠️ SỬA LỖI 2: Đổi tên linh kiện nhận ảnh từ picStudent sang pictureBox4 cho khớp Design thực tế
             if (row.Cells["Pic"].Value != DBNull.Value && row.Cells["Pic"].Value != null)
             {
                 byte[] picData = (byte[])row.Cells["Pic"].Value;
                 using (MemoryStream ms = new MemoryStream(picData))
                 using (Image tempImg = Image.FromStream(ms))
-                    picStudent.Image = new Bitmap(tempImg);
+                {
+                    if (pictureBox4.Image != null) pictureBox4.Image.Dispose();
+                    pictureBox4.Image = new Bitmap(tempImg);
+                }
             }
             else
             {
-                picStudent.Image = null;
+                pictureBox4.Image = null;
             }
 
             erpEdit.Clear();
 
             SetOriginalValues(
-                row.Cells["Fname"].Value.ToString(),
-                row.Cells["Lname"].Value.ToString(),
-                row.Cells["Gder"].Value.ToString(),
-                row.Cells["Phone"].Value.ToString(),
-                row.Cells["Email"].Value.ToString()
+                textBox1.Text.Trim(),
+                textBox2.Text.Trim(),
+                comboBox1.Text,
+                textBox3.Text.Trim(),
+                textBox4.Text.Trim()
             );
         }
 
-        private void btnFix_Click(object sender, EventArgs e)
+        private void btnFix_Click_1(object sender, EventArgs e)
         {
             if (!ValidateInput())
             {
@@ -1242,7 +1262,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMSGV1.Text))
             {
@@ -1274,7 +1294,7 @@ namespace QuanLySinhVien
                 if (cmdLogin.ExecuteNonQuery() > 0)
                 {
                     MessageBox.Show("Đã xóa giảng viên ra khỏi hệ thống thành công tốt đẹp!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btnRefresh_Click(sender, e); // Gọi hàm dọn dẹp sạch giao diện
+                    btnRefresh_Click_1(sender, e); // Gọi hàm dọn dẹp sạch giao diện
                 }
             }
             catch (Exception ex)
@@ -1284,7 +1304,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private void btnRefresh_Click_1(object sender, EventArgs e)
         {
             txtMSGV1.Text = "";
             textBox1.Text = "";
@@ -1307,7 +1327,7 @@ namespace QuanLySinhVien
             LoadData1();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog opf = new OpenFileDialog
             {
@@ -1327,7 +1347,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvAssign_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvAssign_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
@@ -1341,9 +1361,41 @@ namespace QuanLySinhVien
                 cboCourse.SelectedValue = row.Cells["Mã Môn"].Value.ToString().Trim();
         }
 
-        private void panel4_Paint(object sender, PaintEventArgs e)
+
+        private void guna2Shapes4_Click(object sender, EventArgs e)
         {
-            VeBoGocPanel(panel4, 25, e);
+
+        }
+
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            if (gvView == null || gvView.Count == 0)
+            {
+                MessageBox.Show("Danh sách giảng viên hiện tại đang trống, không có dữ liệu để xuất file PDF ní ơi!",
+                                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Trích xuất dữ liệu giảng viên hiện tại trên lưới thành bảng DataTable
+                DataTable dtTeachers = gvView.ToTable();
+
+                // 🚀 GIẢI PHÁP CHÍ MẠNG: Ép kiểu sang DataView và tận dụng luôn hàm xuất PDF bọc thép của sinh viên
+                DataView dvTeachers = new DataView(dtTeachers);
+                ReportExportService.ExportStudentListToPDF(dvTeachers);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gặp sự cố phát sinh khi đang kết xuất file PDF: " + ex.Message,
+                                "Lỗi phân hệ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -73,7 +73,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnSendOTP_Click(object sender, EventArgs e)
+        private void btnSendOTP_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtEmail.Text))
             {
@@ -104,16 +104,16 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnBackLogin_Click(object sender, EventArgs e)
-        {
-            
-
-            this.Close();
-        }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             BoGocPanel(panel1, 25);
         }
+
+        private void btnBackLogin_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }

@@ -31,7 +31,7 @@ namespace QuanLySinhVien
             pnl.Region = new Region(path);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtNewPass.Text) ||
                 string.IsNullOrEmpty(txtConfirmPass.Text))
@@ -80,12 +80,12 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click_1(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
             string currentUserName = Globals.GlobalUserName;
 
@@ -95,9 +95,6 @@ namespace QuanLySinhVien
             this.Close();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            BoGocPanel(panel1, 25);
-        }
+
     }
 }

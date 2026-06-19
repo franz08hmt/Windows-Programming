@@ -18,6 +18,7 @@ namespace QuanLySinhVien
             RegisterRealTimeValidation();
         }
 
+
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -37,7 +38,6 @@ namespace QuanLySinhVien
             txtTK.BackColor = Color.LightGray;
             txtXepLoai.ReadOnly = true;
             txtXepLoai.BackColor = Color.LightGray;
-            nudCKWeight.ReadOnly = true;
             nudCKWeight.BackColor = Color.LightGray;
 
             LoadStudentCombo();
@@ -45,8 +45,20 @@ namespace QuanLySinhVien
 
         private void LoadStudentCombo()
         {
-            cboStudent.DataSource = Student.GetStudents();
-            cboStudent.DisplayMember = "Lname";
+            DataTable dt = Student.GetStudents();
+            if (!dt.Columns.Contains("HoTen"))
+            {
+                dt.Columns.Add("HoTen", typeof(string));
+            }
+
+            foreach (DataRow row in dt.Rows)
+            {
+                row["HoTen"] = VietnameseTextHelper.Normalize(row["Fname"].ToString()) + " " +
+                               VietnameseTextHelper.Normalize(row["Lname"].ToString());
+            }
+
+            cboStudent.DataSource = dt;
+            cboStudent.DisplayMember = "HoTen";
             cboStudent.ValueMember = "MSSV";
         }
 
@@ -57,23 +69,33 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-                string query =
-                    "SELECT d.MaMH, c.TenMH " +
-                    "FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH " +
-                    "WHERE d.MSSV = @mssv " +
-                    "AND NOT EXISTS (" +
-                    "    SELECT 1 FROM Score s " +
-                    "    WHERE s.MSSV = d.MSSV AND s.MaMH = d.MaMH" +
-                    ")";
+
+                // 🚀 GIẢI PHÁP CHÍ MẠNG: Dùng INNER JOIN ép bảng Course kết nối với bảng điểm/đăng ký học phần
+                // để chỉ lôi ra đúng những môn học mà sinh viên này THỰC TẾ ĐÃ ĐĂNG KÝ/CÓ ĐẦU ĐIỂM
+                string query = "SELECT c.MaMH, c.TenMH " +
+                               "FROM Course c " +
+                               "INNER JOIN Score s ON c.MaMH = s.MaMH " +
+                               "WHERE s.MSSV = @mssv " +
+                               "ORDER BY c.TenMH";
+
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
+                cmd.Parameters.AddWithValue("@mssv", mssv); // Truyền chính xác MSSV đang chọn vào bộ lọc
+
                 new SqlDataAdapter(cmd).Fill(dt);
 
+                // Dọn dẹp sạch nguồn cũ và Items ngầm của ô chọn tránh lỗi giật lag đồ họa
+                cboCourse.DataSource = null;
+                cboCourse.Items.Clear();
+
+                // Đổ bộ bảng dữ liệu môn học đã được AI lọc chuẩn chỉ vào ComboBox
                 cboCourse.DataSource = dt;
                 cboCourse.DisplayMember = "TenMH";
                 cboCourse.ValueMember = "MaMH";
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi nạp danh mục môn học theo sinh viên: " + ex.Message);
+            }
             finally { db.closeConnection(); }
         }
 
@@ -210,29 +232,17 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvScores_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvScores_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.RowIndex >= dgvScores.Rows.Count - 1) return;
 
             DataGridViewRow row = dgvScores.Rows[e.RowIndex];
+            string maMH = row.Cells[0].Value?.ToString().Trim() ?? "";
 
-            // Lấy MaMH từ dòng được click
-            string maMH = row.Cells[0].Value?.ToString() ?? "";
-            string tenMH = row.Cells[1].Value?.ToString() ?? "";
-
-            // Thêm môn vào cboCourse nếu chưa có (trường hợp sửa điểm đã nhập)
+            // 🛠️ ĐÃ SỬA: Chỉ thay đổi vị trí chọn SelectedValue của môn học
             if (!string.IsNullOrEmpty(maMH))
             {
-                // Tạo DataTable tạm chứa môn đang sửa để gán vào cboCourse
-                System.Data.DataTable dtTemp = new System.Data.DataTable();
-                dtTemp.Columns.Add("MaMH");
-                dtTemp.Columns.Add("TenMH");
-                dtTemp.Rows.Add(maMH, tenMH);
-
-                cboCourse.DataSource = dtTemp;
-                cboCourse.DisplayMember = "TenMH";
-                cboCourse.ValueMember = "MaMH";
-                cboCourse.SelectedIndex = 0;
+                cboCourse.SelectedValue = maMH;
             }
 
             txtQT.Text = row.Cells[3].Value?.ToString() ?? "";
@@ -244,7 +254,7 @@ namespace QuanLySinhVien
             erpScore?.Clear();
         }
 
-        private void btnSaveScore_Click(object sender, EventArgs e)
+        private void btnSaveScore_Click_1(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboCourse.SelectedValue == null)
             {
@@ -318,12 +328,12 @@ namespace QuanLySinhVien
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void btnFix_Click(object sender, EventArgs e)
+        private void btnExportScorePDF_Click(object sender, EventArgs e)
         {
-            btnSaveScore_Click(sender, e);
+            btnSaveScore_Click_1(sender, e);
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private void btnRefresh_Click_1(object sender, EventArgs e)
         {
             ClearInputFields();
             if (cboStudent.SelectedValue != null)
@@ -439,7 +449,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // [AI] OCR NHẬN DẠNG CHỮ SỐ TỪ ẢNH BẢNG ĐIỂM (nâng cao)
         // ===================================================================
-        private void btnOCRScore_Click(object sender, EventArgs e)
+        private void btnOCRScore_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog
             {
@@ -520,13 +530,69 @@ namespace QuanLySinhVien
                 btnOCRScore.Text = "📷 OCR Đọc điểm từ ảnh";
             }
         }
-        private void panel1_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel1, 25, e);
-        private void panel2_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel2, 25, e);
-        private void panel3_Paint(object sender, PaintEventArgs e) => VeBoGocPanel(panel3, 25, e);
         private void txtQT_TextChanged(object sender, EventArgs e) { }
         private void txtCK_TextChanged(object sender, EventArgs e) { }
 
         private void dgvScores_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            if (cboStudent.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên trước khi xuất.", "Thông báo");
+                return;
+            }
+
+            string mssv = cboStudent.SelectedValue.ToString();
+            string studentName = cboStudent.Text;
+            DataTable dt = Score.GetStudentScoreBoard(mssv);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Sinh viên này chưa có điểm nào.", "Thông báo");
+                return;
+            }
+
+            ReportExportService.ExportScoreToPDF(dt, studentName, mssv);
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (cboStudent.SelectedValue == null || cboStudent.SelectedValue.ToString() == "System.Data.DataRowView")
+            {
+                MessageBox.Show("Ní vui lòng chọn một Sinh viên từ danh sách trước khi xuất bảng điểm nhé!", "Thiếu thông tin",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string mssv = cboStudent.SelectedValue.ToString();
+            string studentName = cboStudent.Text;
+
+            DataTable dt = Score.GetStudentScoreBoard(mssv);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show($"Sinh viên {studentName} hiện tại chưa có dữ liệu điểm môn học nào để xuất file PDF ní ơi!", "Bảng điểm trống",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            try
+            {
+
+                ReportExportService.ExportScoreToPDF(dt, studentName, mssv);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gặp sự cố phát sinh khi đang dựng cấu trúc tệp PDF: " + ex.Message, "Lỗi phân hệ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cboCourse_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

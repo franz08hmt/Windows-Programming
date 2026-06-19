@@ -1,46 +1,175 @@
-﻿using System;
+using Newtonsoft.Json;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLySinhVien
 {
     public partial class f_AccountManage : UserControl
     {
+        // _split, dgvApproved, btnAI đã được khai báo trong Designer.cs
+        private bool _splitterSet = false;
+
+        // Gmail SMTP — xóa trước khi push GitHub
+        private const string SMTP_FROM = "your_gmail@gmail.com";
+        private const string SMTP_PASS = "your_app_password";
+
+        // Gemini API key — xóa trước khi push GitHub
+        private const string GEMINI_KEY = "";
+
         public f_AccountManage()
         {
             InitializeComponent();
+            BuildSplitLayout();
         }
 
+        // ── Bổ sung label section và style cho _split đã có trong Designer ──
+        private void BuildSplitLayout()
+        {
+            // Tách DGV ra để wrap vào TableLayoutPanel có label
+            _split.Panel1.Controls.Remove(dgvAccounts);
+            _split.Panel2.Controls.Remove(dgvApproved);
+
+            var lblPend = MakeSectionLabel("⏳  CHỜ DUYỆT", Color.FromArgb(200, 70, 0));
+            var lblAppr = MakeSectionLabel("✅  ĐÃ DUYỆT", Color.FromArgb(0, 110, 50));
+
+            var tlp1 = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
+                Padding = Padding.Empty, Margin = Padding.Empty
+            };
+            tlp1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            tlp1.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            tlp1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            dgvAccounts.Dock = DockStyle.Fill;
+            tlp1.Controls.Add(lblPend, 0, 0);
+            tlp1.Controls.Add(dgvAccounts, 0, 1);
+            _split.Panel1.Controls.Add(tlp1);
+
+            var tlp2 = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
+                Padding = Padding.Empty, Margin = Padding.Empty
+            };
+            tlp2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            tlp2.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            tlp2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            dgvApproved.Dock = DockStyle.Fill;
+            tlp2.Controls.Add(lblAppr, 0, 0);
+            tlp2.Controls.Add(dgvApproved, 0, 1);
+            _split.Panel2.Controls.Add(tlp2);
+
+            dgvApproved.DoubleClick += dgvApproved_DoubleClick;
+
+            // Wire nút AI (đã có trong Designer, chỉ gán handler)
+            btnAI.Click += async (s, e) => await ScanFakeAccountsAsync();
+
+            // Đặt SplitterDistance ngay khi _split có kích thước thực
+            // SizeChanged đáng tin hơn BeginInvoke vì fire đúng lúc layout hoàn tất
+            _split.SizeChanged += (ss, ee) =>
+            {
+                if (!_splitterSet && _split.Height > 100)
+                {
+                    _splitterSet = true;
+                    _split.SplitterDistance = Math.Max(150, (int)(_split.Height * 0.38));
+                }
+            };
+        }
+
+        private static Label MakeSectionLabel(string text, Color color) =>
+            new Label
+            {
+                Text = text,
+                Dock = DockStyle.Fill,    // Fill the fixed-height TLP row
+                Height = 30,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                ForeColor = color,
+                BackColor = Color.FromArgb(228, 236, 250),  // light blue band, clearly visible
+                Padding = new Padding(8, 5, 0, 0),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+        // ── Load ───────────────────────────────────────────────────────────
         private void f_AccountManage_Load(object sender, EventArgs e)
         {
-            LoadPendingAccounts();
+            LoadAllGrids();
         }
 
-        private void LoadPendingAccounts()
+        private void LoadAllGrids()
+        {
+            LoadPendingGrid();
+            LoadApprovedGrid();
+            UpdateStatusCount();
+        }
+
+        private void LoadPendingGrid()
+        {
+            var dt = QueryAccounts("WHERE VALID=0");
+            dgvAccounts.DataSource = dt;
+            dgvAccounts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAccounts.ReadOnly = true;
+            dgvAccounts.AllowUserToAddRows = false;
+            // Áp dụng style header xanh giống dgvApproved
+            dgvAccounts.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 61, 149);
+            dgvAccounts.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvAccounts.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            dgvAccounts.EnableHeadersVisualStyles = false;
+            dgvAccounts.RowTemplate.Height = 32;
+            dgvAccounts.BackgroundColor = Color.White;
+            dgvAccounts.BorderStyle = BorderStyle.None;
+        }
+
+        private void LoadApprovedGrid()
+        {
+            var dt = QueryAccounts("WHERE VALID=1");
+            dgvApproved.DataSource = dt;
+            dgvApproved.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvApproved.ReadOnly = true;
+            dgvApproved.AllowUserToAddRows = false;
+            dgvApproved.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 61, 149);
+            dgvApproved.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvApproved.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            dgvApproved.EnableHeadersVisualStyles = false;
+            dgvApproved.RowTemplate.Height = 32;
+            dgvApproved.BackgroundColor = Color.White;
+            dgvApproved.BorderStyle = BorderStyle.None;
+        }
+
+        // Truy vấn Login với cột bổ sung Loại TK, bỏ ảnh để tránh lỗi UI
+        private DataTable QueryAccounts(string whereClause)
         {
             My_DB db = new My_DB();
             try
             {
                 db.openConnection();
-                string query = @"SELECT MSGV, Fname, Lname, Username, Email,
-                                CASE position WHEN 1 THEN N'Sinh viên' WHEN 2 THEN N'HR' ELSE N'Admin' END AS [Loại TK],
-                                CASE VALID WHEN 0 THEN N'Chờ duyệt' WHEN 1 THEN N'Đã duyệt' ELSE N'Từ chối' END AS [Trạng thái]
-                                FROM Login ORDER BY VALID ASC";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, db.conn);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                dgvAccounts.DataSource = dt;
-                dgvAccounts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dgvAccounts.ReadOnly = true;
-                dgvAccounts.AllowUserToAddRows = false;
-
-                UpdateStatusCount();
+                string sql = $@"
+                    SELECT MSGV, Fname, Lname, Username, Email,
+                        CASE position
+                            WHEN 0 THEN N'Admin'
+                            WHEN 1 THEN N'Sinh viên'
+                            ELSE N'HR / Giảng viên'
+                        END AS [Loại TK]
+                    FROM Login {whereClause}
+                    ORDER BY MSGV";
+                var dt = new DataTable();
+                new SqlDataAdapter(sql, db.conn).Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
+                return dt;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new DataTable();
             }
             finally { db.closeConnection(); }
         }
@@ -62,79 +191,124 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private string GetSelectedMSGV()
+        // ── Lấy MSGV và Email từ hàng đang chọn ───────────────────────────
+        private string GetSelectedMSGV(DataGridView dgv = null)
         {
-            if (dgvAccounts.CurrentRow == null) return null;
-            return dgvAccounts.CurrentRow.Cells["MSGV"].Value?.ToString();
+            var src = dgv ?? dgvAccounts;
+            return src.CurrentRow?.Cells["MSGV"].Value?.ToString();
         }
 
-        private void btnApprove_Click(object sender, EventArgs e)
+        private string GetSelectedEmail(DataGridView dgv = null)
+        {
+            var src = dgv ?? dgvAccounts;
+            return src.CurrentRow?.Cells["Email"].Value?.ToString() ?? "";
+        }
+
+        private string GetSelectedName(DataGridView dgv = null)
+        {
+            var src = dgv ?? dgvAccounts;
+            if (src.CurrentRow == null) return "";
+            string fname = src.CurrentRow.Cells["Fname"].Value?.ToString() ?? "";
+            string lname = src.CurrentRow.Cells["Lname"].Value?.ToString() ?? "";
+            return $"{lname} {fname}".Trim();
+        }
+
+        private bool IsAdmin(DataGridView dgv = null)
+        {
+            var src = dgv ?? dgvAccounts;
+            return src.CurrentRow?.Cells["Loại TK"].Value?.ToString() == "Admin";
+        }
+
+        // ── Nút Duyệt ─────────────────────────────────────────────────────
+        private async void btnApprove_Click(object sender, EventArgs e)
         {
             string msgv = GetSelectedMSGV();
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
 
-            string ten = dgvAccounts.CurrentRow.Cells["Fname"].Value + " " +
-                         dgvAccounts.CurrentRow.Cells["Lname"].Value;
+            string ten = GetSelectedName();
+            string email = GetSelectedEmail();
 
-            var confirm = MessageBox.Show($"Duyệt tài khoản [{ten}]?", "Xác nhận",
+            var ok = MessageBox.Show($"Duyệt tài khoản [{ten}]?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm != DialogResult.Yes) return;
+            if (ok != DialogResult.Yes) return;
 
             if (UpdateValid(msgv, 1))
             {
                 MessageBox.Show("Duyệt tài khoản thành công!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadPendingAccounts();
+                LoadAllGrids();
+
+                // Gửi email thông báo bất đồng bộ — không chặn UI
+                if (!string.IsNullOrWhiteSpace(email))
+                    await SendApprovalEmailAsync(email, ten);
             }
             else
                 MessageBox.Show("Thao tác thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        // ── Nút Từ chối ───────────────────────────────────────────────────
         private void btnReject_Click(object sender, EventArgs e)
         {
             string msgv = GetSelectedMSGV();
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
 
-            string ten = dgvAccounts.CurrentRow.Cells["Fname"].Value + " " +
-                         dgvAccounts.CurrentRow.Cells["Lname"].Value;
-
-            var confirm = MessageBox.Show($"Từ chối tài khoản [{ten}]?", "Xác nhận",
+            string ten = GetSelectedName();
+            var ok = MessageBox.Show($"Từ chối tài khoản [{ten}]?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (confirm != DialogResult.Yes) return;
+            if (ok != DialogResult.Yes) return;
 
             if (UpdateValid(msgv, -1))
             {
                 MessageBox.Show("Đã từ chối tài khoản!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadPendingAccounts();
+                LoadAllGrids();
             }
             else
                 MessageBox.Show("Thao tác thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        // ── Nút Xóa — bảo vệ Admin & tài khoản đang đăng nhập ────────────
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            string msgv = GetSelectedMSGV();
+            // Xác định DGV nào đang có selection
+            DataGridView activeDgv = dgvApproved.CurrentRow != null &&
+                                     dgvApproved.Focused ? dgvApproved : dgvAccounts;
+
+            string msgv = GetSelectedMSGV(activeDgv);
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
 
-            string ten = dgvAccounts.CurrentRow.Cells["Fname"].Value + " " +
-                         dgvAccounts.CurrentRow.Cells["Lname"].Value;
+            // Bảo vệ: không cho xóa Admin
+            if (IsAdmin(activeDgv))
+            {
+                MessageBox.Show("Không thể xóa tài khoản Admin!", "Bảo mật",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            var confirm = MessageBox.Show($"Xóa vĩnh viễn tài khoản [{ten}]?", "Xác nhận xóa",
+            // Bảo vệ: không cho xóa tài khoản đang đăng nhập
+            if (msgv == Globals.GlobalUserId)
+            {
+                MessageBox.Show("Không thể xóa tài khoản đang đăng nhập!", "Bảo mật",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string ten = GetSelectedName(activeDgv);
+            var ok = MessageBox.Show($"Xóa vĩnh viễn tài khoản [{ten}]?", "Xác nhận xóa",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (confirm != DialogResult.Yes) return;
+            if (ok != DialogResult.Yes) return;
 
             My_DB db = new My_DB();
             try
             {
                 db.openConnection();
-                SqlCommand cmd = new SqlCommand("DELETE FROM Login WHERE MSGV=@msgv", db.conn);
+                var cmd = new SqlCommand("DELETE FROM Login WHERE MSGV=@msgv", db.conn);
                 cmd.Parameters.AddWithValue("@msgv", msgv);
                 if (cmd.ExecuteNonQuery() > 0)
                 {
                     MessageBox.Show("Xóa tài khoản thành công!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadPendingAccounts();
+                    LoadAllGrids();
                 }
             }
             catch (Exception ex)
@@ -150,23 +324,162 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
-                SqlCommand cmd = new SqlCommand(
-                    "UPDATE Login SET VALID=@valid WHERE MSGV=@msgv", db.conn);
-                cmd.Parameters.AddWithValue("@valid", valid);
-                cmd.Parameters.AddWithValue("@msgv", msgv);
+                var cmd = new SqlCommand("UPDATE Login SET VALID=@v WHERE MSGV=@m", db.conn);
+                cmd.Parameters.AddWithValue("@v", valid);
+                cmd.Parameters.AddWithValue("@m", msgv);
                 return cmd.ExecuteNonQuery() > 0;
             }
             catch { return false; }
             finally { db.closeConnection(); }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private void btnRefresh_Click(object sender, EventArgs e) => LoadAllGrids();
+
+        private void btnBack_Click(object sender, EventArgs e) { }
+
+        // ── Double-click vào danh sách đã duyệt → xem thông tin ────────────
+        private void dgvApproved_DoubleClick(object sender, EventArgs e)
         {
-            LoadPendingAccounts();
+            string msgv = GetSelectedMSGV(dgvApproved);
+            if (string.IsNullOrEmpty(msgv)) return;
+            MessageBox.Show(
+                $"MSGV: {msgv}\nHọ tên: {GetSelectedName(dgvApproved)}\nEmail: {GetSelectedEmail(dgvApproved)}",
+                "Thông tin tài khoản", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        // ── Gửi email thông báo sau khi duyệt (Gmail SMTP) ─────────────────
+        private async Task SendApprovalEmailAsync(string toEmail, string name)
         {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var smtp = new SmtpClient("smtp.gmail.com", 587)
+                    {
+                        EnableSsl = true,
+                        Credentials = new NetworkCredential(SMTP_FROM, SMTP_PASS),
+                        Timeout = 8000
+                    };
+                    var msg = new MailMessage(SMTP_FROM, toEmail)
+                    {
+                        Subject = "Tài khoản đã được duyệt - HCMUTE",
+                        Body =
+                            $"Xin chào {name},\n\n" +
+                            "Tài khoản của bạn đã được Admin phê duyệt thành công.\n" +
+                            "Bạn có thể đăng nhập vào Hệ thống Quản lý Sinh viên HCMUTE ngay bây giờ.\n\n" +
+                            "Trân trọng,\nHệ thống Quản lý Sinh viên - HCMUTE",
+                        IsBodyHtml = false
+                    };
+                    smtp.Send(msg);
+                }
+                catch { /* Lỗi gửi email không nên làm crash app */ }
+            });
+        }
+
+        // ── AI quét tài khoản giả / bất thường (Gemini) ────────────────────
+        private async Task ScanFakeAccountsAsync()
+        {
+            if (dgvAccounts.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có tài khoản chờ duyệt để quét.", "Thông báo");
+                return;
+            }
+
+            // Thu thập danh sách pending
+            var sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgvAccounts.Rows)
+            {
+                if (row.IsNewRow) continue;
+                string m = row.Cells["MSGV"].Value?.ToString() ?? "";
+                string fn = row.Cells["Fname"].Value?.ToString() ?? "";
+                string ln = row.Cells["Lname"].Value?.ToString() ?? "";
+                string em = row.Cells["Email"].Value?.ToString() ?? "";
+                string role = row.Cells["Loại TK"].Value?.ToString() ?? "";
+                sb.AppendLine($"MSGV={m}, Tên={ln} {fn}, Email={em}, Loại={role}");
+            }
+
+            string prompt =
+                "Bạn là hệ thống bảo mật phân tích tài khoản người dùng của trường đại học.\n" +
+                "Hãy phân tích danh sách tài khoản sau và xác định tài khoản nào có dấu hiệu bất thường " +
+                "(email giả, tên vô nghĩa, MSGV không hợp lệ, v.v.).\n" +
+                "Với mỗi tài khoản đáng ngờ, hãy liệt kê MSGV và lý do ngắn gọn.\n" +
+                "Nếu không có tài khoản bất thường, hãy nói rõ là danh sách có vẻ hợp lệ.\n\n" +
+                "Danh sách:\n" + sb;
+
+            string result = await CallGeminiAsync(prompt);
+
+            // Highlight hàng nghi ngờ nếu MSGV xuất hiện trong kết quả AI
+            if (!string.IsNullOrEmpty(result))
+            {
+                foreach (DataGridViewRow row in dgvAccounts.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    string msgv = row.Cells["MSGV"].Value?.ToString() ?? "";
+                    if (result.Contains(msgv))
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 230, 220);
+                }
+            }
+
+            // Luôn hiển thị kết quả (kể cả khi có lỗi)
+            ShowAIResult(string.IsNullOrEmpty(result)
+                ? "❌ Không nhận được phản hồi từ AI.\n\nCó thể do:\n• API key chưa hợp lệ (cần key bắt đầu bằng 'AIzaSy...' từ Google AI Studio)\n• Mất kết nối mạng\n\nĐường link lấy key: https://aistudio.google.com/app/apikey"
+                : result);
+        }
+
+        private async Task<string> CallGeminiAsync(string prompt)
+        {
+            try
+            {
+                using (var http = new HttpClient { Timeout = TimeSpan.FromSeconds(20) })
+                {
+                    string url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_KEY}";
+                    var body = new
+                    {
+                        contents = new[] { new { parts = new[] { new { text = prompt } } } }
+                    };
+                    var res = await http.PostAsync(url,
+                        new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json"));
+                    string json = await res.Content.ReadAsStringAsync();
+                    dynamic obj = JsonConvert.DeserializeObject(json);
+                    // Lấy text từ response thành công
+                    string text = obj?.candidates?[0]?.content?.parts?[0]?.text?.ToString();
+                    if (!string.IsNullOrEmpty(text)) return text;
+                    // Nếu API trả lỗi, lấy error message từ JSON
+                    string errMsg = obj?.error?.message?.ToString();
+                    return string.IsNullOrEmpty(errMsg) ? "" : "❌ Lỗi API: " + errMsg;
+                }
+            }
+            catch (Exception ex)
+            {
+                return "Lỗi kết nối AI: " + ex.Message;
+            }
+        }
+
+        private void ShowAIResult(string text)
+        {
+            var f = new Form
+            {
+                Text = "Kết quả quét AI",
+                Size = new Size(720, 520),
+                MinimumSize = new Size(480, 320),
+                StartPosition = FormStartPosition.CenterParent,
+                BackColor = Color.White,
+                FormBorderStyle = FormBorderStyle.Sizable,
+                MaximizeBox = true,
+                MinimizeBox = false
+            };
+            var rtb = new RichTextBox
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                Text = text,
+                Font = new Font("Segoe UI", 10),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                ScrollBars = RichTextBoxScrollBars.Vertical
+            };
+            f.Controls.Add(rtb);
+            f.ShowDialog(this);
         }
     }
 }

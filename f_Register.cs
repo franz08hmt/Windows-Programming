@@ -95,7 +95,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnChoosePic_Click(object sender, EventArgs e)
+        private void btnChoosePic_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
@@ -105,7 +105,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnRegister_Click(object sender, EventArgs e)
+        private void btnRegister_Click_1(object sender, EventArgs e)
         {
 
             if (string.IsNullOrEmpty(txtFname.Text) ||
@@ -225,7 +225,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click_1(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -312,7 +312,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void txtPassword_TextChanged(object sender, EventArgs e)
+        private void txtPassword_TextChanged_1(object sender, EventArgs e)
         {
             string pass = txtPassword.Text;
 
@@ -342,7 +342,7 @@ namespace QuanLySinhVien
 
             if (!string.IsNullOrEmpty(txtConfirmPassword.Text))
             {
-                txtConfirmPassword_TextChanged(sender, e);
+                txtConfirmPassword_TextChanged_1(sender, e);
             }
         }
 
@@ -360,7 +360,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void txtConfirmPassword_TextChanged(object sender, EventArgs e)
+        private void txtConfirmPassword_TextChanged_1(object sender, EventArgs e)
         {
             if (txtConfirmPassword.Text != txtPassword.Text)
             {
@@ -372,7 +372,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        private void btnBack_Click_1(object sender, EventArgs e)
         {
 
             this.Close();

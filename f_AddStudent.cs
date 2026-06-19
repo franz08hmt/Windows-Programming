@@ -26,6 +26,7 @@ namespace QuanLySinhVien
             InitializeComponent();
             RegisterRealTimeValidation();
             SetupSuggestList();
+
         }
 
         private void SetupSuggestList()
@@ -34,20 +35,6 @@ namespace QuanLySinhVien
             lstSuggest.BringToFront();
         }
 
-        private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            GraphicsPath path = new GraphicsPath();
-            path.StartFigure();
-            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
-            path.AddArc(new Rectangle(pnl.Width - radius, 0, radius, radius), 270, 90);
-            path.AddArc(new Rectangle(pnl.Width - radius, pnl.Height - radius, radius, radius), 0, 90);
-            path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
-            path.CloseFigure();
-
-            pnl.Region = new Region(path);
-        }
 
         private void RegisterRealTimeValidation()
         {
@@ -154,7 +141,7 @@ namespace QuanLySinhVien
             btnAdd.Text = "Cập nhật";
         }
 
-        private void btnChooseImage_Click(object sender, EventArgs e)
+        private void btnChooseImage_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
@@ -175,7 +162,8 @@ namespace QuanLySinhVien
             }
         }
 
-        private async void txtAddress_TextChanged(object sender, EventArgs e)
+
+        private async void txtAddress_TextChanged_1(object sender, EventArgs e)
         {
             string keyword = txtAddress.Text.Trim();
             if (keyword.Length < 3)
@@ -209,16 +197,8 @@ namespace QuanLySinhVien
             catch { lstSuggest.Visible = false; }
         }
 
-        private void lstSuggest_Click(object sender, EventArgs e)
-        {
-            if (lstSuggest.SelectedItem != null)
-            {
-                txtAddress.Text = lstSuggest.SelectedItem.ToString();
-                lstSuggest.Visible = false;
-            }
-        }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click_1(object sender, EventArgs e)
         {
             if (!ValidateInput())
             {
@@ -266,7 +246,7 @@ namespace QuanLySinhVien
                     if (sv.AddStudent())
                     {
                         MessageBox.Show("Thêm sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        btnClear_Click(sender, e);
+                        btnClear_Click_1(sender, e);
                     }
                     else
                     {
@@ -294,14 +274,13 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private void btnClear_Click_1(object sender, EventArgs e)
         {
             txtMSSV.Clear(); txtFname.Clear(); txtLname.Clear();
             dtpDob.Value = DateTime.Now;
             cboGender.SelectedIndex = -1;
             txtPhone.Clear(); txtEmail.Clear();
             txtAddress.Clear();
-            lstSuggest.Visible = false;
             picStudent.Image = null;
             studentImage = null;
             erp2.Clear();
@@ -312,11 +291,29 @@ namespace QuanLySinhVien
         {
         }
 
-        private void btnViewlist_Click(object sender, EventArgs e)
+        private void btnViewlist_Click_1(object sender, EventArgs e)
         {
+            f_ListStudent ucDanhSach = new f_ListStudent();
+
+            ucDanhSach.Dock = DockStyle.Fill;
+
+            Control vungChuaParent = this.Parent;
+
+            if (vungChuaParent != null)
+            {
+                vungChuaParent.Controls.Clear();
+
+                vungChuaParent.Controls.Add(ucDanhSach);
+
+                ucDanhSach.BringToFront();
+            }
+            else
+            {
+                MessageBox.Show("Không tìm thấy vùng chứa Form chính để chuyển trang!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void btnSpeech_Click(object sender, EventArgs e)
+        private void btnSpeech_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -372,7 +369,7 @@ namespace QuanLySinhVien
             recognizer = null;
         }
 
-        private void btnScanCard_Click(object sender, EventArgs e)
+        private void btnScanCard_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
@@ -441,36 +438,136 @@ namespace QuanLySinhVien
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            Panel pnl = (Panel)sender;
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
-                pnl.Region = new Region(Path);
+
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
-            Panel pnl = (Panel)sender;
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
-                pnl.Region = new Region(Path);
+
         }
 
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
-            Panel pnl = (Panel)sender;
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using (GraphicsPath Path = GetRoundPath(new RectangleF(0, 0, pnl.Width, pnl.Height), 20))
-                pnl.Region = new Region(Path);
+
         }
 
         private void pnlForm_Paint(object sender, PaintEventArgs e)
         {
-            VeBoGocPanel(pnlForm, 25, e);
         }
 
         private void pnlRight_Paint(object sender, PaintEventArgs e)
         {
-            VeBoGocPanel(pnlRight, 25, e);
+        }
+
+
+
+
+        private void cboGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtMSSV_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+        private void btnAdd_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnAdd.Size = new Size(264, 83);
+            btnAdd.Location = new Point(btnAdd.Location.X + 2, btnAdd.Location.Y + 1);
+        }
+
+        private void btnAdd_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnAdd.Size = new Size(268, 85);
+            btnAdd.Location = new Point(btnAdd.Location.X - 2, btnAdd.Location.Y - 1);
+        }
+
+        private void btnClear_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnClear.Size = new Size(264, 83);
+            btnClear.Location = new Point(btnClear.Location.X + 2, btnClear.Location.Y + 1);
+        }
+
+        private void btnClear_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnClear.Size = new Size(268, 85);
+            btnClear.Location = new Point(btnClear.Location.X - 2, btnClear.Location.Y - 1);
+        }
+
+        private void btnChooseImage_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnChooseImage.Size = new Size(264, 83);
+            btnChooseImage.Location = new Point(btnChooseImage.Location.X + 2, btnChooseImage.Location.Y + 1);
+        }
+
+        private void btnChooseImage_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnChooseImage.Size = new Size(268, 85);
+            btnChooseImage.Location = new Point(btnChooseImage.Location.X - 2, btnChooseImage.Location.Y - 1);
+        }
+
+        private void btnSpeech_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnSpeech.Size = new Size(264, 83);
+            btnSpeech.Location = new Point(btnSpeech.Location.X + 2, btnSpeech.Location.Y + 1);
+        }
+
+        private void btnSpeech_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnSpeech.Size = new Size(268, 85);
+            btnSpeech.Location = new Point(btnSpeech.Location.X - 2, btnSpeech.Location.Y - 1);
+        }
+
+        private void btnScanCard_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnScanCard.Size = new Size(264, 83);
+            btnScanCard.Location = new Point(btnScanCard.Location.X + 2, btnScanCard.Location.Y + 1);
+        }
+
+        private void btnScanCard_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnScanCard.Size = new Size(268, 85);
+            btnScanCard.Location = new Point(btnScanCard.Location.X - 2, btnScanCard.Location.Y - 1);
+        }
+
+        private void btnViewlist_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnViewlist.Size = new Size(264, 83);
+            btnViewlist.Location = new Point(btnViewlist.Location.X + 2, btnViewlist.Location.Y + 1);
+        }
+
+        private void btnViewlist_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnViewlist.Size = new Size(268, 85);
+            btnViewlist.Location = new Point(btnViewlist.Location.X - 2, btnViewlist.Location.Y - 1);
+        }
+
+        private void lstSuggest_Click(object sender, EventArgs e)
+        {
+            if (lstSuggest.SelectedItem != null)
+            {
+                txtAddress.Text = lstSuggest.SelectedItem.ToString();
+
+                lstSuggest.Visible = false;
+
+                txtAddress.Focus();
+                txtAddress.SelectionStart = txtAddress.Text.Length;
+            }
+        }
+
+        private void cboGender_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void f_AddStudent_Load(object sender, EventArgs e)
+        {
+            lstSuggest.Click += new System.EventHandler(this.lstSuggest_Click);
         }
     }
 }

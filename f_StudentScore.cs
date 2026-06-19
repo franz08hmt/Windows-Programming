@@ -277,7 +277,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // NÚT XEM ĐIỂM
         // ===================================================================
-        private void btnXemDiem_Click(object sender, EventArgs e)
+        private void btnXemDiem_Click_1(object sender, EventArgs e)
         {
             string mssv = txtMSSV.Text.Trim();
             if (string.IsNullOrEmpty(mssv))
@@ -292,7 +292,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // NÚT IN TRỰC TIẾP
         // ===================================================================
-        private void btnPrint_Click(object sender, EventArgs e)
+        private void btnPrint_Click_1(object sender, EventArgs e)
         {
             PrintDialog pd = new PrintDialog();
             System.Drawing.Printing.PrintDocument doc =
@@ -348,7 +348,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // NÚT LƯU WORD
         // ===================================================================
-        private void btnLuuWord_Click(object sender, EventArgs e)
+        private void btnLuuWord_Click_1(object sender, EventArgs e)
         {
             if (dtScore == null || dtScore.Rows.Count == 0)
             {
@@ -435,7 +435,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // [AI] NHẬN XÉT HỌC LỰC
         // ===================================================================
-        private async void btnAINhanXet_Click(object sender, EventArgs e)
+        private async void btnAINhanXet_Click_1(object sender, EventArgs e)
         {
             if (dtScore == null || dtScore.Rows.Count == 0)
             {
@@ -478,7 +478,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // [AI] GỢI Ý MÔN HỌC KỲ TỚI
         // ===================================================================
-        private async void btnAIGoiY_Click(object sender, EventArgs e)
+        private async void btnAIGoiY_Click_1(object sender, EventArgs e)
         {
             if (dtScore == null || dtScore.Rows.Count == 0)
             {
@@ -619,5 +619,6 @@ namespace QuanLySinhVien
         {
             VeBoGocPanel(pnlInput, 25, e);
         }
+
     }
 }

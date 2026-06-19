@@ -19,6 +19,7 @@ namespace QuanLySinhVien
         public f_AdminHandleRequest()
         {
             InitializeComponent();
+            this.Resize += f_AdminHandleRequest_Resize;
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -64,6 +65,7 @@ namespace QuanLySinhVien
             cboStatusFilter.SelectedIndex = 0; // Mặc định bộ lọc "Tất cả"
 
             LoadRequestsData(); // Tải dữ liệu lên bảng DataGridView công khai cho Admin/HR xử lý
+            ApplyResponsiveLayout();
 
             // Đăng ký các sự kiện tìm kiếm thời gian thực
             txtSearch.TextChanged -= (s, ev) => LoadRequestsData(); // Hủy đăng ký cũ nếu có để tránh lặp sự kiện
@@ -74,24 +76,23 @@ namespace QuanLySinhVien
 
         private void LoadRequestsData()
         {
-            // Truy vấn lấy dữ liệu từ bảng StudentRequests
-            string query = "SELECT RequestID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
-                           "StudentName as 'Tên Sinh Viên', RequestDate as 'Ngày Gửi', " +
-                           "RequestContent as 'Nội Dung Yêu Cầu', Status as 'Trạng Thái' " +
+            string query = "SELECT ID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
+                           "TenSV as 'Tên Sinh Viên', NgayGui as 'Ngày Gửi', " +
+                           "NoiDung as 'Nội Dung Yêu Cầu', TrangThai as 'Trạng Thái' " +
                            "FROM StudentRequests WHERE 1=1";
 
             string statusSelected = cboStatusFilter.SelectedItem?.ToString() ?? "Tất cả";
-            if (statusSelected == "Chờ duyệt") query += " AND Status = 'Pending'";
-            else if (statusSelected == "Đã duyệt") query += " AND Status = 'Approved'";
-            else if (statusSelected == "Từ chối") query += " AND Status = 'Declined'";
+            if (statusSelected == "Chờ duyệt") query += " AND TrangThai = N'Chờ xử lý'";
+            else if (statusSelected == "Đã duyệt") query += " AND TrangThai = N'Đã duyệt'";
+            else if (statusSelected == "Từ chối") query += " AND TrangThai = N'Từ chối'";
 
             string keyword = txtSearch.Text.Trim();
             if (!string.IsNullOrEmpty(keyword))
             {
-                query += " AND (MSSV LIKE @key OR StudentName LIKE @key)";
+                query += " AND (CAST(MSSV AS NVARCHAR) LIKE @key OR TenSV LIKE @key)";
             }
 
-            query += " ORDER BY RequestDate DESC";
+            query += " ORDER BY NgayGui DESC";
 
             try
             {
@@ -104,6 +105,7 @@ namespace QuanLySinhVien
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Tên Sinh Viên", "Nội Dung Yêu Cầu", "Trạng Thái");
 
                 dgvRequests.DataSource = dt;
 
@@ -114,17 +116,7 @@ namespace QuanLySinhVien
                     dgvRequests.Columns["Tên Sinh Viên"].Width = 150;
                     dgvRequests.Columns["Ngày Gửi"].Width = 120;
                     dgvRequests.Columns["Nội Dung Yêu Cầu"].Width = 250;
-
-                    foreach (DataGridViewRow row in dgvRequests.Rows)
-                    {
-                        if (row.Cells["Trạng Thái"].Value != null)
-                        {
-                            string val = row.Cells["Trạng Thái"].Value.ToString();
-                            if (val == "Pending") row.Cells["Trạng Thái"].Value = "Chờ duyệt";
-                            else if (val == "Approved") row.Cells["Trạng Thái"].Value = "Đã duyệt";
-                            else if (val == "Declined") row.Cells["Trạng Thái"].Value = "Từ chối";
-                        }
-                    }
+                    // TrangThai đã lưu tiếng Việt trong DB, không cần convert
                 }
             }
             catch (Exception ex)
@@ -133,20 +125,20 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvRequests_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvRequests_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dgvRequests.Rows.Count - 1)
             {
                 DataGridViewRow row = dgvRequests.Rows[e.RowIndex];
                 selectedRequestID = Convert.ToInt32(row.Cells[0].Value);
 
-                string rawContent = row.Cells["Nội Dung Yêu Cầu"].Value?.ToString() ?? "";
+                string rawContent = VietnameseTextHelper.Normalize(row.Cells["Nội Dung Yêu Cầu"].Value?.ToString() ?? "");
                 txtRequestDetails.Text = rawContent.Replace(" -> ", Environment.NewLine + "➡️ ");
                 txtRequestDetails.ReadOnly = true;
             }
         }
 
-        private void btnApprove_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
             if (selectedRequestID == -1)
             {
@@ -154,11 +146,11 @@ namespace QuanLySinhVien
                 return;
             }
 
-            string updateQuery = "UPDATE StudentRequests SET Status = 'Approved' WHERE RequestID = @id";
+            string updateQuery = "UPDATE StudentRequests SET TrangThai = N'Đã duyệt' WHERE ID = @id";
             ExecuteStatusUpdate(updateQuery, "Phê duyệt yêu cầu thành công tốt đẹp!");
         }
 
-        private void btnDecline_Click(object sender, EventArgs e)
+        private void btnDecline_Click_1(object sender, EventArgs e)
         {
             if (selectedRequestID == -1)
             {
@@ -169,7 +161,7 @@ namespace QuanLySinhVien
             DialogResult confirm = MessageBox.Show("Ní có chắc chắn muốn TỪ CHỐI đơn đề nghị này của sinh viên không?", "Xác nhận từ chối", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
-                string updateQuery = "UPDATE StudentRequests SET Status = 'Declined' WHERE RequestID = @id";
+                string updateQuery = "UPDATE StudentRequests SET TrangThai = N'Từ chối' WHERE ID = @id";
                 ExecuteStatusUpdate(updateQuery, "Đã từ chối đơn đề nghị của sinh viên.");
             }
         }
@@ -221,12 +213,25 @@ namespace QuanLySinhVien
 
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
-            VeBoGocPanel(panel3, 25, e);
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
+
+        private void f_AdminHandleRequest_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+
+
+
+
+        }
+
     }
 }

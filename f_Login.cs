@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -52,7 +52,7 @@ namespace QuanLySinhVien
             return valid;
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private void btnLogin_Click_1(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
 
@@ -84,8 +84,8 @@ namespace QuanLySinhVien
                 if (reader.Read())
                 {
                     // Đọc NVARCHAR bằng GetString để giữ nguyên Unicode tiếng Việt
-                    string fname = reader.GetString(reader.GetOrdinal("Fname"));
-                    string lname = reader.GetString(reader.GetOrdinal("Lname"));
+                    string fname = VietnameseTextHelper.Normalize(reader.GetString(reader.GetOrdinal("Fname")));
+                    string lname = VietnameseTextHelper.Normalize(reader.GetString(reader.GetOrdinal("Lname")));
                     string fullName = fname.Trim() + " " + lname.Trim();
                     string msgv = reader["MSGV"].ToString();
                     reader.Close();
@@ -169,10 +169,10 @@ namespace QuanLySinhVien
 
         private void f_Login_Load(object sender, EventArgs e)
         {
-            pnlBackground.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, pnlBackground.Width, pnlBackground.Height, 25, 25));
             btnLogin.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, btnLogin.Width, btnLogin.Height, 12, 12));
         }
 
         private void txtUsername_TextChanged(object sender, EventArgs e) { }
+
     }
 }

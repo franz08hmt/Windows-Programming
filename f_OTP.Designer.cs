@@ -31,10 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(f_OTP));
             this.lblMessage = new System.Windows.Forms.Label();
-            this.txtOTP = new System.Windows.Forms.TextBox();
-            this.btnConfirm = new System.Windows.Forms.Button();
             this.pnlHeader = new System.Windows.Forms.Panel();
-            this.btnBackLogin = new System.Windows.Forms.Button();
+            this.btnBackLogin = new Guna.UI2.WinForms.Guna2Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblXacnhanotp = new System.Windows.Forms.Label();
@@ -42,8 +40,10 @@
             this.lblTongQuan = new System.Windows.Forms.Label();
             this.lblTimer = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnResend = new System.Windows.Forms.Button();
             this.timerOTP = new System.Windows.Forms.Timer(this.components);
+            this.btnConfirm = new Guna.UI2.WinForms.Guna2Button();
+            this.txtOTP = new Guna.UI2.WinForms.Guna2TextBox();
+            this.btnResend = new Guna.UI2.WinForms.Guna2Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptGmail)).BeginInit();
@@ -58,27 +58,6 @@
             this.lblMessage.Size = new System.Drawing.Size(218, 21);
             this.lblMessage.TabIndex = 0;
             this.lblMessage.Text = "Nhập mã OTP đã gửi về email:";
-            // 
-            // txtOTP
-            // 
-            this.txtOTP.Location = new System.Drawing.Point(285, 352);
-            this.txtOTP.Name = "txtOTP";
-            this.txtOTP.Size = new System.Drawing.Size(217, 26);
-            this.txtOTP.TabIndex = 1;
-            this.txtOTP.TextChanged += new System.EventHandler(this.txtOTP_TextChanged);
-            // 
-            // btnConfirm
-            // 
-            this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
-            this.btnConfirm.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(227, 388);
-            this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(166, 50);
-            this.btnConfirm.TabIndex = 2;
-            this.btnConfirm.Text = "Xác nhận";
-            this.btnConfirm.UseVisualStyleBackColor = false;
-            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // pnlHeader
             // 
@@ -95,20 +74,29 @@
             // 
             // btnBackLogin
             // 
-            this.btnBackLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.btnBackLogin.FlatAppearance.BorderSize = 0;
-            this.btnBackLogin.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
-            this.btnBackLogin.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btnBackLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBackLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBackLogin.Animated = true;
+            this.btnBackLogin.BackColor = System.Drawing.Color.Transparent;
+            this.btnBackLogin.BorderColor = System.Drawing.Color.Transparent;
+            this.btnBackLogin.BorderRadius = 15;
+            this.btnBackLogin.BorderThickness = 2;
+            this.btnBackLogin.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnBackLogin.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnBackLogin.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnBackLogin.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnBackLogin.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.btnBackLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
             this.btnBackLogin.ForeColor = System.Drawing.Color.White;
-            this.btnBackLogin.Location = new System.Drawing.Point(663, 0);
+            this.btnBackLogin.HoverState.FillColor = System.Drawing.Color.RoyalBlue;
+            this.btnBackLogin.Location = new System.Drawing.Point(663, 4);
             this.btnBackLogin.Name = "btnBackLogin";
-            this.btnBackLogin.Size = new System.Drawing.Size(137, 90);
-            this.btnBackLogin.TabIndex = 4;
+            this.btnBackLogin.PressedDepth = 100;
+            this.btnBackLogin.ShadowDecoration.BorderRadius = 18;
+            this.btnBackLogin.ShadowDecoration.Depth = 10;
+            this.btnBackLogin.ShadowDecoration.Enabled = true;
+            this.btnBackLogin.Size = new System.Drawing.Size(137, 83);
+            this.btnBackLogin.TabIndex = 33;
             this.btnBackLogin.Text = "🡰 Quay lại";
-            this.btnBackLogin.UseVisualStyleBackColor = false;
-            this.btnBackLogin.Click += new System.EventHandler(this.btnBackLogin_Click);
+            this.btnBackLogin.Click += new System.EventHandler(this.btnBackLogin_Click_1);
             // 
             // btnBack
             // 
@@ -190,21 +178,83 @@
             this.label3.TabIndex = 20;
             this.label3.Text = "Mã OTP (6 số)";
             // 
-            // btnResend
-            // 
-            this.btnResend.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnResend.Location = new System.Drawing.Point(399, 388);
-            this.btnResend.Name = "btnResend";
-            this.btnResend.Size = new System.Drawing.Size(166, 50);
-            this.btnResend.TabIndex = 21;
-            this.btnResend.Text = "Gửi lại";
-            this.btnResend.UseVisualStyleBackColor = true;
-            this.btnResend.Click += new System.EventHandler(this.btnResend_Click);
-            // 
             // timerOTP
             // 
             this.timerOTP.Interval = 1000;
             this.timerOTP.Tick += new System.EventHandler(this.timerOTP_Tick);
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Animated = true;
+            this.btnConfirm.BackColor = System.Drawing.Color.Transparent;
+            this.btnConfirm.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnConfirm.BorderRadius = 10;
+            this.btnConfirm.BorderThickness = 2;
+            this.btnConfirm.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnConfirm.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnConfirm.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnConfirm.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnConfirm.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.btnConfirm.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnConfirm.ForeColor = System.Drawing.Color.White;
+            this.btnConfirm.HoverState.FillColor = System.Drawing.Color.SteelBlue;
+            this.btnConfirm.Location = new System.Drawing.Point(238, 388);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.PressedDepth = 100;
+            this.btnConfirm.ShadowDecoration.BorderRadius = 15;
+            this.btnConfirm.ShadowDecoration.Depth = 10;
+            this.btnConfirm.ShadowDecoration.Enabled = true;
+            this.btnConfirm.Size = new System.Drawing.Size(166, 50);
+            this.btnConfirm.TabIndex = 33;
+            this.btnConfirm.Text = "Xác nhận";
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click_1);
+            // 
+            // txtOTP
+            // 
+            this.txtOTP.BorderRadius = 8;
+            this.txtOTP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtOTP.DefaultText = "";
+            this.txtOTP.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtOTP.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtOTP.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtOTP.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtOTP.FocusedState.BorderColor = System.Drawing.SystemColors.HotTrack;
+            this.txtOTP.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.txtOTP.ForeColor = System.Drawing.Color.Black;
+            this.txtOTP.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
+            this.txtOTP.Location = new System.Drawing.Point(275, 345);
+            this.txtOTP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtOTP.Name = "txtOTP";
+            this.txtOTP.PlaceholderText = "";
+            this.txtOTP.SelectedText = "";
+            this.txtOTP.Size = new System.Drawing.Size(256, 31);
+            this.txtOTP.TabIndex = 34;
+            // 
+            // btnResend
+            // 
+            this.btnResend.Animated = true;
+            this.btnResend.BackColor = System.Drawing.Color.Transparent;
+            this.btnResend.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnResend.BorderRadius = 10;
+            this.btnResend.BorderThickness = 2;
+            this.btnResend.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnResend.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnResend.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnResend.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnResend.FillColor = System.Drawing.Color.WhiteSmoke;
+            this.btnResend.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnResend.ForeColor = System.Drawing.Color.Black;
+            this.btnResend.HoverState.FillColor = System.Drawing.Color.Gray;
+            this.btnResend.Location = new System.Drawing.Point(410, 388);
+            this.btnResend.Name = "btnResend";
+            this.btnResend.PressedDepth = 100;
+            this.btnResend.ShadowDecoration.BorderRadius = 15;
+            this.btnResend.ShadowDecoration.Depth = 10;
+            this.btnResend.ShadowDecoration.Enabled = true;
+            this.btnResend.Size = new System.Drawing.Size(166, 50);
+            this.btnResend.TabIndex = 35;
+            this.btnResend.Text = "Gửi lại";
+            this.btnResend.Click += new System.EventHandler(this.btnResend_Click_1);
             // 
             // f_OTP
             // 
@@ -213,13 +263,13 @@
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnResend);
+            this.Controls.Add(this.txtOTP);
+            this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblTimer);
             this.Controls.Add(this.lblTongQuan);
             this.Controls.Add(this.ptGmail);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.btnConfirm);
-            this.Controls.Add(this.txtOTP);
             this.Controls.Add(this.lblMessage);
             this.Name = "f_OTP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -237,8 +287,6 @@
         #endregion
 
         private System.Windows.Forms.Label lblMessage;
-        private System.Windows.Forms.TextBox txtOTP;
-        private System.Windows.Forms.Button btnConfirm;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.PictureBox ptLgo;
@@ -247,8 +295,10 @@
         private System.Windows.Forms.Label lblTongQuan;
         private System.Windows.Forms.Label lblTimer;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnBackLogin;
-        private System.Windows.Forms.Button btnResend;
         private System.Windows.Forms.Timer timerOTP;
+        private Guna.UI2.WinForms.Guna2Button btnBackLogin;
+        private Guna.UI2.WinForms.Guna2Button btnConfirm;
+        private Guna.UI2.WinForms.Guna2TextBox txtOTP;
+        private Guna.UI2.WinForms.Guna2Button btnResend;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +23,12 @@ namespace QuanLySinhVien
                 SetProcessDPIAware();
             }
 
+            using (f_Splash splash = new f_Splash())
+            {
+                splash.ShowDialog();
+            }
+
+            DatabaseTextRepairService.TryRepairMojibakeData();
             Application.Run(new f_Login());
         }
 

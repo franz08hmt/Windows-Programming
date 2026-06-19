@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -11,7 +11,10 @@ namespace QuanLySinhVien
     public partial class f_HomePage : BaseForm
     {
         private string userFullName;
-
+        private Timer activityTimer;
+        private int idleSeconds = 0;
+        private const int TIMEOUT_LIMIT = 60;
+        private ActivityFilter filter;
         public f_HomePage() { InitializeComponent(); }
 
         public f_HomePage(string loginName)
@@ -23,18 +26,20 @@ namespace QuanLySinhVien
 
         private void ShowUserControl(UserControl uc)
         {
-            if (pnlMainContent != null)
-            {
-                // Tắt hiển thị toàn bộ các linh kiện thống kê gốc ẩn bên dưới panel
-                foreach (Control ctrl in pnlMainContent.Controls)
-                {
-                    ctrl.Visible = false;
-                }
+            if (pnlMainContent == null) return;
 
-                uc.Dock = DockStyle.Fill;
-                pnlMainContent.Controls.Add(uc);
-                uc.BringToFront();
-            }
+            foreach (Control c in pnlMainContent.Controls)
+                c.Visible = false;
+
+            uc.Dock = DockStyle.Fill;
+            pnlMainContent.Controls.Add(uc);
+            uc.BringToFront();
+            uc.Visible = true;       // Load event → data loads → form-specific colors set
+        }
+
+        private void btnDarkMode_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void HienThiTrangChuGoc()
@@ -94,9 +99,10 @@ namespace QuanLySinhVien
                 bttFix.Visible = true;
                 btnRegisterMenu.Visible = true;
                 btnManageCourse.Visible = true;
-                button1.Visible = true;
+                btnManageScore.Visible = true;
                 btnStatistic.Visible = true;
-                btnAccountManage.Visible = true;
+                btnReporta.Visible = true;
+                btnStudentRequest.Visible = true;
                 btnManageRequest.Visible = true;
                 btnStudentScore.Visible = true;
 
@@ -111,9 +117,10 @@ namespace QuanLySinhVien
                 bttFix.Visible = true;
                 btnRegisterMenu.Visible = true;
                 btnManageCourse.Visible = true;
-                button1.Visible = true;
+                btnManageScore.Visible = true;
                 btnStatistic.Visible = true;
-                btnAccountManage.Visible = false;
+                btnReporta.Visible = true;
+                btnStudentRequest.Visible = false;
                 btnManageRequest.Visible = false;
 
                 pnlCardSV.Visible = true;
@@ -128,11 +135,12 @@ namespace QuanLySinhVien
                 bttFix.Visible = false;
                 btnManageCourse.Visible = false;
                 btnStatistic.Visible = false;
-                btnAccountManage.Visible = false;
+                btnReporta.Visible = false;
+                btnStudentRequest.Visible = false;
                 btnManageClassroom.Visible = false;
 
                 btnRegisterMenu.Visible = true;
-                button1.Visible = true;
+                btnManageScore.Visible = true;
                 btnManageRequest.Visible = true;
                 btnStudentScore.Visible = true;
 
@@ -164,24 +172,39 @@ namespace QuanLySinhVien
         private void LoadUserAccountInfoCard()
         {
             int position = Globals.GlobalPosition;
-            string username = Globals.GlobalUserName; // Lấy MSSV hoặc username từ Session
+            string userId = Globals.GlobalUserId;
+            string userFullName = Globals.GlobalUserName;
 
             try
             {
                 // 1. Trường hợp là Sinh viên (Position = 1) -> Moi ảnh đại diện từ bảng Student
-                if (position == 1 && !string.IsNullOrEmpty(username))
+                if (position == 1 && !string.IsNullOrEmpty(userId))
                 {
                     My_DB tempDb = new My_DB();
                     tempDb.openConnection();
-                    string query = "SELECT Fname, Lname, Pture FROM Student WHERE MSSV = @mssv";
+                    // Lấy thông tin sinh viên từ bảng Student bằng cách liên kết email với bảng Login qua MSGV
+                    string query = "SELECT s.Fname, s.Lname, s.Pture, s.MSSV FROM Student s JOIN Login l ON s.Email = l.Email WHERE l.MSGV = @msgv";
                     SqlCommand cmd = new SqlCommand(query, tempDb.conn);
-                    cmd.Parameters.AddWithValue("@mssv", username);
+                    cmd.Parameters.AddWithValue("@msgv", userId);
+
+                    if (picUserAvatar != null && picUserAvatar.Image != null)
+                    {
+                        GraphicsPath gp = new GraphicsPath();
+                        gp.AddEllipse(0, 0, picUserAvatar.Width - 1, picUserAvatar.Height - 1);
+                        picUserAvatar.Region = new Region(gp);
+                        picUserAvatar.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                        // 🛠️ CHÈN MỚI DÒNG NÀY: Hiện bàn tay khi di chuột qua ảnh đại diện
+                        picUserAvatar.Cursor = Cursors.Hand;
+                    }
 
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        lblUserFullName.Text = reader["Lname"].ToString().Trim() + " " + reader["Fname"].ToString().Trim();
-                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + username + Environment.NewLine + "(Còn học)";
+                        string mssv = reader["MSSV"].ToString();
+                        lblUserFullName.Text = VietnameseTextHelper.Normalize(reader["Lname"].ToString().Trim()) + " " +
+                                               VietnameseTextHelper.Normalize(reader["Fname"].ToString().Trim());
+                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + mssv + Environment.NewLine + "(Còn học)";
 
                         // Kiểm tra ảnh đại diện sinh viên
                         if (reader["Pture"] != DBNull.Value && reader["Pture"] != null)
@@ -198,22 +221,28 @@ namespace QuanLySinhVien
                             picUserAvatar.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
                         }
                     }
+                    else
+                    {
+                        // Dự phòng nếu không tìm thấy liên kết Student
+                        lblUserFullName.Text = userFullName;
+                        lblUserRoleMSSV.Text = "SV/HV/NCS - " + userId + Environment.NewLine + "(Còn học)";
+                        picUserAvatar.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
+                    }
                     reader.Close();
                     tempDb.closeConnection();
                 }
-                // 2. 🛠️ VỊ TRÍ SỬA ĐỔI CHÍ MẠNG: Dành cho Admin (0) và HR (2) -> Lôi ảnh từ bảng Login lên
+                // 2. Dành cho Admin (0) và HR (2) -> Lôi ảnh từ bảng Login lên
                 else
                 {
                     lblUserFullName.Text = position == 0 ? "Ban Quản Trị Hệ Thống" : "Phòng Nhân Sự (HR)";
-                    lblUserRoleMSSV.Text = "Cán bộ quản lý - " + username;
+                    lblUserRoleMSSV.Text = "Cán bộ quản lý - " + userFullName;
 
-                    // Khởi tạo luồng kết nối SQL phụ bốc ảnh Admin/HR thời gian thực
+                    // Khởi tạo luồng kết nối SQL phụ bốc ảnh Admin/HR thời gian thực qua MSGV
                     My_DB tempDb = new My_DB();
                     tempDb.openConnection();
-                    string query = "SELECT Pic FROM Login WHERE LOWER(Username) = LOWER(@un) OR LOWER(Username) = LOWER(@fn)";
+                    string query = "SELECT Pic FROM Login WHERE MSGV = @msgv";
                     SqlCommand cmd = new SqlCommand(query, tempDb.conn);
-                    cmd.Parameters.AddWithValue("@un", username);
-                    cmd.Parameters.AddWithValue("@fn", userFullName ?? "");
+                    cmd.Parameters.AddWithValue("@msgv", userId);
 
                     object result = cmd.ExecuteScalar();
                     tempDb.closeConnection();
@@ -253,7 +282,7 @@ namespace QuanLySinhVien
 
         private void HomePage_Load(object sender, EventArgs e)
         {
-            rtbChatHistory.AppendText("🤖 Trợ lý: Xin chào! Tôi có thể giúp gì cho bạn? " +
+            lblStatusDot.AppendText("🤖 Trợ lý: Xin chào! Tôi có thể giúp gì cho bạn? " +
                 "(Ví dụ: 'Thêm SV', 'Xem danh sách', 'Có bao nhiêu sinh viên điểm cao?').\n\n");
 
             string fullName = !string.IsNullOrEmpty(Globals.GlobalUserName)
@@ -263,9 +292,78 @@ namespace QuanLySinhVien
 
             ThongKeHeThong();
             ApplyPermissions();
-            btnChangeImage.Click += new EventHandler(btnChangeImage_Click);
 
+            picUserAvatar.Click += new EventHandler(btnChangeImage_Click);
             LoadUserAccountInfoCard();
+
+            lblStatusDot.ForeColor = Color.LimeGreen;
+            lblStatusText.Text = "Đang hoạt động";
+            lblStatusText.ForeColor = Color.DarkGreen;
+
+            activityTimer = new Timer();
+            activityTimer.Interval = 1000;
+            activityTimer.Tick += ActivityTimer_Tick;
+            activityTimer.Start();
+
+            filter = new ActivityFilter(this);
+            Application.AddMessageFilter(filter);
+        }
+
+        private void ActivityTimer_Tick(object sender, EventArgs e)
+        {
+            idleSeconds++;
+
+            // Phát hiện user treo máy quá 1 phút (60 giây)
+            if (idleSeconds >= TIMEOUT_LIMIT)
+            {
+                activityTimer.Stop();
+                Application.RemoveMessageFilter(filter); // Giải phóng bộ lọc tránh nghẽn luồng
+
+                // 🛑 ĐỔI MÀU GIAO DIỆN CỦA LINH KIỆN NÍ KÉO: Chuyển hẳn sang đỏ báo tạm vắng
+                lblStatusDot.ForeColor = Color.Red;
+                lblStatusText.Text = "Tạm vắng";
+                lblStatusText.ForeColor = Color.Red;
+
+                MessageBox.Show("🔒 HỆ THỐNG ĐÃ TỰ ĐỘNG KHÓA PHIÊN LÀM VIỆC!\n\nDo bạn không tương tác trong vòng 1 phút, hệ thống tự động khóa ứng dụng để bảo mật thông tin.",
+                    "Bảo mật hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                // 🚀 ÉP ĐĂNG XUẤT: Đồng bộ cơ chế dọn session và đá về Login giống nút Logout cũ của ní
+                Globals.ClearSession();
+                this.FormClosed -= f_HomePage_FormClosed;
+
+                f_Login loginForm = new f_Login();
+                loginForm.Show();
+                this.Close();
+            }
+        }
+
+        public void ResetIdleTimer()
+        {
+            idleSeconds = 0; // Trả về 0 giây
+
+            // Nếu trạng thái đang là tạm vắng thì trả lại màu xanh "Đang hoạt động" lập tức
+            if (lblStatusText != null && lblStatusText.Text != "Đang hoạt động")
+            {
+                lblStatusDot.ForeColor = Color.LimeGreen;
+                lblStatusText.Text = "Đang hoạt động";
+                lblStatusText.ForeColor = Color.DarkGreen;
+            }
+        }
+
+        private class ActivityFilter : IMessageFilter
+        {
+            private f_HomePage mainForm;
+            public ActivityFilter(f_HomePage form) { mainForm = form; }
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                // Nhận diện mã tin nhắn hệ thống: WM_MOUSEMOVE (0x0200), WM_LBUTTONDOWN (0x0201), WM_KEYDOWN (0x0100)
+                if (m.Msg == 0x0200 || m.Msg == 0x0201 || m.Msg == 0x0100 || m.Msg == 0x0204)
+                {
+                    mainForm.ResetIdleTimer(); // Gọi hàm reset bộ đếm giây về 0
+                }
+                return false; // Trả về false để các nút bấm, linh kiện con khác vẫn nhận click bình thường
+            }
         }
 
         private string ProcessBotResponse(string userInput)
@@ -279,17 +377,17 @@ namespace QuanLySinhVien
                 if (input.Contains("thêm sv") || input.Contains("them sinh vien"))
                 {
                     if (role == 1) return "🤖 Trợ lý: Tài khoản Sinh viên không có quyền truy cập tính năng này!";
-                    bttAdd_Click(null, null); return "redirect";
+                    bttAdd_Click_1(null, null); return "redirect";
                 }
                 if (input.Contains("danh sách") || input.Contains("xem danh sach") || input.Contains("danh sach sv"))
                 {
                     if (role == 1) return "🤖 Trợ lý: Tài khoản Sinh viên không có quyền xem Danh sách sinh viên!";
-                    bttList_Click(null, null); return "redirect";
+                    bttList_Click_1(null, null); return "redirect";
                 }
                 if (input.Contains("quản lý môn") || input.Contains("them mon hoc"))
                 {
                     if (role == 1) return "🤖 Trợ lý: Tài khoản Sinh viên không có quyền Quản lý môn học!";
-                    btnManageCourse_Click(null, null); return "redirect";
+                    btnManageCourse_Click_1(null, null); return "redirect";
                 }
                 if (input.Contains("điểm cao") || input.Contains("diem cao") || input.Contains("sinh vien gioi"))
                 {
@@ -322,45 +420,50 @@ namespace QuanLySinhVien
         // ── Sidebar events ──────────────────────────────
 
         // 🛠️ ĐÃ TÍCH HỢP MỚI: Nút bấm Thêm Sinh Viên nhảy tab Dashboard ngay bên cạnh
-        private void bttAdd_Click(object sender, EventArgs e)
+        private void bttAdd_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_AddStudent()); // Bốc linh kiện thêm sinh viên đặt vào panel chính
         }
 
-        private void bttList_Click(object sender, EventArgs e)
+        private void bttList_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_ListStudent());
         }
-        private void bttFix_Click(object sender, EventArgs e)
+        private void bttFix_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_EditStudent());
         }
-        private void btnRegisterMenu_Click(object sender, EventArgs e)
+        private void btnRegisterMenu_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_RegisterCourse());
         }
-        private void btnManageCourse_Click(object sender, EventArgs e)
+        private void btnManageCourse_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_ManageCourse());
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ShowUserControl(new f_ManageScore());
-        }
-        private void btnStatistic_Click(object sender, EventArgs e)
+        private void btnStatistic_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_Statistic());
+        }
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            ShowUserControl(new f_Report());
+        }
+
+        public void OpenReportForm()
+        {
+            ShowUserControl(new f_Report());
         }
         private void btnAccountManage_Click(object sender, EventArgs e)
         {
             ShowUserControl(new f_AccountManage());
         }
-        private void btnManageClassroom_Click(object sender, EventArgs e)
+        private void btnManageClassroom_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_ManageClassroom());
         }
 
-        private void btnManageRequest_Click(object sender, EventArgs e)
+        private void btnManageRequest_Click_1(object sender, EventArgs e)
         {
             if (Globals.GlobalPosition == 1)
             {
@@ -373,7 +476,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void bttLogout_Click(object sender, EventArgs e)
+        private void bttLogout_Click_1(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống không ní?",
                 "Xác nhận đăng xuất", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -397,87 +500,77 @@ namespace QuanLySinhVien
 
         private void f_HomePage_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Application.OpenForms["f_Login"] != null && !Application.OpenForms["f_Login"].Visible)
+            bool isLoginOpenAndVisible = false;
+
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form != null && form.Name == "f_Login" && form.Visible)
+                {
+                    isLoginOpenAndVisible = true;
+                    break;
+                }
+            }
+            if (!isLoginOpenAndVisible)
+            {
                 Application.Exit();
+            }
         }
 
         // ── Chat bot ────────────────────────────────────
 
-        private void btnSendChat_Click(object sender, EventArgs e)
+        private void btnSendChat_Click_2(object sender, EventArgs e)
         {
             string userText = txtChatInput.Text.Trim();
             if (string.IsNullOrEmpty(userText)) return;
 
-            rtbChatHistory.SelectionColor = Color.Blue;
-            rtbChatHistory.AppendText("👤 Bạn: " + userText + "\n");
+            lblStatusDot.SelectionColor = Color.Blue;
+            lblStatusDot.AppendText("👤 Bạn: " + userText + "\n");
             txtChatInput.Clear();
 
             string botResponse = ProcessBotResponse(userText);
             if (botResponse == "redirect" || this.IsDisposed) return;
 
-            rtbChatHistory.SelectionColor = Color.DarkGreen;
-            rtbChatHistory.AppendText(botResponse + "\n\n");
-            rtbChatHistory.ScrollToCaret();
+            lblStatusDot.SelectionColor = Color.DarkGreen;
+            lblStatusDot.AppendText(botResponse + "\n\n");
+            lblStatusDot.ScrollToCaret();
             txtChatInput.Focus();
         }
 
-        private void txtChatInput_KeyDown(object sender, KeyEventArgs e)
+        private void txtChatInput_KeyDown_1(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; btnSendChat_Click(sender, e); }
+            if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; btnSendChat_Click_2(sender, e); }
         }
 
         private void pnlChoDuyet_Click(object sender, EventArgs e)
         {
             if (Globals.GlobalPosition == 0) btnAccountManage_Click(sender, e);
         }
-        private void btnStudentScore_Click(object sender, EventArgs e)
+        private void btnStudentScore_Click_1(object sender, EventArgs e)
         {
             ShowUserControl(new f_StudentScore());
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e) { }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            ShowUserControl(new f_StudentRequest());
-        }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnManageHR_Click(object sender, EventArgs e)
         {
             ShowUserControl(new f_Assign());
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btnContact_Click(object sender, EventArgs e)
         {
             ShowUserControl(new f_Contact());
                 
 
         }
 
-        private void btnTrangChu_Click(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
             HienThiTrangChuGoc();
         }
 
-        private void btnSendChat_Click_1(object sender, EventArgs e)
-        {
-            string userText = txtChatInput.Text.Trim();
-            if (string.IsNullOrEmpty(userText)) return;
-
-            rtbChatHistory.SelectionColor = Color.Blue;
-            rtbChatHistory.AppendText("👤 Bạn: " + userText + "\n");
-            txtChatInput.Clear();
-
-            string botResponse = ProcessBotResponse(userText);
-            if (botResponse == "redirect" || this.IsDisposed) return;
-
-            rtbChatHistory.SelectionColor = Color.DarkGreen;
-            rtbChatHistory.AppendText(botResponse + "\n\n");
-            rtbChatHistory.ScrollToCaret();
-            txtChatInput.Focus();
-        }
-
-        private void pnlCardPending_Click(object sender, EventArgs e)
+        private void pnlCardPending_Click_1(object sender, EventArgs e)
         {
             if (Globals.GlobalPosition == 0) btnAccountManage_Click(sender, e);
         }
@@ -485,9 +578,9 @@ namespace QuanLySinhVien
         private void btnChangeImage_Click(object sender, EventArgs e)
         {
             int position = Globals.GlobalPosition;
-            string username = Globals.GlobalUserName;
+            string userId = Globals.GlobalUserId;
 
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(userId))
             {
                 MessageBox.Show("Không tìm thấy phiên đăng nhập hợp lệ để cập nhật ảnh!", "Thông báo");
                 return;
@@ -521,27 +614,29 @@ namespace QuanLySinhVien
 
                     if (position == 1) // Nếu là Sinh viên -> Cập nhật bảng Student
                     {
-                        cmd.CommandText = "UPDATE Student SET Pture = @pic WHERE MSSV = @username";
+                        cmd.CommandText = "UPDATE Student SET Pture = @pic WHERE Email = (SELECT Email FROM Login WHERE MSGV = @msgv)";
                     }
                     else // Nếu là Admin (0) hoặc HR (2) -> Cập nhật bảng Login
                     {
-                        cmd.CommandText = "UPDATE Login SET Pic = @pic WHERE LOWER(TRIM(Username)) = LOWER(@username)";
-                        cmd.Parameters.AddWithValue("@fullname", userFullName ?? "");
+                        cmd.CommandText = "UPDATE Login SET Pic = @pic WHERE MSGV = @msgv";
                     }
 
                     cmd.Parameters.Add(new SqlParameter("@pic", SqlDbType.Image) { Value = imageBytes });
-                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@msgv", userId);
 
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         MessageBox.Show("Đã cập nhật ảnh đại diện cá nhân mới thành công tốt đẹp!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
 
                         using (MemoryStream ms = new MemoryStream(imageBytes))
                         {
                             picUserAvatar.Image = Image.FromStream(ms);
                         }
                         LoadUserAccountInfoCard();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể cập nhật ảnh do không tìm thấy bản ghi tương ứng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     tempDb.closeConnection();
                 }
@@ -550,6 +645,27 @@ namespace QuanLySinhVien
                     MessageBox.Show("Lỗi trong quá trình lưu ảnh mới: " + ex.Message, "Lỗi thực thi");
                 }
             }
+        }
+
+        private void rtbChatHistory_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+
+        private void btnManageScore_Click(object sender, EventArgs e)
+        {
+            ShowUserControl(new f_ManageScore());
+        }
+
+        private void btnReporta_Click(object sender, EventArgs e)
+        {
+            ShowUserControl(new f_Report());
+        }
+
+        private void btnStudentRequest_Click(object sender, EventArgs e)
+        {
+            ShowUserControl(new f_StudentRequest());
         }
     }
 }

@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.btnSendOTP = new System.Windows.Forms.Button();
             this.pnlHeader = new System.Windows.Forms.Panel();
-            this.btnBackLogin = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
+            this.txtEmail = new System.Windows.Forms.Button();
             this.ptLgo = new System.Windows.Forms.PictureBox();
             this.lblQuenmatkhau = new System.Windows.Forms.Label();
             this.lblDatlaimatkhau = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnSendOTP = new Guna.UI2.WinForms.Guna2Button();
+            this.txtFname = new Guna.UI2.WinForms.Guna2TextBox();
+            this.btnBackLogin = new Guna.UI2.WinForms.Guna2Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptLgo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -54,29 +54,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Nhập email để nhận mã OTP đặt lại mật khẩu";
             // 
-            // txtEmail
-            // 
-            this.txtEmail.Location = new System.Drawing.Point(54, 190);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(319, 26);
-            this.txtEmail.TabIndex = 1;
-            // 
-            // btnSendOTP
-            // 
-            this.btnSendOTP.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSendOTP.Location = new System.Drawing.Point(306, 331);
-            this.btnSendOTP.Name = "btnSendOTP";
-            this.btnSendOTP.Size = new System.Drawing.Size(158, 42);
-            this.btnSendOTP.TabIndex = 2;
-            this.btnSendOTP.Text = "Gửi mã OTP";
-            this.btnSendOTP.UseVisualStyleBackColor = true;
-            this.btnSendOTP.Click += new System.EventHandler(this.btnSendOTP_Click);
-            // 
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
             this.pnlHeader.Controls.Add(this.btnBackLogin);
-            this.pnlHeader.Controls.Add(this.btnBack);
+            this.pnlHeader.Controls.Add(this.txtEmail);
             this.pnlHeader.Controls.Add(this.ptLgo);
             this.pnlHeader.Controls.Add(this.lblQuenmatkhau);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -85,38 +67,21 @@
             this.pnlHeader.Size = new System.Drawing.Size(799, 90);
             this.pnlHeader.TabIndex = 17;
             // 
-            // btnBackLogin
+            // txtEmail
             // 
-            this.btnBackLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.btnBackLogin.FlatAppearance.BorderSize = 0;
-            this.btnBackLogin.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
-            this.btnBackLogin.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btnBackLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBackLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackLogin.ForeColor = System.Drawing.Color.White;
-            this.btnBackLogin.Location = new System.Drawing.Point(663, 0);
-            this.btnBackLogin.Name = "btnBackLogin";
-            this.btnBackLogin.Size = new System.Drawing.Size(137, 90);
-            this.btnBackLogin.TabIndex = 4;
-            this.btnBackLogin.Text = "<- Quay lại";
-            this.btnBackLogin.UseVisualStyleBackColor = false;
-            this.btnBackLogin.Click += new System.EventHandler(this.btnBackLogin_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.btnBack.FlatAppearance.BorderSize = 0;
-            this.btnBack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
-            this.btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBack.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBack.ForeColor = System.Drawing.Color.White;
-            this.btnBack.Location = new System.Drawing.Point(841, 0);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(137, 90);
-            this.btnBack.TabIndex = 3;
-            this.btnBack.Text = "<- Quay lại";
-            this.btnBack.UseVisualStyleBackColor = false;
+            this.txtEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.txtEmail.FlatAppearance.BorderSize = 0;
+            this.txtEmail.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(50)))), ((int)(((byte)(105)))));
+            this.txtEmail.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
+            this.txtEmail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.txtEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEmail.ForeColor = System.Drawing.Color.White;
+            this.txtEmail.Location = new System.Drawing.Point(841, 0);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(137, 90);
+            this.txtEmail.TabIndex = 3;
+            this.txtEmail.Text = "<- Quay lại";
+            this.txtEmail.UseVisualStyleBackColor = false;
             // 
             // ptLgo
             // 
@@ -166,15 +131,89 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel1.Controls.Add(this.txtFname);
+            this.panel1.Controls.Add(this.btnSendOTP);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.lblDatlaimatkhau);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.txtEmail);
             this.panel1.Location = new System.Drawing.Point(176, 97);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 341);
             this.panel1.TabIndex = 21;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // btnSendOTP
+            // 
+            this.btnSendOTP.Animated = true;
+            this.btnSendOTP.BackColor = System.Drawing.Color.Transparent;
+            this.btnSendOTP.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnSendOTP.BorderRadius = 10;
+            this.btnSendOTP.BorderThickness = 2;
+            this.btnSendOTP.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnSendOTP.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnSendOTP.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnSendOTP.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnSendOTP.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.btnSendOTP.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnSendOTP.ForeColor = System.Drawing.Color.White;
+            this.btnSendOTP.HoverState.FillColor = System.Drawing.Color.SteelBlue;
+            this.btnSendOTP.Location = new System.Drawing.Point(127, 241);
+            this.btnSendOTP.Name = "btnSendOTP";
+            this.btnSendOTP.PressedDepth = 100;
+            this.btnSendOTP.ShadowDecoration.BorderRadius = 15;
+            this.btnSendOTP.ShadowDecoration.Depth = 10;
+            this.btnSendOTP.ShadowDecoration.Enabled = true;
+            this.btnSendOTP.Size = new System.Drawing.Size(166, 50);
+            this.btnSendOTP.TabIndex = 38;
+            this.btnSendOTP.Text = "Gửi mã OTP";
+            this.btnSendOTP.Click += new System.EventHandler(this.btnSendOTP_Click_1);
+            // 
+            // txtFname
+            // 
+            this.txtFname.BorderRadius = 8;
+            this.txtFname.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtFname.DefaultText = "";
+            this.txtFname.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtFname.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtFname.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtFname.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtFname.FocusedState.BorderColor = System.Drawing.SystemColors.HotTrack;
+            this.txtFname.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.txtFname.ForeColor = System.Drawing.Color.Black;
+            this.txtFname.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
+            this.txtFname.Location = new System.Drawing.Point(54, 179);
+            this.txtFname.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtFname.Name = "txtFname";
+            this.txtFname.PlaceholderText = "";
+            this.txtFname.SelectedText = "";
+            this.txtFname.Size = new System.Drawing.Size(323, 31);
+            this.txtFname.TabIndex = 40;
+            // 
+            // btnBackLogin
+            // 
+            this.btnBackLogin.Animated = true;
+            this.btnBackLogin.BackColor = System.Drawing.Color.Transparent;
+            this.btnBackLogin.BorderColor = System.Drawing.Color.Transparent;
+            this.btnBackLogin.BorderRadius = 15;
+            this.btnBackLogin.BorderThickness = 2;
+            this.btnBackLogin.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnBackLogin.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnBackLogin.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnBackLogin.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnBackLogin.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.btnBackLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
+            this.btnBackLogin.ForeColor = System.Drawing.Color.White;
+            this.btnBackLogin.HoverState.FillColor = System.Drawing.Color.RoyalBlue;
+            this.btnBackLogin.Location = new System.Drawing.Point(662, 4);
+            this.btnBackLogin.Name = "btnBackLogin";
+            this.btnBackLogin.PressedDepth = 100;
+            this.btnBackLogin.ShadowDecoration.BorderRadius = 18;
+            this.btnBackLogin.ShadowDecoration.Depth = 10;
+            this.btnBackLogin.ShadowDecoration.Enabled = true;
+            this.btnBackLogin.Size = new System.Drawing.Size(137, 83);
+            this.btnBackLogin.TabIndex = 35;
+            this.btnBackLogin.Text = "🡰 Quay lại";
+            this.btnBackLogin.Click += new System.EventHandler(this.btnBackLogin_Click_1);
             // 
             // f_ForgetPass
             // 
@@ -183,7 +222,6 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(799, 460);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.btnSendOTP);
             this.Controls.Add(this.panel1);
             this.Name = "f_ForgetPass";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -200,15 +238,15 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.Button btnSendOTP;
         private System.Windows.Forms.Panel pnlHeader;
-        private System.Windows.Forms.Button btnBackLogin;
-        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button txtEmail;
         private System.Windows.Forms.PictureBox ptLgo;
         private System.Windows.Forms.Label lblQuenmatkhau;
         private System.Windows.Forms.Label lblDatlaimatkhau;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
+        private Guna.UI2.WinForms.Guna2Button btnSendOTP;
+        private Guna.UI2.WinForms.Guna2TextBox txtFname;
+        private Guna.UI2.WinForms.Guna2Button btnBackLogin;
     }
 }

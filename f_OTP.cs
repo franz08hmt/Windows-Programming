@@ -29,7 +29,7 @@ namespace QuanLySinhVien
             timerOTP.Start();
         }
 
-        private void btnConfirm_Click(object sender, EventArgs e)
+        private void btnConfirm_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(_otpCode))
             {
@@ -54,7 +54,7 @@ namespace QuanLySinhVien
         {
         }
 
-        private void btnBackLogin_Click(object sender, EventArgs e)
+        private void btnBackLogin_Click_1(object sender, EventArgs e)
         {
             f_Login loginForm = new f_Login();
             loginForm.Show();
@@ -77,7 +77,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnResend_Click(object sender, EventArgs e)
+        private void btnResend_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -113,5 +113,6 @@ namespace QuanLySinhVien
                 MessageBox.Show("Lỗi khi kết nối gửi lại mã OTP: " + ex.Message, "Hệ thống");
             }
         }
+
     }
 }

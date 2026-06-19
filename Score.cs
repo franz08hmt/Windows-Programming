@@ -172,12 +172,33 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
+                // Xếp loại theo điểm TB của từng sinh viên (không đếm bản ghi điểm thô)
+                // → tổng Số Lượng = số SV có điểm, khớp với lblTongSV
                 string query = @"
-                    SELECT XepLoai      AS [Xếp Loại],
-                           COUNT(*)     AS [Số Lượng]
-                    FROM Score
-                    WHERE XepLoai IS NOT NULL AND XepLoai != ''
-                    GROUP BY XepLoai";
+                    SELECT sv_grade.XepLoai AS [Xếp Loại],
+                           COUNT(*)         AS [Số Lượng]
+                    FROM (
+                        SELECT MSSV,
+                               CASE
+                                   WHEN AVG(DiemTK) >= 9.0 THEN N'Xuất sắc'
+                                   WHEN AVG(DiemTK) >= 8.0 THEN N'Giỏi'
+                                   WHEN AVG(DiemTK) >= 6.5 THEN N'Khá'
+                                   WHEN AVG(DiemTK) >= 5.0 THEN N'Trung bình'
+                                   ELSE N'Yếu'
+                               END AS XepLoai
+                        FROM Score
+                        WHERE DiemTK IS NOT NULL
+                        GROUP BY MSSV
+                    ) AS sv_grade
+                    GROUP BY sv_grade.XepLoai
+                    ORDER BY CASE sv_grade.XepLoai
+                        WHEN N'Xuất sắc'   THEN 1
+                        WHEN N'Giỏi'       THEN 2
+                        WHEN N'Khá'        THEN 3
+                        WHEN N'Trung bình' THEN 4
+                        WHEN N'Yếu'        THEN 5
+                        ELSE 6
+                    END";
                 new SqlDataAdapter(new SqlCommand(query, db.conn)).Fill(dt);
             }
             catch { }

@@ -23,7 +23,7 @@ namespace QuanLySinhVien
         private void f_RegisterCourse_Load(object sender, EventArgs e)
         {
             Load_Danh_Sach_Sinh_Vien();
-            btnAISuggest.Click += new EventHandler(btnAISuggest_Click_Handler);
+            btnAISuggest.Click += new EventHandler(btnAISuggest_Click_1_Handler);
             btnAICheckConflict.Click += new EventHandler(btnAICheckConflict_Click_Handler);
         }
 
@@ -31,10 +31,21 @@ namespace QuanLySinhVien
         {
             try
             {
-                string query = "SELECT MSSV, CAST(MSSV AS VARCHAR) + ' - ' + Fname + ' ' + Lname AS HoTen FROM Student ORDER BY Lname";
+                string query = "SELECT MSSV, Fname, Lname FROM Student ORDER BY Lname";
                 SqlDataAdapter da = new SqlDataAdapter(query, db.getConnection);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
+
+                if (!dt.Columns.Contains("HoTen"))
+                {
+                    dt.Columns.Add("HoTen", typeof(string));
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    row["HoTen"] = row["Fname"].ToString() + " " + row["Lname"].ToString();
+                }
 
                 cboStudent.DataSource = dt;
                 cboStudent.DisplayMember = "HoTen";
@@ -100,7 +111,7 @@ namespace QuanLySinhVien
             catch { }
         }
 
-        private void cboStudent_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboStudent_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             Load_lstBandau();
             Load_Mon_Hoc_Da_Dang_Ky();
@@ -109,28 +120,28 @@ namespace QuanLySinhVien
         // ===================================================================
         // 4 NÚT DUAL LISTBOX
         // ===================================================================
-        private void btnMoveOne_Click(object sender, EventArgs e)
+        private void btnMoveOne_Click_1(object sender, EventArgs e)
         {
             if (lstBandau.SelectedItem == null) return;
             lstKetqua.Items.Add(lstBandau.SelectedItem);
             lstBandau.Items.Remove(lstBandau.SelectedItem);
         }
 
-        private void btnMoveAll_Click(object sender, EventArgs e)
+        private void btnMoveAll_Click_1(object sender, EventArgs e)
         {
             foreach (var item in lstBandau.Items)
                 lstKetqua.Items.Add(item);
             lstBandau.Items.Clear();
         }
 
-        private void btnRemoveOne_Click(object sender, EventArgs e)
+        private void btnRemoveOne_Click_1(object sender, EventArgs e)
         {
             if (lstKetqua.SelectedItem == null) return;
             lstBandau.Items.Add(lstKetqua.SelectedItem);
             lstKetqua.Items.Remove(lstKetqua.SelectedItem);
         }
 
-        private void btnRemoveAll_Click(object sender, EventArgs e)
+        private void btnRemoveAll_Click_1(object sender, EventArgs e)
         {
             foreach (var item in lstKetqua.Items)
                 lstBandau.Items.Add(item);
@@ -223,7 +234,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // LƯU ĐĂNG KÝ
         // ===================================================================
-        private void btnRegister_Click(object sender, EventArgs e)
+        private void btnRegister_Click_1(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboStudent.SelectedValue is DataRowView)
             {
@@ -285,7 +296,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // HỦY ĐĂNG KÝ
         // ===================================================================
-        private void btnUnregister_Click(object sender, EventArgs e)
+        private void btnUnregister_Click_1(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboStudent.SelectedValue is DataRowView)
             {
@@ -325,7 +336,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // CÂU 4 – GỬI REQUEST XÁC NHẬN
         // ===================================================================
-        private void btnSendRequest_Click(object sender, EventArgs e)
+        private void btnSendRequest_Click_1(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboStudent.SelectedValue is DataRowView)
             {
@@ -383,7 +394,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // [AI] GỢI Ý MÔN HỌC TỐI ƯU (nâng cao)
         // ===================================================================
-        private async void btnAISuggest_Click_Handler(object sender, EventArgs e)
+        private async void btnAISuggest_Click_1_Handler(object sender, EventArgs e)
         {
             if (cboStudent.SelectedValue == null || cboStudent.SelectedValue is DataRowView)
             {
@@ -501,9 +512,7 @@ namespace QuanLySinhVien
             }
         }
 
-        // ===================================================================
-        // [AI] CẢNH BÁO TRÙNG LỊCH (nâng cao)
-        // ===================================================================
+
         private async void btnAICheckConflict_Click_Handler(object sender, EventArgs e)
         {
             if (lstKetqua.Items.Count == 0)
@@ -624,17 +633,21 @@ namespace QuanLySinhVien
             }
         }
 
-        // ===================================================================
-        // SỰ KIỆN KHÁC
-        // ===================================================================
         private void btnBack_Click(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void dgvRegisterList_CellDoubleClick(object sender, DataGridViewCellEventArgs e) { }
 
-        private void btnAISuggest_Click(object sender, EventArgs e)
+
+        private void btnAISuggest_Click_1(object sender, EventArgs e)
         {
 
         }
+
+        private void btnAICheckConflict_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

@@ -45,44 +45,43 @@ namespace QuanLySinhVien
         // 🌟 SỰ KIỆN LOAD FORM: Phân quyền chuẩn chỉnh - Chặn đứng HR (2)
         private void f_StudentRequest_Load(object sender, EventArgs e)
         {
-            // 1. Nếu là HR (Quy ước = 2) -> Trục xuất thẳng tay, không cho nhìn thấy giao diện
+            // 1. Nếu là HR (Quy ước = 2) -> Trục xuất thẳng tay
             if (Globals.GlobalPosition == 2)
             {
                 MessageBox.Show("🤖 [HỆ THỐNG CHẶN TRUY CẬP]: Giao diện gửi phiếu đề nghị này chỉ dành riêng cho Sinh viên và Admin giám sát!\n\nTài khoản HR không có quyền thực thi.",
                                 "Từ chối phân quyền", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-
                 TruocXuatNguoiDung();
                 return;
             }
 
-            // 2. Nếu là ADMIN (Globals.GlobalPosition == 0) -> Xóa trắng MSSV và tên sinh viên
+            // 2. Nếu là ADMIN (Globals.GlobalPosition == 0) -> Chế độ giám sát tổng quan
             if (Globals.GlobalPosition == 0)
             {
+                currentMSSV = "admin"; // 🔒 Chốt chặn an toàn
                 txtMSSV.Text = "";
                 txtMSSV.ReadOnly = true;
 
                 txtStudentName.Text = "Ban Quản Trị Hệ Thống (Chỉ xem)";
                 txtStudentName.ReadOnly = true;
 
-                // Vô hiệu hóa nút gửi đơn đối với tài khoản Admin để tránh dữ liệu rác vào DB
                 btnSendRequest.Enabled = false;
                 btnSendRequest.Text = "Admin chỉ xem";
 
                 LoadCoursesToComboBox();
-
-                // Gọi hàm an toàn (nếu lỗi SQL xảy ra sẽ báo lỗi êm ái chứ không làm đứng app)
-                LoadAllRequestsForAdmin();
+                LoadAllRequestsForAdmin(); // Nạp toàn bộ đơn của trường lên Grid cho Admin duyệt
             }
-            // 3. Nếu là SINH VIÊN (Globals.GlobalPosition == 1) -> Tải thông tin bình thường
+            // 3. Nếu là SINH VIÊN (Globals.GlobalPosition == 1) -> Cho phép gửi đơn
             else
             {
+                currentMSSV = Globals.GlobalUserId; // Lấy chuẩn số MSSV
+
                 txtMSSV.Text = currentMSSV;
                 txtMSSV.ReadOnly = true;
                 btnSendRequest.Enabled = true;
 
                 LayThongTinTenSinhVien();
                 LoadCoursesToComboBox();
-                LoadRequestHistory();
+                LoadRequestHistory(); // Chỉ nạp lịch sử đơn của RIÊNG sinh viên này
             }
         }
 
@@ -112,10 +111,10 @@ namespace QuanLySinhVien
 
         private void LoadAllRequestsForAdmin()
         {
-            string query = "SELECT RequestID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
-                           "StudentName as 'Tên Sinh Viên', RequestDate as 'Ngày Gửi', " +
-                           "RequestContent as 'Nội Dung Tóm Tắt', Status as 'Trạng Thái' " +
-                           "FROM StudentRequests ORDER BY RequestDate DESC";
+            string query = "SELECT ID as 'Mã Yêu Cầu', MSSV as 'MSSV', " +
+                           "TenSV as 'Tên Sinh Viên', NgayGui as 'Ngày Gửi', " +
+                           "NoiDung as 'Nội Dung Tóm Tắt', TrangThai as 'Trạng Thái' " +
+                           "FROM StudentRequests ORDER BY NgayGui DESC";
             try
             {
                 DataTable dt = new DataTable();
@@ -137,19 +136,7 @@ namespace QuanLySinhVien
 
         private void DinhDangTrangThaiDGV()
         {
-            if (dgvHistory.Rows.Count > 0 && dgvHistory.Columns["Trạng Thái"] != null)
-            {
-                foreach (DataGridViewRow row in dgvHistory.Rows)
-                {
-                    if (row.Cells["Trạng Thái"].Value != null)
-                    {
-                        string val = row.Cells["Trạng Thái"].Value.ToString();
-                        if (val == "Pending") row.Cells["Trạng Thái"].Value = "Đang chờ duyệt";
-                        else if (val == "Approved") row.Cells["Trạng Thái"].Value = "Đã phê duyệt";
-                        else if (val == "Declined") row.Cells["Trạng Thái"].Value = "Từ chối";
-                    }
-                }
-            }
+            // TrangThai đã lưu tiếng Việt trong DB, không cần convert
         }
 
         private void LayThongTinTenSinhVien()
@@ -210,9 +197,9 @@ namespace QuanLySinhVien
 
         private void LoadRequestHistory()
         {
-            string query = "SELECT RequestID as 'Mã Yêu Cầu', RequestDate as 'Ngày Gửi', " +
-                           "RequestContent as 'Nội Dung Tóm Tắt', Status as 'Trạng Thái' " +
-                           "FROM StudentRequests WHERE MSSV = @mssv ORDER BY RequestDate DESC";
+            string query = "SELECT ID as 'Mã Yêu Cầu', NgayGui as 'Ngày Gửi', " +
+                           "NoiDung as 'Nội Dung Tóm Tắt', TrangThai as 'Trạng Thái' " +
+                           "FROM StudentRequests WHERE MSSV = @mssv ORDER BY NgayGui DESC";
             try
             {
                 DataTable dt = new DataTable();
@@ -229,19 +216,7 @@ namespace QuanLySinhVien
             catch { }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(panel1, 25, e);
-        }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void pnlHistory_Paint(object sender, PaintEventArgs e)
-        {
-            VeBoGocPanel(pnlHistory, 25, e);
-        }
 
         private void btnSendRequest_Click(object sender, EventArgs e)
         {
@@ -261,8 +236,8 @@ namespace QuanLySinhVien
             }
 
             string fullContent = $"[{loaiYeuCau}]{monHoc} -> LÝ DO: {txtContent.Text.Trim()}";
-            string insertQuery = "INSERT INTO StudentRequests (MSSV, StudentName, RequestContent, Status) " +
-                                 "VALUES (@mssv, @name, @content, 'Pending')";
+            string insertQuery = "INSERT INTO StudentRequests (MSSV, TenSV, NoiDung, TrangThai) " +
+                                 "VALUES (@mssv, @name, @content, N'Chờ xử lý')";
 
             try
             {

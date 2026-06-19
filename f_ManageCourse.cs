@@ -22,20 +22,6 @@ namespace QuanLySinhVien
             InitializeComponent();
         }
 
-        private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            GraphicsPath path = new GraphicsPath();
-            path.StartFigure();
-            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
-            path.AddArc(new Rectangle(pnl.Width - radius, 0, radius, radius), 270, 90);
-            path.AddArc(new Rectangle(pnl.Width - radius, pnl.Height - radius, radius, radius), 0, 90);
-            path.AddArc(new Rectangle(0, pnl.Height - radius, radius, radius), 90, 90);
-            path.CloseFigure();
-
-            pnl.Region = new Region(path);
-        }
         private void f_ManageCourse_Load(object sender, EventArgs e)
         {
             nudAddTuan.Minimum = 10;
@@ -59,15 +45,15 @@ namespace QuanLySinhVien
             cboFilterSemester.SelectedIndexChanged += new EventHandler(cboFilterSemester_SelectedIndexChanged);
 
             btnRefresh.Click += new EventHandler(btnRefresh_Click_Handler);
-            btnSearchList.Click += new EventHandler(btnSearchList_Click);
+            btnSearchList.Click += new EventHandler(btnSearchList_Click_1);
             txtSearchList.TextChanged += new EventHandler(txtSearchList_TextChanged);
-            dgvCourse.CellDoubleClick += new DataGridViewCellEventHandler(dgvCourse_CellDoubleClick);
+            dgvCourse.CellDoubleClick += new DataGridViewCellEventHandler(dgvCourse_CellDoubleClick_1);
 
             SetupAutocomplete();
 
-            btnSearch.Click += new EventHandler(btnSearch_Click);
-            btnEdit.Click += new EventHandler(btnEdit_Click);
-            btnDel.Click += new EventHandler(btnDel_Click);
+            btnSearch.Click += new EventHandler(btnSearch_Click_1);
+            btnEdit.Click += new EventHandler(btnEdit_Click_1);
+            btnDel.Click += new EventHandler(btnDel_Click_1);
             btnAIGenMota.Click += new EventHandler(btnAIGenMota_Click_Handler);
             btnAICDIO.Click += new EventHandler(btnAICDIO_Click_Handler);
 
@@ -453,7 +439,7 @@ namespace QuanLySinhVien
         // ===================================================================
         // TAB SỬA MÔN HỌC
         // ===================================================================
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEditMa.Text))
             {
@@ -492,7 +478,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void btnEdit_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEditMa.Text) ||
                 string.IsNullOrWhiteSpace(txtEditTen.Text))
@@ -545,7 +531,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnDel_Click(object sender, EventArgs e)
+        private void btnDel_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEditMa.Text))
             {
@@ -599,7 +585,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvCourse_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvCourse_CellDoubleClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             DataGridViewRow row = dgvCourse.Rows[e.RowIndex];
@@ -623,7 +609,7 @@ namespace QuanLySinhVien
             try
             {
                 string query =
-                    "SELECT MaMH, TenMH, SoTC, Tuan, Hky AS [Học kỳ], Mota " +
+                    "SELECT MaMH, TenMH, SoTC, Tuan, Hky, Mota " +
                     "FROM Course WHERE 1=1";
 
                 if (!string.IsNullOrWhiteSpace(filter))
@@ -643,6 +629,14 @@ namespace QuanLySinhVien
                 da.Fill(dt);
                 dgvCourse.DataSource = dt;
                 dgvCourse.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                // 🛠️ GIẢI PHÁP CHÍ MẠNG: Việt hóa đè toàn bộ tiêu đề cột thô của SQL Server thành tiếng Việt chuẩn phẳng
+                if (dgvCourse.Columns["MaMH"] != null) dgvCourse.Columns["MaMH"].HeaderText = "Mã Môn Học";
+                if (dgvCourse.Columns["TenMH"] != null) dgvCourse.Columns["TenMH"].HeaderText = "Tên Môn Học";
+                if (dgvCourse.Columns["SoTC"] != null) dgvCourse.Columns["SoTC"].HeaderText = "Số Tín Chỉ";
+                if (dgvCourse.Columns["Tuan"] != null) dgvCourse.Columns["Tuan"].HeaderText = "Số Tuần";
+                if (dgvCourse.Columns["Hky"] != null) dgvCourse.Columns["Hky"].HeaderText = "Học Kỳ";
+                if (dgvCourse.Columns["Mota"] != null) dgvCourse.Columns["Mota"].HeaderText = "Mô Tả Chi Tiết";
             }
             catch (Exception ex)
             {
@@ -651,7 +645,7 @@ namespace QuanLySinhVien
             }
         }
 
-        private void btnSearchList_Click(object sender, EventArgs e)
+        private void btnSearchList_Click_1(object sender, EventArgs e)
         {
             int hky = 0;
             if (cboFilterSemester.SelectedItem != null &&
@@ -662,12 +656,12 @@ namespace QuanLySinhVien
 
         private void txtSearchList_TextChanged(object sender, EventArgs e)
         {
-            btnSearchList_Click(sender, e);
+            btnSearchList_Click_1(sender, e);
         }
 
         private void cboFilterSemester_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnSearchList_Click(sender, e);
+            btnSearchList_Click_1(sender, e);
         }
 
         private void btnRefresh_Click_Handler(object sender, EventArgs e)
@@ -691,14 +685,65 @@ namespace QuanLySinhVien
         private void dgvCourse_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void Hien_Thi_Danh_Sach_Mon_Hoc() { HienThiDanhSach(); }
 
-        private void panel3_Paint_1(object sender, PaintEventArgs e)
+
+        private void btnAICDIO_Click(object sender, EventArgs e)
         {
-            VeBoGocPanel(panel3, 25, e);
+            btnAICDIO_Click_Handler(sender, e);
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            VeBoGocPanel(panel1, 25, e);
+            btnAdd_Click_Handler(sender, e);
+        }
+
+        private void btnAIGenMota_Click(object sender, EventArgs e)
+        {
+            btnAIGenMota_Click_Handler(sender, e);
+        }
+
+        private void btnClear_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnClear_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void btnClear_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void btnAdd_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdd_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void btnAdd_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void txtAddress_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabList_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            btnRefresh_Click_Handler(sender, e);
         }
     }
 }

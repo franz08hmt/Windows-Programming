@@ -23,29 +23,12 @@ namespace QuanLySinhVien
         // API Key 
         private readonly string apiKey = "Điền API zô, push lên thì xóa đi git nó quét";
 
+
         public f_ListStudent()
         {
             InitializeComponent();
-            SetupEventHandlers();
         }
 
-        private void SetupEventHandlers()
-        {
-            // Đăng ký tập trung các sự kiện hệ thống
-            this.Load += new EventHandler(f_ListStudent_Load);
-            txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged_1);
-            txtSearch.Enter += new EventHandler(txtSearch_Enter);
-            txtSearch.Leave += new EventHandler(txtSearch_Leave);
-            cboFilterGender.SelectedIndexChanged += new EventHandler(cboFilterGender_SelectedIndexChanged_1);
-            cboSortBy.SelectedIndexChanged += new EventHandler(cboSortBy_SelectedIndexChanged_1);
-            btnExport.Click += new EventHandler(btnExport_Click);
-
-            // 🛠️ ĐẤU MẠCH ĐỒ HỌA CHUẨN: Ép sự kiện DoubleClick gán trực tiếp vào lưới DataGridView
-            dgvStudents.CellDoubleClick += new DataGridViewCellEventHandler(dgvStudents_CellDoubleClick_1);
-
-            if (this.Controls.Find("btnChonFile", true).Length > 0)
-                this.Controls.Find("btnChonFile", true)[0].Click += new EventHandler(btnChonFile_Click);
-        }
 
         private void f_ListStudent_Load(object sender, EventArgs e)
         {
@@ -94,8 +77,14 @@ namespace QuanLySinhVien
                 DataTable dt = Student.GetStudents();
                 if (dt == null) return;
 
+                VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
                 svView = new DataView(dt);
                 dgvStudents.DataSource = svView;
+
+
+                Font customFont = new Font("Segoe UI", 12, FontStyle.Regular);
+                dgvStudents.DefaultCellStyle.Font = customFont;
+                dgvStudents.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
 
                 dgvStudents.Columns["MSSV"].HeaderText = "Mã SV";
                 dgvStudents.Columns["Fname"].HeaderText = "Họ";
@@ -140,8 +129,11 @@ namespace QuanLySinhVien
             }
             else
             {
-                // Ép kiểu cột số MSSV về chuỗi String để không bị nổ lỗi gạch đỏ gãy mạch lọc
-                svView.RowFilter = $"Convert(MSSV, 'System.String') LIKE '%{keyword}%' OR Fname LIKE '%{keyword}%' OR Lname LIKE '%{keyword}%'";
+
+                svView.RowFilter = $"Convert(MSSV, 'System.String') LIKE '%{keyword}%' " +
+                                   $"OR Fname LIKE '%{keyword}%' " +
+                                   $"OR Lname LIKE '%{keyword}%' " +
+                                   $"OR (Fname + ' ' + Lname) LIKE '%{keyword}%'";
             }
             UpdateTotalCount();
         }
@@ -164,20 +156,8 @@ namespace QuanLySinhVien
             }
         }
 
-        private void cboFilterGender_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            if (svView == null) return;
-            string selected = cboFilterGender.Text.Trim();
 
-            if (selected == "Tất cả" || string.IsNullOrEmpty(selected))
-                svView.RowFilter = "";
-            else
-                svView.RowFilter = $"Gder = '{selected}'";
-
-            UpdateTotalCount();
-        }
-
-        private void cboSortBy_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void cboSortBy_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (svView == null) return;
             string selected = cboSortBy.Text.Trim();
@@ -187,7 +167,7 @@ namespace QuanLySinhVien
                 svView.Sort = "Lname ASC";
         }
 
-        private void btnExport_Click(object sender, EventArgs e)
+        private void btnExport_Click_1(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog
             {
@@ -242,7 +222,17 @@ namespace QuanLySinhVien
             catch (Exception ex) { MessageBox.Show("Lỗi Export: " + ex.Message); }
         }
 
-        private void btnChonFile_Click(object sender, EventArgs e)
+        private void btnExportPDF_Click(object sender, EventArgs e)
+        {
+            if (svView == null)
+            {
+                MessageBox.Show("Vui lòng tải dữ liệu trước khi xuất.", "Thông báo");
+                return;
+            }
+            ReportExportService.ExportStudentListToPDF(svView);
+        }
+
+        private void btnChonFile_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog
             {
@@ -424,7 +414,7 @@ namespace QuanLySinhVien
             lblStatus.ForeColor = Color.DarkBlue;
         }
 
-        private void dgvPreview_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void dgvPreview_RowPrePaint_1(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             if (e.RowIndex >= 0 && dgvPreview.Rows[e.RowIndex].Cells["Lỗi"].Value != null)
             {
@@ -510,8 +500,59 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvPreview_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvPreview_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
+        }
+
+        private void cboFilterGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (svView == null) return;
+            string selected = cboFilterGender.Text.Trim();
+
+            if (selected == "Tất cả" || string.IsNullOrEmpty(selected))
+                svView.RowFilter = "";
+            else
+                svView.RowFilter = $"Gder = '{selected}'";
+
+            UpdateTotalCount();
+        }
+
+        private void pnlToolbar_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            if (svView == null)
+            {
+                MessageBox.Show("Vui lòng tải dữ liệu trước khi xuất.", "Thông báo");
+                return;
+            }
+            ReportExportService.ExportStudentListToPDF(svView);
+        }
+
+        private void btnChonFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "Excel Files|*.xlsx;*.xls",
+                Title = "Chọn file Excel danh sách sinh viên"
+            };
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+
+            _importFilePath = ofd.FileName;
+            lblFilePath.Text = Path.GetFileName(_importFilePath);
+
+            lblStatus.Text = "Đang kết nối AI phân tích cấu trúc file và kiểm tra lỗi...";
+            lblStatus.ForeColor = Color.OrangeRed;
+
+            PreviewExcelWithAI(_importFilePath);
+        }
+
+        private void pnlCards_MouseLeave(object sender, EventArgs e)
+        {
+
         }
     }
 }

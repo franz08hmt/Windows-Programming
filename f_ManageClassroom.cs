@@ -38,8 +38,7 @@ namespace QuanLySinhVien
         private void f_ManageClassroom_Load(object sender, EventArgs e)
         {
             LoadData();
-            // Đã loại bỏ hoàn toàn hàm dịch chuyển vị trí cũ bằng code ở đây
-            // để nhường toàn bộ quyền căn chỉnh tự động cho thuộc tính Padding của Designer.
+            dgvClassroom.CellClick += new DataGridViewCellEventHandler(this.dgvClassroom_CellClick_1);
         }
 
         // Hàm tự động tìm và nạp Logo từ Resources của hệ thống
@@ -82,7 +81,7 @@ namespace QuanLySinhVien
         }
 
         // --- CÂU 2: THÊM LỚP HỌC ---
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click_1(object sender, EventArgs e)
         {
             if (!VerifyInputs())
             {
@@ -112,7 +111,7 @@ namespace QuanLySinhVien
         }
 
         // --- CÂU 2: TÌM KIẾM THEO TÊN LỚP ---
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click_1(object sender, EventArgs e)
         {
             My_DB db = new My_DB();
             SqlCommand command = new SqlCommand("SELECT MaLop AS [Mã Lớp], TenLop AS [Tên Lớp], SiSo AS [Sĩ Số], GVCN AS [GV Chủ Nhiệm] FROM Classroom WHERE TenLop LIKE @name", db.conn);
@@ -122,7 +121,7 @@ namespace QuanLySinhVien
         }
 
         // --- CÂU 3: SỬA LỚP HỌC ---
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void btnEdit_Click_1(object sender, EventArgs e)
         {
             if (!VerifyInputs())
             {
@@ -151,7 +150,7 @@ namespace QuanLySinhVien
         }
 
         // --- CÂU 3: XÓA LỚP HỌC ---
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click_1(object sender, EventArgs e)
         {
             string id = txtMaLop.Text.Trim();
             if (string.IsNullOrEmpty(id))
@@ -177,29 +176,28 @@ namespace QuanLySinhVien
             }
         }
 
-        private void dgvClassroom_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvClassroom_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.RowIndex < dgvClassroom.Rows.Count)
             {
                 DataGridViewRow row = dgvClassroom.Rows[e.RowIndex];
-                txtMaLop.Text = row.Cells["Mã Lớp"].Value?.ToString();
-                txtTenLop.Text = row.Cells["Tên Lớp"].Value?.ToString();
-                txtSiSo.Text = row.Cells["Sĩ Số"].Value?.ToString();
-                txtGVCN.Text = row.Cells["GV Chủ Nhiệm"].Value?.ToString();
+
+                txtMaLop.Text = row.Cells[0].Value?.ToString().Trim() ?? "";
+                txtTenLop.Text = row.Cells[1].Value?.ToString().Trim() ?? "";
+                txtSiSo.Text = row.Cells[2].Value?.ToString().Trim() ?? "0";
+                txtGVCN.Text = row.Cells[3].Value?.ToString().Trim() ?? "";
+
                 txtMaLop.ReadOnly = true;
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private void btnRefresh_Click_1(object sender, EventArgs e)
         {
             LoadData();
             ClearFields();
             txtSearch.Clear();
         }
 
-        // ====================================================================================
-        // --- THIẾT KẾ GIAO DIỆN HIỆN ĐẠI: VẼ PANEL CARD CHUẨN UTEid (CÓ LOGO & CHỮ KHÔNG ĐÈ) ---
-        // ====================================================================================
 
         private void VePanelCardHienDai(Panel pnl, PaintEventArgs e, Color headerColor, string headerText)
         {
@@ -312,5 +310,6 @@ namespace QuanLySinhVien
         {
             VeBoGocPanel(pnlDataCard, 25, e);
         }
+
     }
 }

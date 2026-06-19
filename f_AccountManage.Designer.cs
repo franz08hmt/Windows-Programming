@@ -1,4 +1,4 @@
-﻿namespace QuanLySinhVien
+namespace QuanLySinhVien
 {
     partial class f_AccountManage : System.Windows.Forms.UserControl
     {
@@ -13,8 +13,11 @@
         private void InitializeComponent()
         {
             this.pnlMain = new System.Windows.Forms.Panel();
+            this._split = new System.Windows.Forms.SplitContainer();
             this.dgvAccounts = new System.Windows.Forms.DataGridView();
+            this.dgvApproved = new System.Windows.Forms.DataGridView();
             this.pnlTop = new System.Windows.Forms.Panel();
+            this.btnAI = new System.Windows.Forms.Button();
             this.lblPending = new System.Windows.Forms.Label();
             this.lblApproved = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
@@ -23,16 +26,22 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
+
             this.pnlMain.SuspendLayout();
+            this._split.Panel1.SuspendLayout();
+            this._split.Panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._split)).BeginInit();
+            this._split.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccounts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApproved)).BeginInit();
             this.pnlTop.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // pnlMain
-            // 
+            //
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
-            this.pnlMain.Controls.Add(this.dgvAccounts);
+            this.pnlMain.Controls.Add(this._split);
             this.pnlMain.Controls.Add(this.pnlTop);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(0, 92);
@@ -40,23 +49,58 @@
             this.pnlMain.Padding = new System.Windows.Forms.Padding(15);
             this.pnlMain.Size = new System.Drawing.Size(1462, 865);
             this.pnlMain.TabIndex = 0;
-            // 
-            // dgvAccounts
-            // 
+            //
+            // _split — hiển thị 2 section: CHỜ DUYỆT (Panel1) / ĐÃ DUYỆT (Panel2)
+            //
+            this._split.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._split.Location = new System.Drawing.Point(15, 114);
+            this._split.Name = "_split";
+            this._split.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this._split.Panel1MinSize = 120;
+            this._split.Panel2MinSize = 120;
+            this._split.SplitterDistance = 280;
+            this._split.SplitterWidth = 4;
+            this._split.Size = new System.Drawing.Size(1432, 736);
+            this._split.TabIndex = 10;
+            //
+            // _split.Panel1 — CHỜ DUYỆT (dgvAccounts)
+            //
+            this._split.Panel1.Controls.Add(this.dgvAccounts);
+            //
+            // _split.Panel2 — ĐÃ DUYỆT (dgvApproved)
+            //
+            this._split.Panel2.Controls.Add(this.dgvApproved);
+            //
+            // dgvAccounts (Panel1 — tài khoản chờ duyệt)
+            //
             this.dgvAccounts.BackgroundColor = System.Drawing.Color.White;
             this.dgvAccounts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvAccounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvAccounts.Location = new System.Drawing.Point(15, 114);
+            this.dgvAccounts.Location = new System.Drawing.Point(0, 0);
             this.dgvAccounts.Name = "dgvAccounts";
             this.dgvAccounts.RowHeadersWidth = 62;
             this.dgvAccounts.RowTemplate.Height = 32;
-            this.dgvAccounts.Size = new System.Drawing.Size(1432, 736);
+            this.dgvAccounts.Size = new System.Drawing.Size(1432, 280);
             this.dgvAccounts.TabIndex = 1;
-            // 
+            //
+            // dgvApproved (Panel2 — tài khoản đã duyệt)
+            //
+            this.dgvApproved.BackgroundColor = System.Drawing.Color.White;
+            this.dgvApproved.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvApproved.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvApproved.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvApproved.Location = new System.Drawing.Point(0, 0);
+            this.dgvApproved.Name = "dgvApproved";
+            this.dgvApproved.RowHeadersWidth = 62;
+            this.dgvApproved.RowTemplate.Height = 32;
+            this.dgvApproved.Size = new System.Drawing.Size(1432, 448);
+            this.dgvApproved.TabIndex = 2;
+            //
             // pnlTop
-            // 
+            //
             this.pnlTop.BackColor = System.Drawing.Color.White;
+            this.pnlTop.Controls.Add(this.btnAI);
             this.pnlTop.Controls.Add(this.lblPending);
             this.pnlTop.Controls.Add(this.lblApproved);
             this.pnlTop.Controls.Add(this.btnRefresh);
@@ -68,9 +112,24 @@
             this.pnlTop.Name = "pnlTop";
             this.pnlTop.Size = new System.Drawing.Size(1432, 99);
             this.pnlTop.TabIndex = 2;
-            // 
+            //
+            // btnAI
+            //
+            this.btnAI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(28)))), ((int)(((byte)(235)))));
+            this.btnAI.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAI.FlatAppearance.BorderSize = 0;
+            this.btnAI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAI.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnAI.ForeColor = System.Drawing.Color.White;
+            this.btnAI.Location = new System.Drawing.Point(560, 12);
+            this.btnAI.Name = "btnAI";
+            this.btnAI.Size = new System.Drawing.Size(130, 72);
+            this.btnAI.TabIndex = 10;
+            this.btnAI.Text = "🤖 Quét AI";
+            this.btnAI.UseVisualStyleBackColor = false;
+            //
             // lblPending
-            // 
+            //
             this.lblPending.AutoSize = true;
             this.lblPending.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
             this.lblPending.ForeColor = System.Drawing.Color.OrangeRed;
@@ -79,9 +138,9 @@
             this.lblPending.Size = new System.Drawing.Size(169, 36);
             this.lblPending.TabIndex = 0;
             this.lblPending.Text = "Chờ duyệt: 0";
-            // 
+            //
             // lblApproved
-            // 
+            //
             this.lblApproved.AutoSize = true;
             this.lblApproved.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
             this.lblApproved.ForeColor = System.Drawing.Color.DarkGreen;
@@ -90,9 +149,9 @@
             this.lblApproved.Size = new System.Drawing.Size(154, 36);
             this.lblApproved.TabIndex = 1;
             this.lblApproved.Text = "Đã duyệt: 0";
-            // 
+            //
             // btnRefresh
-            // 
+            //
             this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
             this.btnRefresh.FlatAppearance.BorderSize = 0;
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -105,9 +164,9 @@
             this.btnRefresh.Text = "🔄 Làm mới";
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
+            //
             // btnApprove
-            // 
+            //
             this.btnApprove.BackColor = System.Drawing.Color.DarkGreen;
             this.btnApprove.FlatAppearance.BorderSize = 0;
             this.btnApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -120,9 +179,9 @@
             this.btnApprove.Text = "✔ Duyệt";
             this.btnApprove.UseVisualStyleBackColor = false;
             this.btnApprove.Click += new System.EventHandler(this.btnApprove_Click);
-            // 
+            //
             // btnReject
-            // 
+            //
             this.btnReject.BackColor = System.Drawing.Color.OrangeRed;
             this.btnReject.FlatAppearance.BorderSize = 0;
             this.btnReject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -135,9 +194,9 @@
             this.btnReject.Text = "✘ Từ chối";
             this.btnReject.UseVisualStyleBackColor = false;
             this.btnReject.Click += new System.EventHandler(this.btnReject_Click);
-            // 
+            //
             // btnDelete
-            // 
+            //
             this.btnDelete.BackColor = System.Drawing.Color.DarkRed;
             this.btnDelete.FlatAppearance.BorderSize = 0;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -150,9 +209,9 @@
             this.btnDelete.Text = "🗑 Xóa";
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
+            //
             // lblTitle
-            // 
+            //
             this.lblTitle.AutoSize = true;
             this.lblTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
@@ -162,9 +221,9 @@
             this.lblTitle.Size = new System.Drawing.Size(426, 54);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "QUẢN LÝ TÀI KHOẢN";
-            // 
+            //
             // pnlHeader
-            // 
+            //
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -172,9 +231,9 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1462, 92);
             this.pnlHeader.TabIndex = 1;
-            // 
+            //
             // f_AccountManage
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlMain);
@@ -182,24 +241,33 @@
             this.Name = "f_AccountManage";
             this.Size = new System.Drawing.Size(1462, 957);
             this.Load += new System.EventHandler(this.f_AccountManage_Load);
-            this.pnlMain.ResumeLayout(false);
+
+            this._split.Panel1.ResumeLayout(false);
+            this._split.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this._split)).EndInit();
+            this._split.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccounts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApproved)).EndInit();
+            this.pnlMain.ResumeLayout(false);
             this.pnlTop.ResumeLayout(false);
             this.pnlTop.PerformLayout();
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.ResumeLayout(false);
-
         }
+
         private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.SplitContainer _split;
+        private System.Windows.Forms.DataGridView dgvAccounts;
+        private System.Windows.Forms.DataGridView dgvApproved;
         private System.Windows.Forms.Panel pnlTop;
+        private System.Windows.Forms.Button btnAI;
         private System.Windows.Forms.Label lblPending;
         private System.Windows.Forms.Label lblApproved;
         private System.Windows.Forms.Button btnApprove;
         private System.Windows.Forms.Button btnReject;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.DataGridView dgvAccounts;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel pnlHeader;
     }
