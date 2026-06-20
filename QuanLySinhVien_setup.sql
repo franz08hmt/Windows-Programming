@@ -24,6 +24,10 @@ BEGIN
         Username    VARCHAR(50)     NOT NULL,
         Pass        VARCHAR(100)    NOT NULL,
         Email       VARCHAR(100),
+        Dob         DATETIME,
+        Gder        NVARCHAR(10),
+        Phone       NVARCHAR(15),
+        Address     NVARCHAR(250),
         Pic         IMAGE,
         position    INT             DEFAULT 1,
         VALID       BIT             DEFAULT 0

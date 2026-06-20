@@ -111,12 +111,12 @@ namespace QuanLySinhVien
 
                 if (dgvRequests.Columns.Count >= 6)
                 {
-                    dgvRequests.Columns["Mã Yêu Cầu"].Width = 90;
-                    dgvRequests.Columns["MSSV"].Width = 90;
-                    dgvRequests.Columns["Tên Sinh Viên"].Width = 150;
+                    dgvRequests.Columns["Mã Yêu Cầu"].Width = 130;
+                    dgvRequests.Columns["MSSV"].Width = 100;
+                    dgvRequests.Columns["Tên Sinh Viên"].Width = 170;
                     dgvRequests.Columns["Ngày Gửi"].Width = 120;
-                    dgvRequests.Columns["Nội Dung Yêu Cầu"].Width = 250;
-                    // TrangThai đã lưu tiếng Việt trong DB, không cần convert
+                    dgvRequests.Columns["Nội Dung Yêu Cầu"].Width = 260;
+                    dgvRequests.Columns["Trạng Thái"].Width = 130;
                 }
             }
             catch (Exception ex)
@@ -127,7 +127,7 @@ namespace QuanLySinhVien
 
         private void dgvRequests_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dgvRequests.Rows.Count - 1)
+            if (e.RowIndex >= 0 && e.RowIndex < dgvRequests.Rows.Count)
             {
                 DataGridViewRow row = dgvRequests.Rows[e.RowIndex];
                 selectedRequestID = Convert.ToInt32(row.Cells[0].Value);

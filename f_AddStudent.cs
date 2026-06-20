@@ -26,6 +26,7 @@ namespace QuanLySinhVien
             InitializeComponent();
             RegisterRealTimeValidation();
             SetupSuggestList();
+            this.Resize += (s, e) => ArrangeAddStudentLayout();
 
         }
 
@@ -568,6 +569,93 @@ namespace QuanLySinhVien
         private void f_AddStudent_Load(object sender, EventArgs e)
         {
             lstSuggest.Click += new System.EventHandler(this.lstSuggest_Click);
+            ArrangeAddStudentLayout();
+        }
+
+        private void ArrangeAddStudentLayout()
+        {
+            if (pnlForm == null || pnlRight == null || this.Width <= 0 || this.Height <= 0) return;
+
+            SuspendLayout();
+            pnlForm.SuspendLayout();
+            pnlRight.SuspendLayout();
+
+            const int left = 7;
+            const int top = 108;
+            const int gap = 32;
+            const int rightMargin = 18;
+            int panelHeight = Math.Max(720, Math.Min(835, this.ClientSize.Height - top - 46));
+
+            pnlRight.Height = panelHeight;
+            pnlRight.Left = Math.Max(left + 720, this.ClientSize.Width - pnlRight.Width - rightMargin);
+            pnlRight.Top = top;
+
+            pnlForm.Left = left;
+            pnlForm.Top = top;
+            pnlForm.Width = Math.Max(780, pnlRight.Left - gap - left);
+            pnlForm.Height = panelHeight;
+
+            guna2Separator1.Width = Math.Max(600, this.ClientSize.Width - 24);
+            guna2Separator2.Width = guna2Separator1.Width;
+            guna2Separator2.Top = pnlForm.Bottom + 24;
+
+            int innerLeft = 28;
+            int innerRight = 24;
+            int columnGap = 72;
+            int colWidth = Math.Max(260, (pnlForm.Width - innerLeft - innerRight - columnGap) / 2);
+            int rightX = innerLeft + colWidth + columnGap;
+            int fullWidth = pnlForm.Width - innerLeft - innerRight;
+
+            guna2Panel2.Width = pnlForm.Width;
+            label9.Left = Math.Max(12, (guna2Panel2.Width - label9.Width) / 2);
+
+            txtMSSV.Left = innerLeft;
+            txtMSSV.Width = fullWidth;
+
+            label3.Left = rightX;
+            label5.Left = rightX;
+            label7.Left = rightX;
+            txtFname.Left = innerLeft;
+            txtFname.Width = colWidth;
+            txtLname.Left = rightX;
+            txtLname.Width = colWidth;
+            dtpDob.Left = innerLeft;
+            dtpDob.Width = colWidth;
+            cboGender.Left = rightX;
+            cboGender.Width = colWidth;
+            txtPhone.Left = innerLeft;
+            txtPhone.Width = colWidth;
+            txtEmail.Left = rightX;
+            txtEmail.Width = colWidth;
+
+            txtAddress.Left = innerLeft;
+            txtAddress.Width = fullWidth;
+            lstSuggest.Left = txtAddress.Left;
+            lstSuggest.Width = txtAddress.Width;
+
+            int buttonY = pnlForm.Height - btnAdd.Height - 28;
+            int buttonsTotal = btnAdd.Width + btnClear.Width + 90;
+            btnAdd.Top = buttonY;
+            btnClear.Top = buttonY;
+            btnAdd.Left = Math.Max(innerLeft, (pnlForm.Width - buttonsTotal) / 2);
+            btnClear.Left = btnAdd.Right + 90;
+
+            picStudent.Left = (pnlRight.Width - picStudent.Width) / 2;
+            btnChooseImage.Left = (pnlRight.Width - btnChooseImage.Width) / 2;
+            btnSpeech.Left = btnChooseImage.Left;
+            btnScanCard.Left = btnChooseImage.Left;
+            btnViewlist.Left = btnChooseImage.Left;
+
+            btnViewlist.Top = pnlRight.Height - btnViewlist.Height - 22;
+            btnScanCard.Top = btnViewlist.Top - btnScanCard.Height - 15;
+            btnSpeech.Top = btnScanCard.Top - btnSpeech.Height - 15;
+            btnChooseImage.Top = btnSpeech.Top - btnChooseImage.Height - 15;
+            picStudent.Top = 22;
+            picStudent.Height = Math.Max(230, btnChooseImage.Top - picStudent.Top - 18);
+
+            pnlRight.ResumeLayout(false);
+            pnlForm.ResumeLayout(false);
+            ResumeLayout(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace QuanLySinhVien
+namespace QuanLySinhVien
 {
     partial class f_RegisterCourse : System.Windows.Forms.UserControl
     {
@@ -80,6 +80,7 @@
             // 
             // lstBandau
             // 
+            this.lstBandau.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.lstBandau.FormattingEnabled = true;
             this.lstBandau.ItemHeight = 20;
             this.lstBandau.Location = new System.Drawing.Point(7, 168);
@@ -90,6 +91,7 @@
             // 
             // lstKetqua
             // 
+            this.lstKetqua.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.lstKetqua.FormattingEnabled = true;
             this.lstKetqua.ItemHeight = 20;
             this.lstKetqua.Location = new System.Drawing.Point(793, 168);
@@ -123,6 +125,7 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(247)))));
             this.panel1.Controls.Add(this.btnRemoveAll);
             this.panel1.Controls.Add(this.btnMoveAll);
@@ -253,6 +256,7 @@
             // 
             // guna2Separator1
             // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator1.FillThickness = 3;
             this.guna2Separator1.Location = new System.Drawing.Point(7, 73);
             this.guna2Separator1.Name = "guna2Separator1";
@@ -314,7 +318,8 @@
             this.btnRegister.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnRegister.ForeColor = System.Drawing.Color.White;
             this.btnRegister.HoverState.FillColor = System.Drawing.Color.LimeGreen;
-            this.btnRegister.Location = new System.Drawing.Point(69, 426);
+            this.btnRegister.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnRegister.Location = new System.Drawing.Point(63, 426);
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.PressedDepth = 100;
             this.btnRegister.ShadowDecoration.BorderRadius = 18;
@@ -340,7 +345,8 @@
             this.btnUnregister.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnUnregister.ForeColor = System.Drawing.Color.White;
             this.btnUnregister.HoverState.FillColor = System.Drawing.Color.Crimson;
-            this.btnUnregister.Location = new System.Drawing.Point(333, 426);
+            this.btnUnregister.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnUnregister.Location = new System.Drawing.Point(343, 426);
             this.btnUnregister.Name = "btnUnregister";
             this.btnUnregister.PressedDepth = 100;
             this.btnUnregister.ShadowDecoration.BorderRadius = 18;
@@ -366,7 +372,8 @@
             this.btnSendRequest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnSendRequest.ForeColor = System.Drawing.Color.White;
             this.btnSendRequest.HoverState.FillColor = System.Drawing.Color.Orange;
-            this.btnSendRequest.Location = new System.Drawing.Point(609, 426);
+            this.btnSendRequest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnSendRequest.Location = new System.Drawing.Point(623, 426);
             this.btnSendRequest.Name = "btnSendRequest";
             this.btnSendRequest.PressedDepth = 100;
             this.btnSendRequest.ShadowDecoration.BorderRadius = 18;
@@ -392,7 +399,8 @@
             this.btnAISuggest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnAISuggest.ForeColor = System.Drawing.Color.White;
             this.btnAISuggest.HoverState.FillColor = System.Drawing.Color.SlateBlue;
-            this.btnAISuggest.Location = new System.Drawing.Point(874, 426);
+            this.btnAISuggest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnAISuggest.Location = new System.Drawing.Point(903, 426);
             this.btnAISuggest.Name = "btnAISuggest";
             this.btnAISuggest.PressedDepth = 100;
             this.btnAISuggest.ShadowDecoration.BorderRadius = 18;
@@ -418,7 +426,8 @@
             this.btnAICheckConflict.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnAICheckConflict.ForeColor = System.Drawing.Color.White;
             this.btnAICheckConflict.HoverState.FillColor = System.Drawing.Color.PaleGoldenrod;
-            this.btnAICheckConflict.Location = new System.Drawing.Point(1152, 426);
+            this.btnAICheckConflict.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnAICheckConflict.Location = new System.Drawing.Point(1183, 426);
             this.btnAICheckConflict.Name = "btnAICheckConflict";
             this.btnAICheckConflict.PressedDepth = 100;
             this.btnAICheckConflict.ShadowDecoration.BorderRadius = 18;
@@ -453,6 +462,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvRegisterList.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvRegisterList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.dgvRegisterList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRegisterList.Location = new System.Drawing.Point(7, 521);
             this.dgvRegisterList.Name = "dgvRegisterList";
             this.dgvRegisterList.RowHeadersVisible = false;
@@ -497,6 +507,7 @@
             this.cboStudent.Items.AddRange(new object[] {
             "Nam",
             "Nữ"});
+            this.cboStudent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.cboStudent.Location = new System.Drawing.Point(209, 89);
             this.cboStudent.Name = "cboStudent";
             this.cboStudent.Size = new System.Drawing.Size(593, 36);
@@ -505,6 +516,7 @@
             // 
             // guna2Separator2
             // 
+            this.guna2Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator2.FillThickness = 3;
             this.guna2Separator2.Location = new System.Drawing.Point(7, 918);
             this.guna2Separator2.Name = "guna2Separator2";

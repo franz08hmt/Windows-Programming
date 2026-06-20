@@ -20,6 +20,7 @@
             this.btnManageHR = new Guna.UI2.WinForms.Guna2Button();
             this.btnManageRequest = new Guna.UI2.WinForms.Guna2Button();
             this.btnStudentRequest = new Guna.UI2.WinForms.Guna2Button();
+            this.btnAccountManage = new Guna.UI2.WinForms.Guna2Button();
             this.btnReporta = new Guna.UI2.WinForms.Guna2Button();
             this.btnStatistic = new Guna.UI2.WinForms.Guna2Button();
             this.btnStudentScore = new Guna.UI2.WinForms.Guna2Button();
@@ -104,6 +105,7 @@
             this.pnlSidebar.Controls.Add(this.btnManageHR);
             this.pnlSidebar.Controls.Add(this.btnManageRequest);
             this.pnlSidebar.Controls.Add(this.btnStudentRequest);
+            this.pnlSidebar.Controls.Add(this.btnAccountManage);
             this.pnlSidebar.Controls.Add(this.btnReporta);
             this.pnlSidebar.Controls.Add(this.btnStatistic);
             this.pnlSidebar.Controls.Add(this.btnStudentScore);
@@ -135,7 +137,7 @@
             this.bttLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bttLogout.ForeColor = System.Drawing.Color.OrangeRed;
             this.bttLogout.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
-            this.bttLogout.Location = new System.Drawing.Point(-1, 1269);
+            this.bttLogout.Location = new System.Drawing.Point(-1, 1348);
             this.bttLogout.Name = "bttLogout";
             this.bttLogout.PressedDepth = 100;
             this.bttLogout.ShadowDecoration.BorderRadius = 18;
@@ -160,7 +162,7 @@
             this.btnContact.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnContact.ForeColor = System.Drawing.Color.White;
             this.btnContact.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
-            this.btnContact.Location = new System.Drawing.Point(0, 1109);
+            this.btnContact.Location = new System.Drawing.Point(0, 1188);
             this.btnContact.Name = "btnContact";
             this.btnContact.PressedDepth = 100;
             this.btnContact.ShadowDecoration.BorderRadius = 18;
@@ -185,7 +187,7 @@
             this.btnManageHR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnManageHR.ForeColor = System.Drawing.Color.White;
             this.btnManageHR.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
-            this.btnManageHR.Location = new System.Drawing.Point(-1, 1030);
+            this.btnManageHR.Location = new System.Drawing.Point(-1, 1109);
             this.btnManageHR.Name = "btnManageHR";
             this.btnManageHR.PressedDepth = 100;
             this.btnManageHR.ShadowDecoration.BorderRadius = 18;
@@ -210,7 +212,7 @@
             this.btnManageRequest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnManageRequest.ForeColor = System.Drawing.Color.White;
             this.btnManageRequest.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
-            this.btnManageRequest.Location = new System.Drawing.Point(-1, 951);
+            this.btnManageRequest.Location = new System.Drawing.Point(-1, 1030);
             this.btnManageRequest.Name = "btnManageRequest";
             this.btnManageRequest.PressedDepth = 100;
             this.btnManageRequest.ShadowDecoration.BorderRadius = 18;
@@ -235,7 +237,7 @@
             this.btnStudentRequest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnStudentRequest.ForeColor = System.Drawing.Color.White;
             this.btnStudentRequest.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
-            this.btnStudentRequest.Location = new System.Drawing.Point(1, 872);
+            this.btnStudentRequest.Location = new System.Drawing.Point(1, 951);
             this.btnStudentRequest.Name = "btnStudentRequest";
             this.btnStudentRequest.PressedDepth = 100;
             this.btnStudentRequest.ShadowDecoration.BorderRadius = 18;
@@ -269,7 +271,33 @@
             this.btnReporta.TabIndex = 40;
             this.btnReporta.Text = "📊 Báo cáo/Xuất";
             this.btnReporta.Click += new System.EventHandler(this.btnReporta_Click);
-            // 
+            //
+            // btnAccountManage
+            //
+            this.btnAccountManage.Animated = true;
+            this.btnAccountManage.BackColor = System.Drawing.Color.Transparent;
+            this.btnAccountManage.BorderColor = System.Drawing.Color.Transparent;
+            this.btnAccountManage.BorderRadius = 15;
+            this.btnAccountManage.BorderThickness = 1;
+            this.btnAccountManage.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnAccountManage.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnAccountManage.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnAccountManage.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnAccountManage.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(67)))), ((int)(((byte)(137)))));
+            this.btnAccountManage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnAccountManage.ForeColor = System.Drawing.Color.White;
+            this.btnAccountManage.HoverState.FillColor = System.Drawing.Color.MidnightBlue;
+            this.btnAccountManage.Location = new System.Drawing.Point(0, 872);
+            this.btnAccountManage.Name = "btnAccountManage";
+            this.btnAccountManage.PressedDepth = 100;
+            this.btnAccountManage.ShadowDecoration.BorderRadius = 18;
+            this.btnAccountManage.ShadowDecoration.Depth = 10;
+            this.btnAccountManage.Size = new System.Drawing.Size(216, 73);
+            this.btnAccountManage.TabIndex = 47;
+            this.btnAccountManage.Text = "👤 Quản lý tài khoản";
+            this.btnAccountManage.Visible = false;
+            this.btnAccountManage.Click += new System.EventHandler(this.btnAccountManage_Click);
+            //
             // btnStatistic
             // 
             this.btnStatistic.Animated = true;
@@ -958,6 +986,7 @@
         private Guna.UI2.WinForms.Guna2Button btnStudentScore;
         private Guna.UI2.WinForms.Guna2Button btnStatistic;
         private Guna.UI2.WinForms.Guna2Button btnReporta;
+        private Guna.UI2.WinForms.Guna2Button btnAccountManage;
         private Guna.UI2.WinForms.Guna2Button btnStudentRequest;
         private Guna.UI2.WinForms.Guna2Button btnManageRequest;
         private Guna.UI2.WinForms.Guna2Button btnManageHR;

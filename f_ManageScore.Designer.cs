@@ -153,6 +153,7 @@
             this.lblWeight.AutoSize = true;
             this.lblWeight.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.lblWeight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblWeight.Location = new System.Drawing.Point(18, 659);
             this.lblWeight.Name = "lblWeight";
             this.lblWeight.Size = new System.Drawing.Size(141, 30);
@@ -164,6 +165,7 @@
             this.lblWeightCK.AutoSize = true;
             this.lblWeightCK.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.lblWeightCK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.lblWeightCK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblWeightCK.Location = new System.Drawing.Point(286, 659);
             this.lblWeightCK.Name = "lblWeightCK";
             this.lblWeightCK.Size = new System.Drawing.Size(80, 30);
@@ -203,7 +205,8 @@
             this.guna2Separator1.Name = "guna2Separator1";
             this.guna2Separator1.Size = new System.Drawing.Size(1438, 10);
             this.guna2Separator1.TabIndex = 30;
-            // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            //
             // guna2Panel1
             // 
             this.guna2Panel1.BackColor = System.Drawing.Color.Transparent;
@@ -280,6 +283,7 @@
             this.guna2Panel4.ShadowDecoration.Enabled = true;
             this.guna2Panel4.Size = new System.Drawing.Size(809, 827);
             this.guna2Panel4.TabIndex = 33;
+            this.guna2Panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Bottom)));
             // 
             // btnRefresh
             // 
@@ -304,6 +308,7 @@
             this.btnRefresh.ShadowDecoration.Enabled = true;
             this.btnRefresh.Size = new System.Drawing.Size(198, 76);
             this.btnRefresh.TabIndex = 41;
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRefresh.Text = "🔄 Làm mới";
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click_1);
             // 
@@ -330,6 +335,7 @@
             this.btnFix.ShadowDecoration.Enabled = true;
             this.btnFix.Size = new System.Drawing.Size(198, 76);
             this.btnFix.TabIndex = 40;
+            this.btnFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnFix.Text = "✏️ Sửa điểm";
             this.btnFix.Click += new System.EventHandler(this.btnExportScorePDF_Click);
             // 
@@ -356,6 +362,7 @@
             this.btnSaveScore.ShadowDecoration.Enabled = true;
             this.btnSaveScore.Size = new System.Drawing.Size(198, 76);
             this.btnSaveScore.TabIndex = 39;
+            this.btnSaveScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSaveScore.Text = "💾 Lưu điểm";
             this.btnSaveScore.Click += new System.EventHandler(this.btnSaveScore_Click_1);
             // 
@@ -371,6 +378,7 @@
             this.nudCKWeight.Name = "nudCKWeight";
             this.nudCKWeight.Size = new System.Drawing.Size(107, 44);
             this.nudCKWeight.TabIndex = 38;
+            this.nudCKWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudCKWeight.UpDownButtonFillColor = System.Drawing.Color.DarkTurquoise;
             this.nudCKWeight.Value = new decimal(new int[] {
             60,
@@ -390,6 +398,7 @@
             this.nudQTWeight.Name = "nudQTWeight";
             this.nudQTWeight.Size = new System.Drawing.Size(107, 44);
             this.nudQTWeight.TabIndex = 37;
+            this.nudQTWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudQTWeight.UpDownButtonFillColor = System.Drawing.Color.DarkCyan;
             this.nudQTWeight.Value = new decimal(new int[] {
             40,
@@ -417,6 +426,7 @@
             this.txtMota.SelectedText = "";
             this.txtMota.Size = new System.Drawing.Size(766, 123);
             this.txtMota.TabIndex = 36;
+            this.txtMota.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // txtXepLoai
             // 
@@ -521,6 +531,7 @@
             this.cboCourse.Name = "cboCourse";
             this.cboCourse.Size = new System.Drawing.Size(766, 36);
             this.cboCourse.TabIndex = 31;
+            this.cboCourse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.cboCourse.SelectedIndexChanged += new System.EventHandler(this.cboCourse_SelectedIndexChanged);
             // 
             // cboStudent
@@ -541,6 +552,7 @@
             this.cboStudent.Name = "cboStudent";
             this.cboStudent.Size = new System.Drawing.Size(766, 36);
             this.cboStudent.TabIndex = 30;
+            this.cboStudent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // guna2Panel5
             // 
@@ -587,6 +599,7 @@
             this.guna2Panel2.ShadowDecoration.Enabled = true;
             this.guna2Panel2.Size = new System.Drawing.Size(602, 631);
             this.guna2Panel2.TabIndex = 42;
+            this.guna2Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // dgvScores
             // 
@@ -693,6 +706,7 @@
             this.guna2Panel6.ShadowDecoration.Enabled = true;
             this.guna2Panel6.Size = new System.Drawing.Size(602, 183);
             this.guna2Panel6.TabIndex = 43;
+            this.guna2Panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // label10
             // 
@@ -803,6 +817,7 @@
             this.guna2Separator2.Name = "guna2Separator2";
             this.guna2Separator2.Size = new System.Drawing.Size(1438, 10);
             this.guna2Separator2.TabIndex = 44;
+            this.guna2Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // f_ManageScore
             // 

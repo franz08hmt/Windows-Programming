@@ -18,6 +18,7 @@ namespace QuanLySinhVien
         {
             InitializeComponent();
             TaiLogoTruong();
+            this.Resize += (s, e) => ArrangeClassroomLayout();
         }
 
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
@@ -38,6 +39,7 @@ namespace QuanLySinhVien
         private void f_ManageClassroom_Load(object sender, EventArgs e)
         {
             LoadData();
+            ArrangeClassroomLayout();
             dgvClassroom.CellClick += new DataGridViewCellEventHandler(this.dgvClassroom_CellClick_1);
         }
 
@@ -60,6 +62,80 @@ namespace QuanLySinhVien
         private void LoadData()
         {
             dgvClassroom.DataSource = classroom.GetClassrooms();
+            ApplyClassroomGridColumnLayout();
+        }
+
+        private void ArrangeClassroomLayout()
+        {
+            if (pnlInputCard == null || pnlDataCard == null || dgvClassroom == null) return;
+
+            SuspendLayout();
+
+            const int left = 7;
+            const int top = 91;
+            const int gap = 24;
+            const int rightMargin = 18;
+            int panelHeight = Math.Max(780, Math.Min(870, ClientSize.Height - top - 28));
+            int inputWidth = Math.Min(570, Math.Max(535, ClientSize.Width / 3));
+
+            pnlInputCard.Location = new Point(left, top);
+            pnlInputCard.Size = new Size(inputWidth, panelHeight);
+            guna2CustomGradientPanel1.Location = new Point(pnlInputCard.Left, pnlInputCard.Top - 4);
+            guna2CustomGradientPanel1.Size = new Size(pnlInputCard.Width, 62);
+
+            int dataLeft = pnlInputCard.Right + gap;
+            int dataWidth = Math.Max(620, ClientSize.Width - dataLeft - rightMargin);
+            pnlDataCard.Location = new Point(dataLeft, top - 2);
+            pnlDataCard.Size = new Size(dataWidth, panelHeight + 2);
+            guna2CustomGradientPanel2.Location = new Point(pnlDataCard.Left, top);
+            guna2CustomGradientPanel2.Size = new Size(pnlDataCard.Width, 62);
+
+            txtMaLop.Width = pnlInputCard.Width - 70;
+            txtTenLop.Width = txtMaLop.Width;
+            txtSiSo.Width = txtMaLop.Width;
+            txtGVCN.Width = txtMaLop.Width;
+
+            int buttonGap = 34;
+            int buttonLeft = Math.Max(34, (pnlInputCard.Width - btnAdd.Width - btnEdit.Width - buttonGap) / 2);
+            btnAdd.Left = buttonLeft;
+            btnEdit.Left = btnAdd.Right + buttonGap;
+            btnDelete.Left = buttonLeft;
+            btnRefresh.Left = btnEdit.Left;
+            btnDelete.Top = pnlInputCard.Height - btnDelete.Height - 54;
+            btnRefresh.Top = btnDelete.Top;
+            btnAdd.Top = btnDelete.Top - btnAdd.Height - 28;
+            btnEdit.Top = btnAdd.Top;
+
+            txtSearch.Width = Math.Max(240, pnlDataCard.Width - txtSearch.Left - btnSearch.Width - 28);
+            btnSearch.Left = txtSearch.Right + 10;
+            dgvClassroom.Location = new Point(pnlDataCard.Left + 17, pnlDataCard.Top + 149);
+            dgvClassroom.Size = new Size(pnlDataCard.Width - 34, pnlDataCard.Height - 166);
+
+            guna2Separator1.Width = Math.Max(600, ClientSize.Width - 24);
+            guna2Separator2.Width = guna2Separator1.Width;
+            guna2Separator2.Top = Math.Max(pnlInputCard.Bottom, pnlDataCard.Bottom) + 24;
+
+            ApplyClassroomGridColumnLayout();
+            ResumeLayout(false);
+        }
+
+        private void ApplyClassroomGridColumnLayout()
+        {
+            if (dgvClassroom == null || dgvClassroom.Columns.Count == 0) return;
+
+            dgvClassroom.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            SetClassroomColumn("Mã Lớp", 90, 90);
+            SetClassroomColumn("Tên Lớp", 230, 180);
+            SetClassroomColumn("Sĩ Số", 70, 70);
+            SetClassroomColumn("GV Chủ Nhiệm", 220, 180);
+        }
+
+        private void SetClassroomColumn(string columnName, float fillWeight, int minimumWidth)
+        {
+            if (!dgvClassroom.Columns.Contains(columnName)) return;
+
+            dgvClassroom.Columns[columnName].FillWeight = fillWeight;
+            dgvClassroom.Columns[columnName].MinimumWidth = minimumWidth;
         }
 
         // Hàm kiểm tra xem người dùng nhập đầy đủ thông tin chưa

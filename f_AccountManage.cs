@@ -18,8 +18,8 @@ namespace QuanLySinhVien
         private bool _splitterSet = false;
 
         // Gmail SMTP — xóa trước khi push GitHub
-        private const string SMTP_FROM = "your_gmail@gmail.com";
-        private const string SMTP_PASS = "your_app_password";
+        private const string SMTP_FROM = "taihuynhjg249@gmail.com";
+        private const string SMTP_PASS = "dglk qqcf ughh yief";
 
         // Gemini API key — xóa trước khi push GitHub
         private const string GEMINI_KEY = "";
@@ -220,7 +220,7 @@ namespace QuanLySinhVien
         }
 
         // ── Nút Duyệt ─────────────────────────────────────────────────────
-        private async void btnApprove_Click(object sender, EventArgs e)
+        private async void btnApprove_Click_1(object sender, EventArgs e)
         {
             string msgv = GetSelectedMSGV();
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
@@ -247,7 +247,7 @@ namespace QuanLySinhVien
         }
 
         // ── Nút Từ chối ───────────────────────────────────────────────────
-        private void btnReject_Click(object sender, EventArgs e)
+        private void btnReject_Click_1(object sender, EventArgs e)
         {
             string msgv = GetSelectedMSGV();
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
@@ -268,11 +268,10 @@ namespace QuanLySinhVien
         }
 
         // ── Nút Xóa — bảo vệ Admin & tài khoản đang đăng nhập ────────────
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click_1(object sender, EventArgs e)
         {
-            // Xác định DGV nào đang có selection
-            DataGridView activeDgv = dgvApproved.CurrentRow != null &&
-                                     dgvApproved.Focused ? dgvApproved : dgvAccounts;
+            // Xác định DGV nào đang có selection (không dùng Focused vì click button làm mất focus)
+            DataGridView activeDgv = dgvApproved.SelectedRows.Count > 0 ? dgvApproved : dgvAccounts;
 
             string msgv = GetSelectedMSGV(activeDgv);
             if (string.IsNullOrEmpty(msgv)) { MessageBox.Show("Vui lòng chọn tài khoản!"); return; }
@@ -333,7 +332,7 @@ namespace QuanLySinhVien
             finally { db.closeConnection(); }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e) => LoadAllGrids();
+        private void btnRefresh_Click_1(object sender, EventArgs e) => LoadAllGrids();
 
         private void btnBack_Click(object sender, EventArgs e) { }
 
@@ -481,5 +480,11 @@ namespace QuanLySinhVien
             f.Controls.Add(rtb);
             f.ShowDialog(this);
         }
+
+        private void btnAI_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

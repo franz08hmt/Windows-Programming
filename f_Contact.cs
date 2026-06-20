@@ -132,8 +132,56 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
             return Convert.ToInt32(cmd.ExecuteScalar());
         }
 
-        private void InsertContact(string fname, string lname, DateTime dob, string gender, int groupId, string phone, string address, string email)
+        // Trả về true nếu đã tồn tại liên hệ trùng (Phone hoặc Fname+Lname) của user này
+        private bool IsDuplicateContact(string phone, string fname, string lname)
         {
+            SqlCommand cmd;
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM dbo.Contact WHERE LTRIM(RTRIM(Phone))=@ph AND UserID=@uid",
+                    db.conn);
+                cmd.Parameters.AddWithValue("@ph", phone.Trim());
+                cmd.Parameters.AddWithValue("@uid", currentUserId);
+            }
+            else
+            {
+                cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM dbo.Contact WHERE Fname=@fn AND Lname=@ln AND UserID=@uid",
+                    db.conn);
+                cmd.Parameters.AddWithValue("@fn", fname ?? "");
+                cmd.Parameters.AddWithValue("@ln", lname ?? "");
+                cmd.Parameters.AddWithValue("@uid", currentUserId);
+            }
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+        }
+
+        // Xóa các bản ghi trùng lặp (Fname+Lname+Phone+UserID), giữ ID nhỏ nhất mỗi nhóm
+        private int CleanDuplicateContacts()
+        {
+            try
+            {
+                db.openConnection();
+                var cmd = new SqlCommand(@"
+                    DELETE FROM dbo.Contact
+                    WHERE ID NOT IN (
+                        SELECT MIN(ID)
+                        FROM dbo.Contact
+                        GROUP BY Fname, Lname, COALESCE(Phone,''), UserID
+                    )
+                    AND UserID = @uid", db.conn);
+                cmd.Parameters.AddWithValue("@uid", currentUserId);
+                return cmd.ExecuteNonQuery();
+            }
+            catch { return 0; }
+            finally { db.closeConnection(); }
+        }
+
+        // Trả về true nếu insert thành công, false nếu trùng lặp (bỏ qua)
+        private bool InsertContact(string fname, string lname, DateTime dob, string gender, int groupId, string phone, string address, string email)
+        {
+            if (IsDuplicateContact(phone, fname, lname)) return false;
+
             SqlCommand cmd = new SqlCommand(
                 "INSERT INTO dbo.Contact (Fname, Lname, Dob, Gender, Group_ID, Phone, Address, Email, Pic, UserID) " +
                 "VALUES (@fn, @ln, @dob, @gender, @gid, @phone, @address, @email, NULL, @uid)", db.conn);
@@ -147,6 +195,7 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
             cmd.Parameters.AddWithValue("@email", email);
             cmd.Parameters.AddWithValue("@uid", currentUserId);
             cmd.ExecuteNonQuery();
+            return true;
         }
 
         private void ApplyContactModernTheme()
@@ -188,11 +237,10 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
             btnDeleteGroup.SetBounds(271, 233, 200, 55);
         }
 
-        // Buttons created in Designer.cs — chỉ đăng ký event ở đây
         private void BuildImportAIButtons()
         {
-            btnImportCSV.Click += async (s, e) => await btnImportCSV_ClickAsync();
-            btnAISuggestGroup.Click += async (s, e) => await btnAISuggestGroup_ClickAsync();
+            // Designer.cs đã wire btnImportCSV_Click và btnAISuggestGroup_Click,
+            // hai stub đó gọi async version — không đăng ký thêm ở đây.
         }
 
         private IEnumerable<Control> GetAllControls(Control parent)
@@ -273,6 +321,7 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
             txtSearchContact.Enter += new EventHandler(txtSearchContact_Enter);
             txtSearchContact.Leave += new EventHandler(txtSearchContact_Leave);
             txtSearchContact.KeyDown += new KeyEventHandler(txtSearchContact_KeyDown);
+            bntSearchContact.Click += new EventHandler(bntSearchContact_Click);
 
             btnAddContact.Click += (s, e) => AddContact();
             btnDeleteContact.Click += (s, e) => DeleteContact();
@@ -590,6 +639,14 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
             try
             {
                 db.openConnection();
+
+                if (IsDuplicateContact(txtPhone.Text.Trim(), txtFname.Text.Trim(), txtLname.Text.Trim()))
+                {
+                    MessageBox.Show("Liên hệ này đã tồn tại trong danh bạ!", "Trùng lặp",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 cmd.Parameters.AddWithValue("@fn", txtFname.Text.Trim());
                 cmd.Parameters.AddWithValue("@ln", txtLname.Text.Trim());
@@ -850,13 +907,15 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
                 string path = ofd.FileName;
                 bool isVcf = path.EndsWith(".vcf", StringComparison.OrdinalIgnoreCase);
 
-                int imported = 0, skipped = 0;
+                int imported = 0, skipped = 0, duplicates = 0;
                 List<string> errors = new List<string>();
+
+                // Xóa trùng lặp đang có trước khi nhập mới
+                int cleaned = CleanDuplicateContacts();
 
                 try
                 {
                     db.openConnection();
-                    // Pre-load groups for name→id resolution
                     var groupMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                     using (var cmd = new SqlCommand("SELECT ID, Name FROM Groups WHERE UserID=@uid", db.conn))
                     {
@@ -867,14 +926,16 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
                     }
 
                     if (isVcf)
-                        ImportVCard(path, groupMap, ref imported, ref skipped, errors);
+                        ImportVCard(path, groupMap, ref imported, ref skipped, ref duplicates, errors);
                     else
-                        ImportCsv(path, groupMap, ref imported, ref skipped, errors);
+                        ImportCsv(path, groupMap, ref imported, ref skipped, ref duplicates, errors);
 
                     LoadContactList();
-                    string msg = $"Nhập thành công {imported} liên hệ.";
-                    if (skipped > 0) msg += $"\nBỏ qua {skipped} dòng lỗi.";
-                    if (errors.Count > 0) msg += "\n" + string.Join("\n", errors.Take(5));
+                    string msg = $"Nhập thành công {imported} liên hệ mới.";
+                    if (duplicates > 0) msg += $"\nBỏ qua {duplicates} liên hệ trùng lặp.";
+                    if (cleaned > 0)    msg += $"\nĐã xóa {cleaned} bản ghi trùng lặp cũ.";
+                    if (skipped > 0)    msg += $"\nBỏ qua {skipped} dòng lỗi định dạng.";
+                    if (errors.Count > 0) msg += "\n" + string.Join("\n", errors.Take(3));
                     MessageBox.Show(msg, "Kết quả nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -887,7 +948,7 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
         }
 
         private void ImportCsv(string path, Dictionary<string, int> groupMap,
-            ref int imported, ref int skipped, List<string> errors)
+            ref int imported, ref int skipped, ref int duplicates, List<string> errors)
         {
             var lines = File.ReadAllLines(path, Encoding.UTF8);
             // Detect separator: first line may use ; or ,
@@ -918,15 +979,17 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
                     DateTime dob = DateTime.TryParse(dobStr, out var d) ? d : new DateTime(2000, 1, 1);
                     int groupId = ResolveOrCreateGroup(groupName, groupMap);
 
-                    InsertContact(fname, lname, dob, gender, groupId, phone, address, email);
-                    imported++;
+                    if (InsertContact(fname, lname, dob, gender, groupId, phone, address, email))
+                        imported++;
+                    else
+                        duplicates++;
                 }
                 catch (Exception ex) { skipped++; errors.Add($"Dòng {i + 1}: {ex.Message}"); }
             }
         }
 
         private void ImportVCard(string path, Dictionary<string, int> groupMap,
-            ref int imported, ref int skipped, List<string> errors)
+            ref int imported, ref int skipped, ref int duplicates, List<string> errors)
         {
             var lines = File.ReadAllLines(path, Encoding.UTF8);
             string fname = "", lname = "", phone = "", email = "", address = "", dobStr = "", gender = "Nam";
@@ -948,8 +1011,10 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
                         {
                             DateTime dob = DateTime.TryParse(dobStr, out var d) ? d : new DateTime(2000, 1, 1);
                             int gid = ResolveOrCreateGroup("", groupMap);
-                            InsertContact(fname, lname, dob, gender, gid, phone, address, email);
-                            imported++;
+                            if (InsertContact(fname, lname, dob, gender, gid, phone, address, email))
+                                imported++;
+                            else
+                                duplicates++;
                         }
                         catch (Exception ex) { skipped++; errors.Add(ex.Message); }
                     }

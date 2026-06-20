@@ -156,6 +156,7 @@
             // guna2Separator1
             // 
             this.guna2Separator1.FillThickness = 3;
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator1.Location = new System.Drawing.Point(18, 877);
             this.guna2Separator1.Name = "guna2Separator1";
             this.guna2Separator1.Size = new System.Drawing.Size(1414, 11);
@@ -164,6 +165,7 @@
             // guna2Separator3
             // 
             this.guna2Separator3.FillThickness = 3;
+            this.guna2Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator3.Location = new System.Drawing.Point(8, 61);
             this.guna2Separator3.Name = "guna2Separator3";
             this.guna2Separator3.Size = new System.Drawing.Size(1444, 10);
@@ -180,6 +182,7 @@
             this.guna2Panel1.Controls.Add(this.guna2Panel2);
             this.guna2Panel1.Controls.Add(this.label18);
             this.guna2Panel1.FillColor = System.Drawing.Color.White;
+            this.guna2Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Panel1.Location = new System.Drawing.Point(555, 77);
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.ShadowDecoration.BorderRadius = 20;
@@ -212,6 +215,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvGroup.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvGroup.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.dgvGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvGroup.Location = new System.Drawing.Point(3, 170);
             this.dgvGroup.Name = "dgvGroup";
             this.dgvGroup.RowHeadersVisible = false;
@@ -503,6 +507,7 @@
             this.guna2Panel9.Controls.Add(this.guna2Panel10);
             this.guna2Panel9.Controls.Add(this.label16);
             this.guna2Panel9.FillColor = System.Drawing.Color.White;
+            this.guna2Panel9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Panel9.Location = new System.Drawing.Point(827, 84);
             this.guna2Panel9.Name = "guna2Panel9";
             this.guna2Panel9.ShadowDecoration.BorderRadius = 20;
@@ -516,6 +521,7 @@
             this.txtTotalContact.AutoSize = true;
             this.txtTotalContact.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.txtTotalContact.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
+            this.txtTotalContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtTotalContact.Location = new System.Drawing.Point(3, 668);
             this.txtTotalContact.Name = "txtTotalContact";
             this.txtTotalContact.Size = new System.Drawing.Size(184, 28);
@@ -537,6 +543,7 @@
             this.btnExportCSV.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnExportCSV.ForeColor = System.Drawing.Color.White;
             this.btnExportCSV.HoverState.FillColor = System.Drawing.Color.YellowGreen;
+            this.btnExportCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnExportCSV.Location = new System.Drawing.Point(403, 707);
             this.btnExportCSV.Name = "btnExportCSV";
             this.btnExportCSV.PressedDepth = 100;
@@ -563,6 +570,7 @@
             this.btnAISuggestGroup.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnAISuggestGroup.ForeColor = System.Drawing.Color.White;
             this.btnAISuggestGroup.HoverState.FillColor = System.Drawing.Color.SlateBlue;
+            this.btnAISuggestGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAISuggestGroup.Location = new System.Drawing.Point(213, 707);
             this.btnAISuggestGroup.Name = "btnAISuggestGroup";
             this.btnAISuggestGroup.PressedDepth = 100;
@@ -589,6 +597,7 @@
             this.btnImportCSV.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnImportCSV.ForeColor = System.Drawing.Color.White;
             this.btnImportCSV.HoverState.FillColor = System.Drawing.Color.MediumTurquoise;
+            this.btnImportCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnImportCSV.Location = new System.Drawing.Point(23, 707);
             this.btnImportCSV.Name = "btnImportCSV";
             this.btnImportCSV.PressedDepth = 100;
@@ -624,6 +633,7 @@
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvContacts.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dgvContacts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvContacts.Location = new System.Drawing.Point(8, 171);
             this.dgvContacts.Name = "dgvContacts";
             this.dgvContacts.RowHeadersVisible = false;
@@ -770,6 +780,7 @@
             this.guna2Panel7.Controls.Add(this.label7);
             this.guna2Panel7.Controls.Add(this.label8);
             this.guna2Panel7.FillColor = System.Drawing.Color.White;
+            this.guna2Panel7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Bottom)));
             this.guna2Panel7.Location = new System.Drawing.Point(8, 84);
             this.guna2Panel7.Name = "guna2Panel7";
             this.guna2Panel7.ShadowDecoration.BorderRadius = 20;
@@ -793,6 +804,7 @@
             this.btnDeleteContact.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnDeleteContact.ForeColor = System.Drawing.Color.White;
             this.btnDeleteContact.HoverState.FillColor = System.Drawing.Color.IndianRed;
+            this.btnDeleteContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDeleteContact.Location = new System.Drawing.Point(593, 693);
             this.btnDeleteContact.Name = "btnDeleteContact";
             this.btnDeleteContact.PressedDepth = 100;
@@ -818,6 +830,7 @@
             this.btnRefreshContact.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnRefreshContact.ForeColor = System.Drawing.Color.White;
             this.btnRefreshContact.HoverState.FillColor = System.Drawing.Color.Silver;
+            this.btnRefreshContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRefreshContact.Location = new System.Drawing.Point(398, 693);
             this.btnRefreshContact.Name = "btnRefreshContact";
             this.btnRefreshContact.PressedDepth = 100;
@@ -843,6 +856,7 @@
             this.btnFixContact.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnFixContact.ForeColor = System.Drawing.Color.White;
             this.btnFixContact.HoverState.FillColor = System.Drawing.Color.LightSeaGreen;
+            this.btnFixContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnFixContact.Location = new System.Drawing.Point(207, 693);
             this.btnFixContact.Name = "btnFixContact";
             this.btnFixContact.PressedDepth = 100;
@@ -868,6 +882,7 @@
             this.btnAddContact.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnAddContact.ForeColor = System.Drawing.Color.White;
             this.btnAddContact.HoverState.FillColor = System.Drawing.Color.LimeGreen;
+            this.btnAddContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAddContact.Location = new System.Drawing.Point(16, 693);
             this.btnAddContact.Name = "btnAddContact";
             this.btnAddContact.PressedDepth = 100;
@@ -1211,6 +1226,7 @@
             // guna2Separator2
             // 
             this.guna2Separator2.FillThickness = 3;
+            this.guna2Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator2.Location = new System.Drawing.Point(8, 63);
             this.guna2Separator2.Name = "guna2Separator2";
             this.guna2Separator2.Size = new System.Drawing.Size(1444, 10);

@@ -26,8 +26,6 @@ namespace QuanLySinhVien
             this.Load += new EventHandler(f_Report_Load);
             cboReportType.SelectedIndexChanged += new EventHandler(CboReportType_SelectedIndexChanged);
             btnPreview.Click += new EventHandler(BtnPreview_Click);
-            btnExportPDF.Click += new EventHandler(btnExportPDF_Click_1);
-            btnExportExcel.Click += new EventHandler(btnExportExcel_Click_1);
             btnRefresh.Click += new EventHandler(BtnRefresh_Click);
             txtSearch.TextChanged += new EventHandler(TxtSearch_TextChanged);
         }

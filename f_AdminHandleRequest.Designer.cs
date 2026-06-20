@@ -53,8 +53,8 @@
             // 
             // txtRequestDetails
             // 
-            this.txtRequestDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRequestDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRequestDetails.BackColor = System.Drawing.Color.WhiteSmoke;
             this.txtRequestDetails.Location = new System.Drawing.Point(3, 3);
             this.txtRequestDetails.Multiline = true;
@@ -69,7 +69,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label3.Location = new System.Drawing.Point(204, 113);
+            this.label3.Location = new System.Drawing.Point(14, 113);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(363, 32);
             this.label3.TabIndex = 35;
@@ -81,7 +81,7 @@
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.label5.Location = new System.Drawing.Point(324, 19);
+            this.label5.Location = new System.Drawing.Point(14, 19);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(136, 32);
             this.label5.TabIndex = 25;
@@ -90,6 +90,7 @@
             // guna2Separator1
             // 
             this.guna2Separator1.FillThickness = 3;
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator1.Location = new System.Drawing.Point(8, 73);
             this.guna2Separator1.Name = "guna2Separator1";
             this.guna2Separator1.Size = new System.Drawing.Size(1438, 10);
@@ -146,12 +147,13 @@
             this.pnlDataCard.Controls.Add(this.cboStatusFilter);
             this.pnlDataCard.Controls.Add(this.label5);
             this.pnlDataCard.Controls.Add(this.label3);
+            this.pnlDataCard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Bottom)));
             this.pnlDataCard.Location = new System.Drawing.Point(8, 96);
             this.pnlDataCard.Name = "pnlDataCard";
             this.pnlDataCard.ShadowDecoration.BorderRadius = 20;
             this.pnlDataCard.ShadowDecoration.Depth = 2;
             this.pnlDataCard.ShadowDecoration.Enabled = true;
-            this.pnlDataCard.Size = new System.Drawing.Size(777, 843);
+            this.pnlDataCard.Size = new System.Drawing.Size(940, 843);
             this.pnlDataCard.TabIndex = 43;
             // 
             // cboStatusFilter
@@ -170,9 +172,9 @@
             "Chờ duyệt",
             "Đã duyệt",
             "Từ chối"});
-            this.cboStatusFilter.Location = new System.Drawing.Point(185, 54);
+            this.cboStatusFilter.Location = new System.Drawing.Point(14, 54);
             this.cboStatusFilter.Name = "cboStatusFilter";
-            this.cboStatusFilter.Size = new System.Drawing.Size(396, 36);
+            this.cboStatusFilter.Size = new System.Drawing.Size(350, 36);
             this.cboStatusFilter.TabIndex = 40;
             // 
             // txtSearch
@@ -188,12 +190,13 @@
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.txtSearch.ForeColor = System.Drawing.Color.Black;
             this.txtSearch.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
-            this.txtSearch.Location = new System.Drawing.Point(185, 151);
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearch.Location = new System.Drawing.Point(14, 151);
             this.txtSearch.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.PlaceholderText = "";
             this.txtSearch.SelectedText = "";
-            this.txtSearch.Size = new System.Drawing.Size(396, 44);
+            this.txtSearch.Size = new System.Drawing.Size(912, 44);
             this.txtSearch.TabIndex = 41;
             // 
             // dgvRequests
@@ -220,6 +223,7 @@
             dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvRequests.DefaultCellStyle = dataGridViewCellStyle15;
+            this.dgvRequests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRequests.Location = new System.Drawing.Point(14, 221);
             this.dgvRequests.Name = "dgvRequests";
             this.dgvRequests.RowHeadersVisible = false;
@@ -259,12 +263,13 @@
             this.guna2CustomGradientPanel1.Controls.Add(this.btnDecline);
             this.guna2CustomGradientPanel1.Controls.Add(this.btnAdd);
             this.guna2CustomGradientPanel1.Controls.Add(this.txtRequestDetails);
-            this.guna2CustomGradientPanel1.Location = new System.Drawing.Point(816, 96);
+            this.guna2CustomGradientPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.guna2CustomGradientPanel1.Location = new System.Drawing.Point(979, 96);
             this.guna2CustomGradientPanel1.Name = "guna2CustomGradientPanel1";
             this.guna2CustomGradientPanel1.ShadowDecoration.BorderRadius = 20;
             this.guna2CustomGradientPanel1.ShadowDecoration.Depth = 2;
             this.guna2CustomGradientPanel1.ShadowDecoration.Enabled = true;
-            this.guna2CustomGradientPanel1.Size = new System.Drawing.Size(630, 729);
+            this.guna2CustomGradientPanel1.Size = new System.Drawing.Size(467, 729);
             this.guna2CustomGradientPanel1.TabIndex = 44;
             // 
             // btnAdd
@@ -282,7 +287,8 @@
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnAdd.ForeColor = System.Drawing.Color.White;
             this.btnAdd.HoverState.FillColor = System.Drawing.Color.LimeGreen;
-            this.btnAdd.Location = new System.Drawing.Point(197, 457);
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAdd.Location = new System.Drawing.Point(111, 457);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.PressedDepth = 100;
             this.btnAdd.ShadowDecoration.BorderRadius = 18;
@@ -308,7 +314,8 @@
             this.btnDecline.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnDecline.ForeColor = System.Drawing.Color.White;
             this.btnDecline.HoverState.FillColor = System.Drawing.Color.IndianRed;
-            this.btnDecline.Location = new System.Drawing.Point(197, 581);
+            this.btnDecline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDecline.Location = new System.Drawing.Point(111, 581);
             this.btnDecline.Name = "btnDecline";
             this.btnDecline.PressedDepth = 100;
             this.btnDecline.ShadowDecoration.BorderRadius = 18;

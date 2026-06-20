@@ -1,4 +1,4 @@
-﻿namespace QuanLySinhVien
+namespace QuanLySinhVien
 {
     partial class f_ManageCourse : System.Windows.Forms.UserControl
     {
@@ -151,6 +151,7 @@
             this.pnlForm.Controls.Add(this.txtAddTen);
             this.pnlForm.Controls.Add(this.txtAddMa);
             this.pnlForm.FillColor = System.Drawing.Color.White;
+            this.pnlForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlForm.Location = new System.Drawing.Point(6, 92);
             this.pnlForm.Name = "pnlForm";
             this.pnlForm.ShadowDecoration.BorderRadius = 20;
@@ -203,7 +204,8 @@
             this.btnAIGenMota.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnAIGenMota.ForeColor = System.Drawing.Color.White;
             this.btnAIGenMota.HoverState.FillColor = System.Drawing.Color.SlateBlue;
-            this.btnAIGenMota.Location = new System.Drawing.Point(1007, 677);
+            this.btnAIGenMota.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnAIGenMota.Location = new System.Drawing.Point(631, 677);
             this.btnAIGenMota.Name = "btnAIGenMota";
             this.btnAIGenMota.PressedDepth = 100;
             this.btnAIGenMota.ShadowDecoration.BorderRadius = 18;
@@ -227,6 +229,7 @@
             this.txtAddMota.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.txtAddMota.ForeColor = System.Drawing.Color.Black;
             this.txtAddMota.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
+            this.txtAddMota.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAddMota.Location = new System.Drawing.Point(55, 445);
             this.txtAddMota.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.txtAddMota.Multiline = true;
@@ -252,7 +255,8 @@
             this.btnAICDIO.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnAICDIO.ForeColor = System.Drawing.Color.White;
             this.btnAICDIO.HoverState.FillColor = System.Drawing.Color.LightSeaGreen;
-            this.btnAICDIO.Location = new System.Drawing.Point(162, 677);
+            this.btnAICDIO.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnAICDIO.Location = new System.Drawing.Point(55, 677);
             this.btnAICDIO.Name = "btnAICDIO";
             this.btnAICDIO.PressedDepth = 100;
             this.btnAICDIO.ShadowDecoration.BorderRadius = 18;
@@ -289,7 +293,8 @@
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnAdd.ForeColor = System.Drawing.Color.White;
             this.btnAdd.HoverState.FillColor = System.Drawing.Color.LimeGreen;
-            this.btnAdd.Location = new System.Drawing.Point(566, 677);
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnAdd.Location = new System.Drawing.Point(343, 677);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.PressedDepth = 100;
             this.btnAdd.ShadowDecoration.BorderRadius = 18;
@@ -456,6 +461,7 @@
             // 
             // guna2Separator2
             // 
+            this.guna2Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator2.FillThickness = 3;
             this.guna2Separator2.Location = new System.Drawing.Point(6, 884);
             this.guna2Separator2.Name = "guna2Separator2";
@@ -464,6 +470,7 @@
             // 
             // guna2Separator1
             // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator1.FillThickness = 3;
             this.guna2Separator1.Location = new System.Drawing.Point(6, 67);
             this.guna2Separator1.Name = "guna2Separator1";
@@ -548,6 +555,7 @@
             this.guna2Panel4.Controls.Add(this.txtEditTen);
             this.guna2Panel4.Controls.Add(this.txtEditMa);
             this.guna2Panel4.FillColor = System.Drawing.Color.White;
+            this.guna2Panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Panel4.Location = new System.Drawing.Point(6, 92);
             this.guna2Panel4.Name = "guna2Panel4";
             this.guna2Panel4.ShadowDecoration.BorderRadius = 20;
@@ -626,7 +634,8 @@
             this.btnDel.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnDel.ForeColor = System.Drawing.Color.White;
             this.btnDel.HoverState.FillColor = System.Drawing.Color.Crimson;
-            this.btnDel.Location = new System.Drawing.Point(777, 678);
+            this.btnDel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnDel.Location = new System.Drawing.Point(343, 678);
             this.btnDel.Name = "btnDel";
             this.btnDel.PressedDepth = 100;
             this.btnDel.ShadowDecoration.BorderRadius = 18;
@@ -650,10 +659,13 @@
             this.txtEditMota.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.txtEditMota.ForeColor = System.Drawing.Color.Black;
             this.txtEditMota.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
+            this.txtEditMota.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.txtEditMota.Location = new System.Drawing.Point(55, 445);
             this.txtEditMota.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.txtEditMota.Multiline = true;
             this.txtEditMota.Name = "txtEditMota";
             this.txtEditMota.PlaceholderText = "";
+            this.txtEditMota.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtEditMota.SelectedText = "";
             this.txtEditMota.Size = new System.Drawing.Size(1328, 210);
             this.txtEditMota.TabIndex = 26;
@@ -684,7 +696,8 @@
             this.btnEdit.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnEdit.ForeColor = System.Drawing.Color.White;
             this.btnEdit.HoverState.FillColor = System.Drawing.Color.RoyalBlue;
-            this.btnEdit.Location = new System.Drawing.Point(419, 678);
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
+            this.btnEdit.Location = new System.Drawing.Point(55, 678);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.PressedDepth = 100;
             this.btnEdit.ShadowDecoration.BorderRadius = 18;
@@ -851,6 +864,7 @@
             // 
             // guna2Separator4
             // 
+            this.guna2Separator4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator4.BackColor = System.Drawing.Color.Transparent;
             this.guna2Separator4.FillThickness = 3;
             this.guna2Separator4.Location = new System.Drawing.Point(6, 67);
@@ -860,6 +874,7 @@
             // 
             // guna2Separator3
             // 
+            this.guna2Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator3.FillThickness = 3;
             this.guna2Separator3.Location = new System.Drawing.Point(6, 883);
             this.guna2Separator3.Name = "guna2Separator3";
@@ -1021,6 +1036,7 @@
             // 
             // guna2Separator5
             // 
+            this.guna2Separator5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator5.BackColor = System.Drawing.Color.Transparent;
             this.guna2Separator5.FillThickness = 3;
             this.guna2Separator5.Location = new System.Drawing.Point(6, 67);
@@ -1092,6 +1108,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvCourse.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvCourse.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.dgvCourse.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvCourse.Location = new System.Drawing.Point(6, 166);
             this.dgvCourse.Name = "dgvCourse";
             this.dgvCourse.RowHeadersVisible = false;

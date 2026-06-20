@@ -1,4 +1,4 @@
-﻿namespace QuanLySinhVien
+namespace QuanLySinhVien
 {
     partial class f_ManageClassroom : System.Windows.Forms.UserControl
     {
@@ -156,6 +156,7 @@
             // 
             // guna2Separator1
             // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator1.FillThickness = 3;
             this.guna2Separator1.Location = new System.Drawing.Point(7, 73);
             this.guna2Separator1.Name = "guna2Separator1";
@@ -180,6 +181,7 @@
             this.pnlInputCard.Controls.Add(this.lblTenLop);
             this.pnlInputCard.Controls.Add(this.lblSiSo);
             this.pnlInputCard.Controls.Add(this.lblGVCN);
+            this.pnlInputCard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Bottom)));
             this.pnlInputCard.Location = new System.Drawing.Point(4, 91);
             this.pnlInputCard.Name = "pnlInputCard";
             this.pnlInputCard.ShadowDecoration.BorderRadius = 20;
@@ -203,6 +205,7 @@
             this.btnRefresh.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnRefresh.ForeColor = System.Drawing.Color.Black;
             this.btnRefresh.HoverState.FillColor = System.Drawing.Color.White;
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right))));
             this.btnRefresh.Location = new System.Drawing.Point(302, 642);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.PressedDepth = 100;
@@ -229,6 +232,7 @@
             this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 11.5F, System.Drawing.FontStyle.Bold);
             this.btnDelete.ForeColor = System.Drawing.Color.White;
             this.btnDelete.HoverState.FillColor = System.Drawing.Color.IndianRed;
+            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
             this.btnDelete.Location = new System.Drawing.Point(58, 642);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.PressedDepth = 100;
@@ -255,6 +259,7 @@
             this.btnEdit.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnEdit.ForeColor = System.Drawing.Color.White;
             this.btnEdit.HoverState.FillColor = System.Drawing.Color.DodgerBlue;
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right))));
             this.btnEdit.Location = new System.Drawing.Point(302, 530);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.PressedDepth = 100;
@@ -281,6 +286,7 @@
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnAdd.ForeColor = System.Drawing.Color.White;
             this.btnAdd.HoverState.FillColor = System.Drawing.Color.LimeGreen;
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left))));
             this.btnAdd.Location = new System.Drawing.Point(59, 530);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.PressedDepth = 100;
@@ -378,6 +384,7 @@
             // 
             // guna2Separator2
             // 
+            this.guna2Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Separator2.FillThickness = 3;
             this.guna2Separator2.Location = new System.Drawing.Point(9, 914);
             this.guna2Separator2.Name = "guna2Separator2";
@@ -397,6 +404,7 @@
             this.guna2CustomGradientPanel1.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
             this.guna2CustomGradientPanel1.FillColor3 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
             this.guna2CustomGradientPanel1.FillColor4 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
+            this.guna2CustomGradientPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left))));
             this.guna2CustomGradientPanel1.Location = new System.Drawing.Point(4, 87);
             this.guna2CustomGradientPanel1.Name = "guna2CustomGradientPanel1";
             this.guna2CustomGradientPanel1.ShadowDecoration.BorderRadius = 20;
@@ -426,6 +434,7 @@
             this.pnlDataCard.Controls.Add(this.btnSearch);
             this.pnlDataCard.Controls.Add(this.txtSearch);
             this.pnlDataCard.Controls.Add(this.lblSearch);
+            this.pnlDataCard.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlDataCard.Location = new System.Drawing.Point(594, 89);
             this.pnlDataCard.Name = "pnlDataCard";
             this.pnlDataCard.ShadowDecoration.BorderRadius = 20;
@@ -449,6 +458,7 @@
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnSearch.ForeColor = System.Drawing.Color.White;
             this.btnSearch.HoverState.FillColor = System.Drawing.Color.Gray;
+            this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right))));
             this.btnSearch.Location = new System.Drawing.Point(666, 80);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.PressedDepth = 100;
@@ -473,6 +483,7 @@
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.txtSearch.ForeColor = System.Drawing.Color.Black;
             this.txtSearch.HoverState.BorderColor = System.Drawing.Color.SkyBlue;
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Location = new System.Drawing.Point(219, 82);
             this.txtSearch.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.txtSearch.Name = "txtSearch";
@@ -494,6 +505,7 @@
             this.guna2CustomGradientPanel2.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
             this.guna2CustomGradientPanel2.FillColor3 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
             this.guna2CustomGradientPanel2.FillColor4 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(82)))), ((int)(((byte)(166)))));
+            this.guna2CustomGradientPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2CustomGradientPanel2.Location = new System.Drawing.Point(594, 91);
             this.guna2CustomGradientPanel2.Name = "guna2CustomGradientPanel2";
             this.guna2CustomGradientPanel2.ShadowDecoration.BorderRadius = 20;
@@ -538,6 +550,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvClassroom.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvClassroom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvClassroom.Location = new System.Drawing.Point(611, 238);
             this.dgvClassroom.Name = "dgvClassroom";
             this.dgvClassroom.RowHeadersVisible = false;

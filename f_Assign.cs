@@ -52,6 +52,112 @@ namespace QuanLySinhVien
             {
                 lstSuggest.Click += new System.EventHandler(this.lstSuggest_Click);
             }
+
+            this.Resize += (s, e) => this.BeginInvoke(new Action(() =>
+            {
+                RepositionTab4Controls();
+                RepositionPnlFormControls();
+            }));
+        }
+
+        private void RepositionTab4Controls()
+        {
+            const int gap     = 8;
+            const int minPnlW = 320;
+
+            pnlForm.Anchor = System.Windows.Forms.AnchorStyles.None;
+
+            int containerW = this.ClientSize.Width;
+            if (containerW < 400) return;   // chưa layout xong
+
+            int dgvLeft = dgvsuathongtin.Left;
+            int dgvTop  = dgvsuathongtin.Top;
+
+            // Tỉ lệ 7:3 — DGV chiếm 70%, pnlForm chiếm 30% phần còn lại
+            int available = containerW - dgvLeft - gap;
+            int dgvW  = available * 7 / 10;
+            int pnlW  = available - dgvW;
+            if (pnlW < minPnlW) { pnlW = minPnlW; dgvW = available - pnlW; }
+
+            int pnlLeft = dgvLeft + dgvW + gap;
+
+            dgvsuathongtin.Width = dgvW;
+            pnlForm.Left   = pnlLeft;
+            pnlForm.Top    = dgvTop;              // căn cùng Y với DGV
+            pnlForm.Width  = pnlW;
+            pnlForm.Height = dgvsuathongtin.Height;
+        }
+
+        private bool _pnlFormInited = false;
+        private void RepositionPnlFormControls()
+        {
+            // Lần đầu: bỏ Anchor tất cả control bên trong pnlForm để layout code hoàn toàn kiểm soát
+            if (!_pnlFormInited)
+            {
+                System.Windows.Forms.Control[] inners = {
+                    label14, txtMSGV1, label24, textBox1, label25, textBox2,
+                    label17, dateTimePicker1, label18, comboBox1, label23, textBox4,
+                    label19, textBox3, label27, textBox5,
+                    pictureBox4, button4, btnFix, btnDelete, btnRefresh,
+                    label15, label16, label20
+                };
+                foreach (var c in inners)
+                    c.Anchor = System.Windows.Forms.AnchorStyles.None;
+
+                label23.Text  = "Email *";
+                label15.Visible = false;
+                label16.Visible = false;
+                label20.Visible = false;
+                dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+                button4.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+                _pnlFormInited = true;
+            }
+
+            const int pad  = 12;
+            const int imgW = 155;
+            const int gap  = 10;
+            int fieldX = pad + imgW + gap;         // = 177
+            int fieldW = pnlForm.Width - fieldX - pad;
+            if (fieldW < 140) fieldW = 140;
+
+            // --- Cột PHẢI: MSGV, Họ, Tên, Điện thoại, Địa chỉ, Email ---
+            // Row 1  y=20
+            label14.SetBounds(fieldX,  20, fieldW, 26);  // MSGV *
+            txtMSGV1.SetBounds(fieldX, 50, fieldW, 40);  // bottom=90
+            // Row 2  y=106
+            label24.SetBounds(fieldX, 106, fieldW, 26);  // Họ *
+            textBox1.SetBounds(fieldX, 136, fieldW, 40); // bottom=176
+            // Row 3  y=192
+            label25.SetBounds(fieldX, 192, fieldW, 26);  // Tên *
+            textBox2.SetBounds(fieldX, 222, fieldW, 40); // bottom=262
+            // Row 4  y=278
+            label19.SetBounds(fieldX, 278, fieldW, 26);  // Điện thoại
+            textBox3.SetBounds(fieldX, 308, fieldW, 34); // bottom=342
+            // Row 5  y=358
+            label27.SetBounds(fieldX, 358, fieldW, 26);  // Địa chỉ *
+            textBox5.SetBounds(fieldX, 388, fieldW, 80); // multiline, bottom=468
+            // Row 6  y=484
+            label23.SetBounds(fieldX, 484, fieldW, 26);  // Email *
+            textBox4.SetBounds(fieldX, 514, fieldW, 40); // bottom=554
+
+            // --- Cột TRÁI: ảnh + Ngày sinh + Giới tính (control ngắn) ---
+            int btn4W = fieldX - pad - 2;                // = 163, vừa khít trước cột phải
+            pictureBox4.SetBounds(pad,  20, imgW, 180);  // ảnh 155×180
+            button4.SetBounds(pad,     206, btn4W, 40);  // "Chọn ảnh" đủ chỗ (163px)
+            label17.SetBounds(pad,     278, imgW,  26);  // Ngày sinh * — căn Row4
+            dateTimePicker1.SetBounds(pad, 308, imgW, 34);
+            label18.SetBounds(pad,     358, imgW,  26);  // Giới tính * — căn Row5
+            comboBox1.SetBounds(pad,   388, imgW,  34);
+
+            // --- 3 nút dưới cùng ---
+            int btnY      = 570;   // 554 + 16
+            int totalW    = pnlForm.Width - pad * 4;
+            int btnW      = totalW / 3;
+            int remainder = totalW - btnW * 3;
+            btnFix.SetBounds(pad,                  btnY, btnW,             54);
+            btnDelete.SetBounds(pad * 2 + btnW,    btnY, btnW,             54);
+            btnRefresh.SetBounds(pad*3 + btnW*2,   btnY, btnW + remainder, 54);
+            btnRefresh.Visible = true;
         }
 
         private void BoGocPanel(Panel pnl, int radius)
@@ -82,6 +188,7 @@ namespace QuanLySinhVien
 
         private void f_Assign_Load(object sender, EventArgs e)
         {
+            EnsureLoginTeacherColumns();
             LoadHRToComboBox();
             LoadCoursesToComboBox();
             LoadAssignList();
@@ -89,6 +196,42 @@ namespace QuanLySinhVien
             LoadData1();
 
             dgvsuathongtin.CellClick += new DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            // BeginInvoke: đợi AutoScale hoàn tất trước khi reposition
+            this.BeginInvoke(new Action(() =>
+            {
+                RepositionTab4Controls();
+                RepositionPnlFormControls();
+            }));
+        }
+
+        private void EnsureLoginTeacherColumns()
+        {
+            const string query = @"
+IF COL_LENGTH('dbo.Login', 'Dob') IS NULL
+    ALTER TABLE dbo.Login ADD Dob DATETIME NULL;
+IF COL_LENGTH('dbo.Login', 'Gder') IS NULL
+    ALTER TABLE dbo.Login ADD Gder NVARCHAR(10) NULL;
+IF COL_LENGTH('dbo.Login', 'Phone') IS NULL
+    ALTER TABLE dbo.Login ADD Phone NVARCHAR(15) NULL;
+IF COL_LENGTH('dbo.Login', 'Address') IS NULL
+    ALTER TABLE dbo.Login ADD Address NVARCHAR(250) NULL;";
+
+            try
+            {
+                db.openConnection();
+                using (SqlCommand cmd = new SqlCommand(query, db.conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kiểm tra cấu trúc bảng giảng viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                db.closeConnection();
+            }
         }
 
         private bool ValidateInput()
@@ -196,6 +339,19 @@ namespace QuanLySinhVien
                 dgvsuathongtin.DefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
                 dgvsuathongtin.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
                 dgvsuathongtin.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
+
+                dgvsuathongtin.Columns["MSGV"].MinimumWidth  = 55;
+                dgvsuathongtin.Columns["Fname"].MinimumWidth = 55;
+                dgvsuathongtin.Columns["Lname"].MinimumWidth = 80;
+                dgvsuathongtin.Columns["Dob"].MinimumWidth   = 80;
+                dgvsuathongtin.Columns["Gder"].MinimumWidth  = 55;
+                dgvsuathongtin.Columns["Phone"].MinimumWidth = 90;
+                dgvsuathongtin.Columns["Email"].MinimumWidth = 100;
+                if (dgvsuathongtin.Columns["Address"] != null)
+                    dgvsuathongtin.Columns["Address"].MinimumWidth = 80;
+                if (dgvsuathongtin.Columns["Pic"] != null)
+                    dgvsuathongtin.Columns["Pic"].MinimumWidth = 50;
+                dgvsuathongtin.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
             catch (Exception ex)
             {
@@ -452,6 +608,18 @@ namespace QuanLySinhVien
                 dgvStudents.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
                 dgvStudents.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
 
+                dgvStudents.Columns["MSGV"].MinimumWidth  = 75;
+                dgvStudents.Columns["Fname"].MinimumWidth = 75;
+                dgvStudents.Columns["Lname"].MinimumWidth = 125;
+                dgvStudents.Columns["Dob"].MinimumWidth   = 105;
+                dgvStudents.Columns["Gder"].MinimumWidth  = 95;
+                dgvStudents.Columns["Phone"].MinimumWidth = 115;
+                dgvStudents.Columns["Email"].MinimumWidth = 185;
+                if (dgvStudents.Columns["Address"] != null)
+                    dgvStudents.Columns["Address"].MinimumWidth = 155;
+                if (dgvStudents.Columns["Pic"] != null)
+                    dgvStudents.Columns["Pic"].MinimumWidth = 65;
+
                 UpdateTotalCount();
             }
             catch (Exception ex)
@@ -600,8 +768,8 @@ namespace QuanLySinhVien
             string maSoGV = txtMSGV.Text.Trim();
 
             // SỬA TAY: Cập nhật chuỗi chèn đầy đủ thuộc tính vào bảng Login
-            string query = "INSERT INTO Login (Username, Pass, Fname, Lname, position, MSGV, Dob, Gder, Phone, Email, VALID) " +
-                           "VALUES (@msgv, @msgv, @fname, @lname, 2, @msgv, @dob, @gder, @phone, @email, 'True')";
+            string query = "INSERT INTO Login (Username, Pass, Fname, Lname, position, MSGV, Dob, Gder, Phone, Email, Address, VALID) " +
+                           "VALUES (@msgv, @msgv, @fname, @lname, 2, @msgv, @dob, @gder, @phone, @email, @address, 'True')";
 
             try
             {
@@ -614,6 +782,7 @@ namespace QuanLySinhVien
                 cmd.Parameters.AddWithValue("@gder", cboGender.Text);
                 cmd.Parameters.AddWithValue("@phone", txtPhone.Text.Trim());
                 cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
+                cmd.Parameters.AddWithValue("@address", txtAddress.Text.Trim());
 
                 if (cmd.ExecuteNonQuery() == 1)
                 {
@@ -1176,7 +1345,7 @@ namespace QuanLySinhVien
 
             if (dgvsuathongtin.Columns.Contains("Address"))
             {
-                txtAddress.Text = row.Cells["Address"].Value?.ToString() ?? "";
+                textBox5.Text = row.Cells["Address"].Value?.ToString() ?? "";
             }
 
             txtMSGV1.Enabled = false;
@@ -1225,7 +1394,7 @@ namespace QuanLySinhVien
             {
                 db.openConnection();
 
-                string query = "UPDATE Login SET Fname=@fn, Lname=@ln, Dob=@dob, Gder=@gder, Phone=@phone, Email=@email, Pic=@pic WHERE MSGV=@msgv";
+                string query = "UPDATE Login SET Fname=@fn, Lname=@ln, Dob=@dob, Gder=@gder, Phone=@phone, Email=@email, Address=@address, Pic=@pic WHERE MSGV=@msgv";
                 SqlCommand cmd = new SqlCommand(query, db.conn);
                 cmd.Parameters.AddWithValue("@msgv", txtMSGV1.Text.Trim());
                 cmd.Parameters.AddWithValue("@fn", textBox1.Text.Trim());
@@ -1234,6 +1403,7 @@ namespace QuanLySinhVien
                 cmd.Parameters.AddWithValue("@gder", comboBox1.Text);
                 cmd.Parameters.AddWithValue("@phone", textBox3.Text.Trim());
                 cmd.Parameters.AddWithValue("@email", textBox4.Text.Trim());
+                cmd.Parameters.AddWithValue("@address", txtAddress.Text.Trim());
 
                 if (picStudent.Image != null)
                 {
@@ -1394,6 +1564,11 @@ namespace QuanLySinhVien
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlForm_Paint_1(object sender, PaintEventArgs e)
         {
 
         }

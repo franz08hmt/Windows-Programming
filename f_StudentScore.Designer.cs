@@ -64,6 +64,7 @@
             this.pnlInput.Name = "pnlInput";
             this.pnlInput.Size = new System.Drawing.Size(1459, 108);
             this.pnlInput.TabIndex = 1;
+            this.pnlInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlInput.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlInput_Paint);
             // 
             // lblMSSV
@@ -106,6 +107,7 @@
             this.pnlSummary.Name = "pnlSummary";
             this.pnlSummary.Size = new System.Drawing.Size(1462, 57);
             this.pnlSummary.TabIndex = 3;
+            this.pnlSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // lblDiemTB
             // 
@@ -150,6 +152,7 @@
             this.chartScore.Name = "chartScore";
             this.chartScore.Size = new System.Drawing.Size(1462, 480);
             this.chartScore.TabIndex = 4;
+            this.chartScore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // guna2Separator1
             // 
@@ -158,7 +161,8 @@
             this.guna2Separator1.Name = "guna2Separator1";
             this.guna2Separator1.Size = new System.Drawing.Size(1438, 10);
             this.guna2Separator1.TabIndex = 27;
-            // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            //
             // guna2Panel1
             // 
             this.guna2Panel1.BackColor = System.Drawing.Color.Transparent;
@@ -417,6 +421,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvScore.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvScore.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.dgvScore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvScore.Location = new System.Drawing.Point(-2, 203);
             this.dgvScore.Name = "dgvScore";
             this.dgvScore.RowHeadersVisible = false;

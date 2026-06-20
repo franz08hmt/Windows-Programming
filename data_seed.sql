@@ -22,6 +22,9 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
                WHERE TABLE_NAME = 'Login' AND COLUMN_NAME = 'Phone')
     ALTER TABLE Login ADD Phone NVARCHAR(15) NULL;
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+               WHERE TABLE_NAME = 'Login' AND COLUMN_NAME = 'Address')
+    ALTER TABLE Login ADD Address NVARCHAR(250) NULL;
 GO
 
 -- ============================================================
@@ -325,29 +328,82 @@ GO
 --    Username=Pass=MSGV để tiện test login
 -- ============================================================
 IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV001')
-    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,position,VALID)
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
     VALUES ('GV001',N'Nguyễn',N'Văn Hùng','GV001','GV001','hung@hcmute.edu.vn',
-            '1985-04-12',N'Nam',N'0909001001', 2, 1);
+            '1985-04-12',N'Nam',N'0909001001',N'Quận 1, TP.HCM', 2, 1);
 IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV002')
-    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,position,VALID)
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
     VALUES ('GV002',N'Trần',N'Thị Mai','GV002','GV002','mai@hcmute.edu.vn',
-            '1988-09-25',N'Nữ',N'0909001002', 2, 1);
+            '1988-09-25',N'Nữ',N'0909001002',N'Quận 3, TP.HCM', 2, 1);
 IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV003')
-    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,position,VALID)
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
     VALUES ('GV003',N'Lê',N'Minh Tùng','GV003','GV003','tung@hcmute.edu.vn',
-            '1990-02-18',N'Nam',N'0909001003', 2, 1);
+            '1990-02-18',N'Nam',N'0909001003',N'Quận 5, TP.HCM', 2, 1);
 IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV004')
-    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,position,VALID)
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
     VALUES ('GV004',N'Phạm',N'Thanh Hoa','GV004','GV004','hoa@hcmute.edu.vn',
-            '1992-06-30',N'Nữ',N'0909001004', 2, 1);
+            '1992-06-30',N'Nữ',N'0909001004',N'Quận 7, TP.HCM', 2, 1);
 IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV005')
-    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,position,VALID)
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
     VALUES ('GV005',N'Hoàng',N'Đức Thắng','GV005','GV005','thang@hcmute.edu.vn',
-            '1987-11-05',N'Nam',N'0909001005', 2, 1);
+            '1987-11-05',N'Nam',N'0909001005',N'Quận 9, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV006')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('GV006',N'Vũ',N'Thành Long','GV006','GV006','long@hcmute.edu.vn',
+            '1989-03-14',N'Nam',N'0909001006',N'Quận Bình Thạnh, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV007')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('GV007',N'Đặng',N'Thị Lan Anh','GV007','GV007','lananh@hcmute.edu.vn',
+            '1991-07-22',N'Nữ',N'0909001007',N'Quận Gò Vấp, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV008')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('GV008',N'Bùi',N'Quốc Hưng','GV008','GV008','hung2@hcmute.edu.vn',
+            '1986-12-09',N'Nam',N'0909001008',N'Quận Tân Bình, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV009')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('GV009',N'Ngô',N'Thị Hương','GV009','GV009','huong@hcmute.edu.vn',
+            '1993-05-17',N'Nữ',N'0909001009',N'Quận Phú Nhuận, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'GV010')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('GV010',N'Lý',N'Minh Khoa','GV010','GV010','khoa@hcmute.edu.vn',
+            '1984-08-28',N'Nam',N'0909001010',N'Quận 10, TP.HCM', 2, 1);
+IF NOT EXISTS (SELECT 1 FROM Login WHERE MSGV = 'HR001')
+    INSERT INTO Login (MSGV,Fname,Lname,Username,Pass,Email,Dob,Gder,Phone,Address,position,VALID)
+    VALUES ('HR001',N'Trịnh',N'Thị Bảo Châu','HR001','HR001','bauchau@hcmute.edu.vn',
+            '1990-01-15',N'Nữ',N'0909002001',N'Quận 12, TP.HCM', 2, 1);
 GO
 
 -- ============================================================
--- 7. KIỂM TRA KẾT QUẢ
+-- 7. CẬP NHẬT ĐẦY ĐỦ THÔNG TIN GIẢNG VIÊN
+--    Điền Dob, Gder, Phone, Address cho các bản ghi còn thiếu
+--    (chỉ UPDATE khi field đang NULL để không ghi đè dữ liệu hợp lệ)
+-- ============================================================
+UPDATE Login SET Dob='1985-04-12', Gder=N'Nam',  Phone=N'0909001001', Address=N'Quận 1, TP.HCM'
+WHERE MSGV='GV001' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1988-09-25', Gder=N'Nữ',   Phone=N'0909001002', Address=N'Quận 3, TP.HCM'
+WHERE MSGV='GV002' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1990-02-18', Gder=N'Nam',  Phone=N'0909001003', Address=N'Quận 5, TP.HCM'
+WHERE MSGV='GV003' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1992-06-30', Gder=N'Nữ',   Phone=N'0909001004', Address=N'Quận 7, TP.HCM'
+WHERE MSGV='GV004' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1987-11-05', Gder=N'Nam',  Phone=N'0909001005', Address=N'Quận 9, TP.HCM'
+WHERE MSGV='GV005' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1989-03-14', Gder=N'Nam',  Phone=N'0909001006', Address=N'Quận Bình Thạnh, TP.HCM'
+WHERE MSGV='GV006' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1991-07-22', Gder=N'Nữ',   Phone=N'0909001007', Address=N'Quận Gò Vấp, TP.HCM'
+WHERE MSGV='GV007' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1986-12-09', Gder=N'Nam',  Phone=N'0909001008', Address=N'Quận Tân Bình, TP.HCM'
+WHERE MSGV='GV008' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1993-05-17', Gder=N'Nữ',   Phone=N'0909001009', Address=N'Quận Phú Nhuận, TP.HCM'
+WHERE MSGV='GV009' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1984-08-28', Gder=N'Nam',  Phone=N'0909001010', Address=N'Quận 10, TP.HCM'
+WHERE MSGV='GV010' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+UPDATE Login SET Dob='1990-01-15', Gder=N'Nữ',   Phone=N'0909002001', Address=N'Quận 12, TP.HCM'
+WHERE MSGV='HR001' AND (Dob IS NULL OR Gder IS NULL OR Phone IS NULL OR Address IS NULL);
+GO
+
+-- ============================================================
+-- 8. KIỂM TRA KẾT QUẢ
 -- ============================================================
 SELECT 'Tổng sinh viên'     AS [Bảng],   COUNT(*) AS [Số lượng] FROM Student
 UNION ALL

@@ -42,9 +42,26 @@ namespace QuanLySinhVien
             TruocXuatNguoiDung();
         }
 
+        private void EnsureMSSVColumnIsVarChar()
+        {
+            try
+            {
+                db.openConnection();
+                SqlCommand cmd = new SqlCommand(
+                    "IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS " +
+                    "WHERE TABLE_NAME='StudentRequests' AND COLUMN_NAME='MSSV' AND DATA_TYPE='int') " +
+                    "BEGIN ALTER TABLE StudentRequests ALTER COLUMN MSSV NVARCHAR(50) END",
+                    db.conn);
+                cmd.ExecuteNonQuery();
+            }
+            catch { }
+            finally { db.closeConnection(); }
+        }
+
         // 🌟 SỰ KIỆN LOAD FORM: Phân quyền chuẩn chỉnh - Chặn đứng HR (2)
         private void f_StudentRequest_Load(object sender, EventArgs e)
         {
+            EnsureMSSVColumnIsVarChar();
             // 1. Nếu là HR (Quy ước = 2) -> Trục xuất thẳng tay
             if (Globals.GlobalPosition == 2)
             {
@@ -76,7 +93,7 @@ namespace QuanLySinhVien
                 currentMSSV = Globals.GlobalUserId; // Lấy chuẩn số MSSV
 
                 txtMSSV.Text = currentMSSV;
-                txtMSSV.ReadOnly = true;
+                txtMSSV.ReadOnly = false;
                 btnSendRequest.Enabled = true;
 
                 LayThongTinTenSinhVien();
@@ -141,7 +158,7 @@ namespace QuanLySinhVien
 
         private void LayThongTinTenSinhVien()
         {
-            string query = "SELECT Lname + ' ' + Fname FROM Student WHERE MSSV = @mssv";
+            string query = "SELECT Lname + ' ' + Fname FROM Login WHERE MSGV = @mssv";
             try
             {
                 db.openConnection();
@@ -220,6 +237,14 @@ namespace QuanLySinhVien
 
         private void btnSendRequest_Click(object sender, EventArgs e)
         {
+            currentMSSV = txtMSSV.Text.Trim();
+            if (string.IsNullOrWhiteSpace(currentMSSV))
+            {
+                MessageBox.Show("Vui lòng nhập Mã Số Sinh Viên!", "Thiếu thông tin",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMSSV.Focus();
+                return;
+            }
             if (string.IsNullOrWhiteSpace(txtContent.Text))
             {
                 MessageBox.Show("Ní vui lòng nhập chi tiết nội dung yêu cầu/đề nghị trước khi bấm gửi nhé!",

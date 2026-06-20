@@ -68,7 +68,8 @@
             this.guna2Separator1.Name = "guna2Separator1";
             this.guna2Separator1.Size = new System.Drawing.Size(1438, 10);
             this.guna2Separator1.TabIndex = 27;
-            // 
+            this.guna2Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            //
             // guna2Panel1
             // 
             this.guna2Panel1.BackColor = System.Drawing.Color.Transparent;
@@ -195,6 +196,7 @@
             this.pnlForm.ShadowDecoration.Enabled = true;
             this.pnlForm.Size = new System.Drawing.Size(1438, 494);
             this.pnlForm.TabIndex = 32;
+            this.pnlForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // guna2Panel3
             // 
@@ -354,6 +356,7 @@
             this.btnSendRequest.Size = new System.Drawing.Size(268, 85);
             this.btnSendRequest.TabIndex = 41;
             this.btnSendRequest.Text = "➤ GỬI YÊU CẦU";
+            this.btnSendRequest.Click += new System.EventHandler(this.btnSendRequest_Click);
             // 
             // guna2Panel2
             // 
@@ -371,6 +374,7 @@
             this.guna2Panel2.ShadowDecoration.Enabled = true;
             this.guna2Panel2.Size = new System.Drawing.Size(1441, 351);
             this.guna2Panel2.TabIndex = 42;
+            this.guna2Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // guna2Panel4
             // 
@@ -425,6 +429,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvHistory.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvHistory.Location = new System.Drawing.Point(0, 58);
             this.dgvHistory.Name = "dgvHistory";
             this.dgvHistory.RowHeadersVisible = false;

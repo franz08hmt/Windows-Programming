@@ -30,6 +30,7 @@ namespace QuanLySinhVien
         {
             InitializeComponent();
             RegisterRealTimeValidation();
+            this.Resize += (s, e) => ArrangeEditStudentLayout();
         }
 
         private void VeBoGocPanel(Panel pnl, int radius, PaintEventArgs e)
@@ -63,6 +64,61 @@ namespace QuanLySinhVien
         private void f_EditStudent_Load_1(object sender, EventArgs e)
         {
             LoadData();
+            ArrangeEditStudentLayout();
+        }
+
+        private void ArrangeEditStudentLayout()
+        {
+            if (dgvStudents == null || pnlForm == null || this.Width <= 0 || this.Height <= 0) return;
+
+            SuspendLayout();
+
+            const int left = 7;
+            const int top = 113;
+            const int gap = 20;
+            const int rightMargin = 18;
+            int panelHeight = Math.Max(680, Math.Min(860, this.ClientSize.Height - top - 28));
+
+            pnlForm.Top = top;
+            pnlForm.Height = panelHeight;
+            pnlForm.Left = Math.Max(left + 520, this.ClientSize.Width - pnlForm.Width - rightMargin);
+
+            dgvStudents.Left = left;
+            dgvStudents.Top = top;
+            dgvStudents.Width = Math.Max(520, pnlForm.Left - gap - left);
+            dgvStudents.Height = panelHeight;
+            ApplyStudentGridColumnLayout();
+
+            guna2Separator1.Width = Math.Max(600, this.ClientSize.Width - 24);
+            guna2Separator2.Width = guna2Separator1.Width;
+            guna2Separator2.Top = Math.Max(dgvStudents.Bottom, pnlForm.Bottom) + 24;
+
+            ResumeLayout(false);
+        }
+
+        private void ApplyStudentGridColumnLayout()
+        {
+            if (dgvStudents == null || dgvStudents.Columns.Count == 0) return;
+
+            dgvStudents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            SetGridColumn("MSSV", 90, 85);
+            SetGridColumn("Fname", 90, 85);
+            SetGridColumn("Lname", 120, 95);
+            SetGridColumn("Dob", 105, 95);
+            SetGridColumn("Gder", 80, 75);
+            SetGridColumn("Phone", 110, 100);
+            SetGridColumn("Email", 230, 180);
+            SetGridColumn("Address", 210, 150);
+            SetGridColumn("Pture", 55, 45);
+        }
+
+        private void SetGridColumn(string columnName, float fillWeight, int minimumWidth)
+        {
+            if (!dgvStudents.Columns.Contains(columnName)) return;
+
+            dgvStudents.Columns[columnName].FillWeight = fillWeight;
+            dgvStudents.Columns[columnName].MinimumWidth = minimumWidth;
         }
 
 
@@ -167,6 +223,7 @@ namespace QuanLySinhVien
                 }
 
                 dgvStudents.RowTemplate.Height = 50;
+                ApplyStudentGridColumnLayout();
             }
             catch (Exception ex)
             {

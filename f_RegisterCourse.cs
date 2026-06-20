@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,6 +18,7 @@ namespace QuanLySinhVien
         public f_RegisterCourse()
         {
             InitializeComponent();
+            this.SizeChanged += new EventHandler(f_RegisterCourse_SizeChanged);
         }
 
         private void f_RegisterCourse_Load(object sender, EventArgs e)
@@ -25,6 +26,68 @@ namespace QuanLySinhVien
             Load_Danh_Sach_Sinh_Vien();
             btnAISuggest.Click += new EventHandler(btnAISuggest_Click_1_Handler);
             btnAICheckConflict.Click += new EventHandler(btnAICheckConflict_Click_Handler);
+            AdjustLayout();
+        }
+
+        // Tái bố cục động khi form resize: 2 listbox lấp đầy chiều rộng, panel arrows ở giữa
+        private void f_RegisterCourse_SizeChanged(object sender, EventArgs e)
+        {
+            AdjustLayout();
+        }
+
+        private void AdjustLayout()
+        {
+            int margin = 8;
+            int arrowW = 150;    // chiều rộng panel mũi tên
+            int totalW = this.Width;
+
+            // Mỗi list chiếm nửa (trừ arrows + margins)
+            int listW = (totalW - arrowW - margin * 4) / 2;
+            if (listW < 100) return;
+
+            int listH = Math.Max(120, (int)(this.Height * 0.26)); // ~26% chiều cao
+
+            // Vị trí X
+            int xLeft  = margin;
+            int xArrow = xLeft + listW + margin;
+            int xRight = xArrow + arrowW + margin;
+
+            // --- Row 1: Labels ---
+            int yLabel = lblBandau.Top;
+            lblBandau.SetBounds(xLeft, yLabel, listW, lblBandau.Height);
+            lblKetqua.SetBounds(xRight, yLabel, listW, lblKetqua.Height);
+
+            // --- Row 2: ListBoxes + Arrow panel ---
+            int yList = lblBandau.Bottom + 4;
+            lstBandau.SetBounds(xLeft,  yList, listW,  listH);
+            panel1.SetBounds(xArrow, yList, arrowW, listH);
+            lstKetqua.SetBounds(xRight, yList, listW,  listH);
+
+            // --- Row 3: lblMonInfo (dưới lstBandau) ---
+            int yInfo = yList + listH + 4;
+            lblMonInfo.SetBounds(xLeft, yInfo, listW + arrowW + margin * 2, lblMonInfo.Height);
+
+            // --- Row 4: Buttons ---
+            int btnY = yInfo + lblMonInfo.Height + 6;
+            int btnW = 190;
+            int btnH = 52;
+            int btnGap = (totalW - margin * 2 - btnW * 5) / 4;
+            if (btnGap < 8) btnGap = 8;
+
+            btnRegister.SetBounds(margin, btnY, btnW, btnH);
+            btnUnregister.SetBounds(btnRegister.Right + btnGap, btnY, btnW, btnH);
+            btnSendRequest.SetBounds(btnUnregister.Right + btnGap, btnY, btnW, btnH);
+            btnAISuggest.SetBounds(btnSendRequest.Right + btnGap, btnY, btnW, btnH);
+            btnAICheckConflict.SetBounds(btnAISuggest.Right + btnGap, btnY, btnW, btnH);
+
+            // --- Row 5: label "Danh sách môn đã đăng ký" ---
+            int yLabel4 = btnY + btnH + 8;
+            label4.SetBounds(margin, yLabel4, 400, label4.Height);
+
+            // --- Row 6: DataGrid ---
+            int yDgv = yLabel4 + label4.Height + 4;
+            int dgvH = Math.Max(100, this.Height - yDgv - margin * 2);
+            dgvRegisterList.SetBounds(margin, yDgv, totalW - margin * 2, dgvH);
         }
 
         private void Load_Danh_Sach_Sinh_Vien()

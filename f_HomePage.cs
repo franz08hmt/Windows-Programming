@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace QuanLySinhVien
@@ -102,6 +103,7 @@ namespace QuanLySinhVien
                 btnManageScore.Visible = true;
                 btnStatistic.Visible = true;
                 btnReporta.Visible = true;
+                btnAccountManage.Visible = true;
                 btnStudentRequest.Visible = true;
                 btnManageRequest.Visible = true;
                 btnStudentScore.Visible = true;
@@ -292,6 +294,8 @@ namespace QuanLySinhVien
 
             ThongKeHeThong();
             ApplyPermissions();
+            ArrangeStudentSidebar();
+            ArrangeDashboardLayout();
 
             picUserAvatar.Click += new EventHandler(btnChangeImage_Click);
             LoadUserAccountInfoCard();
@@ -307,6 +311,78 @@ namespace QuanLySinhVien
 
             filter = new ActivityFilter(this);
             Application.AddMessageFilter(filter);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            ArrangeStudentSidebar();
+            ArrangeDashboardLayout();
+        }
+
+        private void ArrangeStudentSidebar()
+        {
+            if (Globals.GlobalPosition != 1) return;
+
+            Control[] studentButtons =
+            {
+                btnTrangChu,
+                btnRegisterMenu,
+                btnManageScore,
+                btnStudentScore,
+                btnManageRequest,
+                btnManageHR,
+                btnContact
+            };
+
+            int top = 4;
+            const int gap = 8;
+
+            foreach (Control button in studentButtons)
+            {
+                if (!button.Visible) continue;
+
+                button.Location = new Point(button.Location.X, top);
+                top += button.Height + gap;
+            }
+
+            if (bttLogout.Visible)
+            {
+                bttLogout.Location = new Point(bttLogout.Location.X, top + 16);
+            }
+        }
+
+        private void ArrangeDashboardLayout()
+        {
+            if (pnlMainContent == null || pnlChat == null || pnlMainContent.Controls.Count == 0) return;
+            if (pnlMainContent.Controls.OfType<UserControl>().Any(c => c.Visible)) return;
+
+            const int left = 12;
+            const int right = 14;
+            int contentWidth = Math.Max(900, pnlMainContent.ClientSize.Width - left - right);
+
+            guna2Separator1.Width = contentWidth;
+            guna2Separator2.Width = contentWidth;
+
+            int avatarLeft = Math.Max(900, pnlMainContent.ClientSize.Width - 350);
+            picUserAvatar.Left = avatarLeft;
+            lblUserFullName.Left = avatarLeft + picUserAvatar.Width + 12;
+            lblUserRoleMSSV.Left = lblUserFullName.Left;
+            label2.Left = lblUserFullName.Left + 4;
+            lblStatusText.Left = label2.Right + 6;
+
+            pnlChat.Width = contentWidth;
+            pnlChat.Height = Math.Max(600, pnlMainContent.ClientSize.Height - pnlChat.Top - 84);
+
+            txtChatInput.Left = 20;
+            txtChatInput.Top = pnlChat.Height - txtChatInput.Height - 16;
+            btnSendChat.Top = pnlChat.Height - btnSendChat.Height - 12;
+            btnSendChat.Left = pnlChat.Width - btnSendChat.Width - 40;
+            txtChatInput.Width = Math.Max(320, btnSendChat.Left - txtChatInput.Left - 14);
+            lblStatusDot.Width = pnlChat.Width - 40;
+            lblStatusDot.Height = Math.Max(120, txtChatInput.Top - lblStatusDot.Top - 12);
+
+            guna2Separator2.Top = pnlChat.Bottom + 28;
         }
 
         private void ActivityTimer_Tick(object sender, EventArgs e)
