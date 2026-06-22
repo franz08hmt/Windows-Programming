@@ -20,7 +20,7 @@ namespace QuanLySinhVien
 
         private void f_OTP_Load_1(object sender, EventArgs e)
         {
-            lblMessage.Text = "Nhập mã OTP đã gửi về gmail: " + _email;
+            lblMessage.Text = "Nhập mã OTP đã gửi về gmail: " + HashHelper.MaskEmail(_email);
 
             _timeLeft = 300;
             lblTimer.Text = "Còn lại: 05:00";

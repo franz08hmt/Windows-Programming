@@ -195,7 +195,7 @@
             // 
             this.pctLogo.BackColor = System.Drawing.Color.Transparent;
             this.pctLogo.Image = global::QuanLySinhVien.Properties.Resources.Logo1;
-            this.pctLogo.Location = new System.Drawing.Point(377, 614);
+            this.pctLogo.Location = new System.Drawing.Point(377, 649);
             this.pctLogo.Name = "pctLogo";
             this.pctLogo.Size = new System.Drawing.Size(74, 57);
             this.pctLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -208,7 +208,7 @@
             this.lblDesigned.BackColor = System.Drawing.Color.Transparent;
             this.lblDesigned.Font = new System.Drawing.Font("Segoe UI Semibold", 8F, System.Drawing.FontStyle.Bold);
             this.lblDesigned.ForeColor = System.Drawing.Color.Gray;
-            this.lblDesigned.Location = new System.Drawing.Point(442, 634);
+            this.lblDesigned.Location = new System.Drawing.Point(442, 669);
             this.lblDesigned.Name = "lblDesigned";
             this.lblDesigned.Size = new System.Drawing.Size(164, 21);
             this.lblDesigned.TabIndex = 12;
@@ -238,7 +238,7 @@
             this.pnlForm.ShadowDecoration.BorderRadius = 20;
             this.pnlForm.ShadowDecoration.Depth = 10;
             this.pnlForm.ShadowDecoration.Enabled = true;
-            this.pnlForm.Size = new System.Drawing.Size(450, 489);
+            this.pnlForm.Size = new System.Drawing.Size(450, 508);
             this.pnlForm.TabIndex = 29;
             // 
             // rdHR
@@ -365,7 +365,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(244)))), ((int)(((byte)(247)))));
             this.BackgroundImage = global::QuanLySinhVien.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(978, 744);
+            this.ClientSize = new System.Drawing.Size(978, 810);
             this.Controls.Add(this.pnlForm);
             this.Controls.Add(this.lblDesigned);
             this.Controls.Add(this.pctLogo);

@@ -360,7 +360,7 @@ namespace QuanLySinhVien
         {
             double similarity = CompareFaceImages(_storedFaceBytes, _capturedFaceBytes);
 
-            if (similarity >= 0.80)
+            if (similarity >= 0.6)
             {
                 StopWebcam();
                 this.DialogResult = DialogResult.OK;
@@ -415,7 +415,7 @@ namespace QuanLySinhVien
             catch { return null; }
         }
 
-        // ── So sánh khuôn mặt (Bhattacharyya histogram grayscale 64×64) ─
+        // ── So sánh khuôn mặt: Histogram RGB + Structural Similarity ──
 
         private double CompareFaceImages(byte[] stored, byte[] captured)
         {
@@ -428,26 +428,120 @@ namespace QuanLySinhVien
                 using (var r1   = new Bitmap(bmp1, 64, 64))
                 using (var r2   = new Bitmap(bmp2, 64, 64))
                 {
-                    int[] hist1 = new int[256];
-                    int[] hist2 = new int[256];
+                    // 1. Histogram so sánh (R, G, B riêng biệt)
+                    double histSimilarity = CompareHistograms(r1, r2);
 
-                    for (int y = 0; y < 64; y++)
-                        for (int x = 0; x < 64; x++)
-                        {
-                            Color c1 = r1.GetPixel(x, y);
-                            Color c2 = r2.GetPixel(x, y);
-                            hist1[(int)(0.299 * c1.R + 0.587 * c1.G + 0.114 * c1.B)]++;
-                            hist2[(int)(0.299 * c2.R + 0.587 * c2.G + 0.114 * c2.B)]++;
-                        }
+                    // 2. Structural Similarity (so sánh chi tiết pixel)
+                    double structSimilarity = ComputeStructuralSimilarity(r1, r2);
 
-                    double sum = 0;
-                    const int PIXELS = 64 * 64;
-                    for (int i = 0; i < 256; i++)
-                        sum += Math.Sqrt((double)hist1[i] / PIXELS * hist2[i] / PIXELS);
-                    return sum;
+                    // 3. Kết hợp: 70% histogram + 30% structural (weighted average)
+                    double combined = (histSimilarity * 0.70) + (structSimilarity * 0.30);
+
+                    return combined;
                 }
             }
             catch { return 0; }
+        }
+
+        // ── So sánh Histogram (R, G, B riêng) ──
+        private double CompareHistograms(Bitmap bmp1, Bitmap bmp2)
+        {
+            int[] histR1 = new int[256], histG1 = new int[256], histB1 = new int[256];
+            int[] histR2 = new int[256], histG2 = new int[256], histB2 = new int[256];
+
+            for (int y = 0; y < bmp1.Height; y++)
+                for (int x = 0; x < bmp1.Width; x++)
+                {
+                    Color c1 = bmp1.GetPixel(x, y);
+                    Color c2 = bmp2.GetPixel(x, y);
+                    histR1[c1.R]++; histG1[c1.G]++; histB1[c1.B]++;
+                    histR2[c2.R]++; histG2[c2.G]++; histB2[c2.B]++;
+                }
+
+            double sumR = 0, sumG = 0, sumB = 0;
+            const int PIXELS = 64 * 64;
+            
+            for (int i = 0; i < 256; i++)
+            {
+                sumR += Math.Sqrt((double)histR1[i] / PIXELS * histR2[i] / PIXELS);
+                sumG += Math.Sqrt((double)histG1[i] / PIXELS * histG2[i] / PIXELS);
+                sumB += Math.Sqrt((double)histB1[i] / PIXELS * histB2[i] / PIXELS);
+            }
+
+            // Trung bình 3 channel
+            return (sumR + sumG + sumB) / 3.0;
+        }
+
+        // ── Structural Similarity (so sánh chi tiết pixel) ──
+        private double ComputeStructuralSimilarity(Bitmap bmp1, Bitmap bmp2)
+        {
+            const int BLOCK_SIZE = 8;
+            const int BLOCKS_H = 64 / BLOCK_SIZE;
+            const int BLOCKS_W = 64 / BLOCK_SIZE;
+
+            double totalSimilarity = 0;
+            int blockCount = 0;
+
+            // Chia ảnh thành các block 8x8
+            for (int by = 0; by < BLOCKS_H; by++)
+            {
+                for (int bx = 0; bx < BLOCKS_W; bx++)
+                {
+                    double blockSim = CompareBlock(bmp1, bmp2, bx * BLOCK_SIZE, by * BLOCK_SIZE, BLOCK_SIZE);
+                    totalSimilarity += blockSim;
+                    blockCount++;
+                }
+            }
+
+            return blockCount > 0 ? totalSimilarity / blockCount : 0;
+        }
+
+        // ── So sánh từng block ──
+        private double CompareBlock(Bitmap bmp1, Bitmap bmp2, int startX, int startY, int blockSize)
+        {
+            double mean1 = 0, mean2 = 0;
+            double[] pixels1 = new double[blockSize * blockSize];
+            double[] pixels2 = new double[blockSize * blockSize];
+
+            // Lấy giá trị intensity (luminance) từng pixel
+            int idx = 0;
+            for (int y = startY; y < startY + blockSize; y++)
+            {
+                for (int x = startX; x < startX + blockSize; x++)
+                {
+                    Color c1 = bmp1.GetPixel(x, y);
+                    Color c2 = bmp2.GetPixel(x, y);
+                    pixels1[idx] = 0.299 * c1.R + 0.587 * c1.G + 0.114 * c1.B;
+                    pixels2[idx] = 0.299 * c2.R + 0.587 * c2.G + 0.114 * c2.B;
+                    mean1 += pixels1[idx];
+                    mean2 += pixels2[idx];
+                    idx++;
+                }
+            }
+
+            mean1 /= pixels1.Length;
+            mean2 /= pixels2.Length;
+
+            // Tính variance
+            double var1 = 0, var2 = 0, covar = 0;
+            for (int i = 0; i < pixels1.Length; i++)
+            {
+                var1 += (pixels1[i] - mean1) * (pixels1[i] - mean1);
+                var2 += (pixels2[i] - mean2) * (pixels2[i] - mean2);
+                covar += (pixels1[i] - mean1) * (pixels2[i] - mean2);
+            }
+
+            var1 /= pixels1.Length;
+            var2 /= pixels2.Length;
+            covar /= pixels1.Length;
+
+            // SSIM formula
+            const double C1 = 6.5025;
+            const double C2 = 58.5225;
+            double ssim = ((2 * mean1 * mean2 + C1) * (2 * covar + C2)) /
+                          ((mean1 * mean1 + mean2 * mean2 + C1) * (var1 + var2 + C2));
+
+            return Math.Max(0, Math.Min(1, ssim)); // Clamp to [0, 1]
         }
     }
 }
