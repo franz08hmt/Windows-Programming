@@ -64,7 +64,7 @@ namespace QuanLySinhVien
                 SqlCommand cmd = new SqlCommand(
                     "UPDATE Login SET Pass = @pass WHERE Username = @user",
                     db.conn);
-                cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = txtNewPass.Text;
+                cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = HashHelper.HashSHA256(txtNewPass.Text);
                 cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = _username;
                 cmd.ExecuteNonQuery();
 

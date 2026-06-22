@@ -163,12 +163,30 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionLogger.cs" />
+    <Compile Include="HashHelper.cs" />
+    <Compile Include="LoginSecurityService.cs" />
+    <Compile Include="f_FaceLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="f_FaceLogin.Designer.cs">
+      <DependentUpon>f_FaceLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ThemeManager.cs" />
     <Compile Include="BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classroom.cs" />
     <Compile Include="Course.cs" />
     <Compile Include="DatabaseTextRepairService.cs" />
+    <Compile Include="EmailHelper.cs" />
+    <Compile Include="TotpHelper.cs" />
+    <Compile Include="f_TwoFactorSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="f_TwoFactorVerify.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="f_AccountManage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -385,6 +403,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="add_new_courses.sql" />
+    <None Include="seed_available_courses.sql" />
+    <None Include="fix_score_distribution.sql" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

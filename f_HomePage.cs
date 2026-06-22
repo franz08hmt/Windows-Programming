@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace QuanLySinhVien
 {
@@ -16,6 +17,7 @@ namespace QuanLySinhVien
         private int idleSeconds = 0;
         private const int TIMEOUT_LIMIT = 60;
         private ActivityFilter filter;
+        private Guna2Button _btnDarkToggle;
         public f_HomePage() { InitializeComponent(); }
 
         public f_HomePage(string loginName)
@@ -36,11 +38,68 @@ namespace QuanLySinhVien
             pnlMainContent.Controls.Add(uc);
             uc.BringToFront();
             uc.Visible = true;       // Load event → data loads → form-specific colors set
+
+            if (ThemeManager.IsDark)
+                ThemeManager.ApplyToTree(uc);
         }
 
         private void btnDarkMode_Click(object sender, EventArgs e)
         {
+            ThemeManager.Toggle();
+        }
 
+        private void InitDarkModeButton()
+        {
+            _btnDarkToggle = new Guna2Button
+            {
+                Name         = "btnDarkToggle",
+                Size         = new Size(216, 50),
+                Location     = new Point(14, 9999),   // ArrangeSidebar will reposition
+                Text         = "🌙 Dark Mode",
+                Font         = new Font("Segoe UI", 9f, FontStyle.Bold),
+                ForeColor    = Color.White,
+                FillColor    = ThemeManager.ToggleBg,
+                BorderRadius = 12,
+                Cursor       = Cursors.Hand,
+                TabStop      = false,
+            };
+            _btnDarkToggle.Click += btnDarkMode_Click;
+            pnlSidebar.Controls.Add(_btnDarkToggle);
+
+            ThemeManager.ThemeChanged += (s, ev) =>
+            {
+                ApplyThemeToApp();
+                ArrangeSidebar();
+            };
+        }
+
+        private void ApplyThemeToApp()
+        {
+            // ── Sidebar ───────────────────────────────────────────────
+            pnlSidebar.BackColor = ThemeManager.SidebarBg;
+            foreach (Control c in pnlSidebar.Controls)
+            {
+                if (c is Guna2Button btn)
+                {
+                    if (btn == _btnDarkToggle)
+                    {
+                        btn.FillColor = ThemeManager.ToggleBg;
+                        btn.Text = ThemeManager.IsDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+                    }
+                    else if (btn != bttLogout)
+                    {
+                        btn.FillColor = ThemeManager.NavBtnBg;
+                    }
+                    // bttLogout keeps its own color
+                }
+            }
+
+            // ── Main form background ──────────────────────────────────
+            this.BackColor = ThemeManager.SidebarBg;
+
+            // ── Content area + all visible children ───────────────────
+            pnlMainContent.BackColor = ThemeManager.AppBg;
+            ThemeManager.ApplyToTree(pnlMainContent);
         }
 
         private void HienThiTrangChuGoc()
@@ -73,13 +132,67 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
+
+                if (Globals.GlobalPosition == 1) // STUDENT: hiện thống kê cá nhân
+                {
+                    // Lấy MSSV từ Login.MSGV
+                    var cmdMSSV = new SqlCommand(
+                        "SELECT s.MSSV FROM Student s JOIN Login l ON s.Email = l.Email WHERE l.MSGV = @msgv",
+                        db.conn);
+                    cmdMSSV.Parameters.AddWithValue("@msgv", Globals.GlobalUserId);
+                    object mssvObj = cmdMSSV.ExecuteScalar();
+                    string mssv = mssvObj?.ToString() ?? "";
+
+                    int monDaHoc = 0;
+                    decimal diemTB  = 0;
+                    int tinChiTichLuy = 0;
+
+                    if (!string.IsNullOrEmpty(mssv))
+                    {
+                        var c1 = new SqlCommand("SELECT COUNT(*) FROM DKMH WHERE MSSV = @mssv", db.conn);
+                        c1.Parameters.AddWithValue("@mssv", mssv);
+                        monDaHoc = (int)c1.ExecuteScalar();
+
+                        var c2 = new SqlCommand(
+                            "SELECT ISNULL(ROUND(AVG(CAST(DiemTK AS FLOAT)),1),0) FROM Score WHERE MSSV = @mssv AND DiemTK IS NOT NULL",
+                            db.conn);
+                        c2.Parameters.AddWithValue("@mssv", mssv);
+                        object gpaObj = c2.ExecuteScalar();
+                        diemTB = (gpaObj == DBNull.Value || gpaObj == null) ? 0 : Convert.ToDecimal(gpaObj);
+
+                        var c3 = new SqlCommand(
+                            "SELECT ISNULL(SUM(c.SoTC),0) FROM DKMH d JOIN Course c ON d.MaMH = c.MaMH WHERE d.MSSV = @mssv",
+                            db.conn);
+                        c3.Parameters.AddWithValue("@mssv", mssv);
+                        tinChiTichLuy = (int)c3.ExecuteScalar();
+                    }
+
+                    // Card 1 (xanh): Môn đã đăng ký
+                    lblCardSVTitle.Text = "MÔN ĐÃ ĐĂNG KÝ";
+                    lblTotalStudents.Text = monDaHoc.ToString();
+
+                    // Card 2 (xanh lá): Điểm trung bình
+                    lblCardHRTitle.Text = "ĐIỂM TRUNG BÌNH";
+                    lblTotalHR.Text = diemTB.ToString("0.0");
+
+                    // Card 3 (đỏ cam): Tín chỉ tích lũy
+                    lblCardPendingTitle.Text = "TÍN CHỈ TÍCH LŨY";
+                    lblTotalPending.Text = tinChiTichLuy.ToString();
+                    return;
+                }
+
+                // ADMIN / HR: thống kê toàn hệ thống
+                lblCardSVTitle.Text     = "TỔNG SINH VIÊN";
+                lblCardPendingTitle.Text = "CHỜ PHÊ DUYỆT";
+                lblCardHRTitle.Text     = "TÀI KHOẢN HR";
+
                 int totalStudents = (int)new SqlCommand("SELECT COUNT(*) FROM Student", db.conn).ExecuteScalar();
-                int totalPending = (int)new SqlCommand("SELECT COUNT(*) FROM Login WHERE VALID = 0", db.conn).ExecuteScalar();
-                int totalHR = (int)new SqlCommand("SELECT COUNT(*) FROM Login WHERE position = 2", db.conn).ExecuteScalar();
+                int totalPending  = (int)new SqlCommand("SELECT COUNT(*) FROM Login WHERE VALID = 0", db.conn).ExecuteScalar();
+                int totalHR       = (int)new SqlCommand("SELECT COUNT(*) FROM Login WHERE position = 2", db.conn).ExecuteScalar();
 
                 lblTotalStudents.Text = totalStudents.ToString();
-                lblTotalPending.Text = totalPending.ToString();
-                lblTotalHR.Text = totalHR.ToString();
+                lblTotalPending.Text  = totalPending.ToString();
+                lblTotalHR.Text       = totalHR.ToString();
             }
             catch (Exception ex)
             {
@@ -117,18 +230,21 @@ namespace QuanLySinhVien
                 bttAdd.Visible = true;
                 bttList.Visible = true;
                 bttFix.Visible = true;
-                btnRegisterMenu.Visible = true;
+                btnRegisterMenu.Visible = false;   // HR không đăng ký môn như SV
                 btnManageCourse.Visible = true;
                 btnManageScore.Visible = true;
+                btnManageClassroom.Visible = true;
                 btnStatistic.Visible = true;
                 btnReporta.Visible = true;
+                btnManageHR.Visible = true;
                 btnStudentRequest.Visible = false;
-                btnManageRequest.Visible = false;
+                btnManageRequest.Visible = true;   // HR duyệt yêu cầu sinh viên
+                btnAccountManage.Visible = false;  // Chỉ Admin quản lý tài khoản
+                btnStudentScore.Visible = true;
 
                 pnlCardSV.Visible = true;
-                pnlCardPending.Visible = false;
+                pnlCardPending.Visible = true;     // HR cần thấy số yêu cầu chờ
                 pnlCardHR.Visible = true;
-                btnStudentScore.Visible = true;
             }
             else if (position == 1) // STUDENT
             {
@@ -136,19 +252,21 @@ namespace QuanLySinhVien
                 bttList.Visible = false;
                 bttFix.Visible = false;
                 btnManageCourse.Visible = false;
+                btnManageScore.Visible = false;    // SV không quản lý điểm, chỉ xem
                 btnStatistic.Visible = false;
                 btnReporta.Visible = false;
-                btnStudentRequest.Visible = false;
+                btnStudentRequest.Visible = true;  // SV gửi yêu cầu (đã bị ẩn sai!)
+                btnManageRequest.Visible = false;  // SV không duyệt yêu cầu (đã hiện sai!)
                 btnManageClassroom.Visible = false;
+                btnManageHR.Visible = false;
+                btnAccountManage.Visible = false;  // Chỉ Admin quản lý tài khoản
 
                 btnRegisterMenu.Visible = true;
-                btnManageScore.Visible = true;
-                btnManageRequest.Visible = true;
                 btnStudentScore.Visible = true;
 
-                pnlCardSV.Visible = false;
-                pnlCardPending.Visible = false;
-                pnlCardHR.Visible = false;
+                pnlCardSV.Visible = true;      // Hiện dashboard cá nhân
+                pnlCardPending.Visible = true;
+                pnlCardHR.Visible = true;
             }
         }
 
@@ -292,12 +410,20 @@ namespace QuanLySinhVien
                 : userFullName;
             lblTroLy.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
+            InitDarkModeButton();
             ThongKeHeThong();
             ApplyPermissions();
             ArrangeStudentSidebar();
             ArrangeDashboardLayout();
 
             picUserAvatar.Click += new EventHandler(btnChangeImage_Click);
+
+            var avatarMenu = new ContextMenuStrip();
+            avatarMenu.Items.Add("📷 Đổi ảnh đại diện", null, btnChangeImage_Click);
+            avatarMenu.Items.Add(new ToolStripSeparator());
+            avatarMenu.Items.Add("🔒 Cài đặt bảo mật 2FA", null, (s, ev2fa) => { using (var f2fa = new f_TwoFactorSetup()) f2fa.ShowDialog(this); });
+            picUserAvatar.ContextMenuStrip = avatarMenu;
+
             LoadUserAccountInfoCard();
 
             lblStatusDot.ForeColor = Color.LimeGreen;
@@ -322,34 +448,51 @@ namespace QuanLySinhVien
 
         private void ArrangeStudentSidebar()
         {
-            if (Globals.GlobalPosition != 1) return;
+            ArrangeSidebar();
+        }
 
-            Control[] studentButtons =
-            {
-                btnTrangChu,
-                btnRegisterMenu,
-                btnManageScore,
-                btnStudentScore,
-                btnManageRequest,
-                btnManageHR,
-                btnContact
-            };
-
-            int top = 4;
+        private void ArrangeSidebar()
+        {
             const int gap = 8;
+            int top = 4;
 
-            foreach (Control button in studentButtons)
+            if (Globals.GlobalPosition != 0)
             {
-                if (!button.Visible) continue;
+                // Non-admin: restack visible nav buttons (exclude logout and dark toggle)
+                var navButtons = pnlSidebar.Controls
+                    .OfType<Control>()
+                    .Where(c => c != bttLogout && c != _btnDarkToggle)
+                    .OrderBy(c => c.Top)
+                    .ToList();
 
-                button.Location = new Point(button.Location.X, top);
-                top += button.Height + gap;
+                foreach (Control btn in navButtons)
+                {
+                    if (!btn.Visible) continue;
+                    btn.Location = new Point(btn.Location.X, top);
+                    top += btn.Height + gap;
+                }
+            }
+            else
+            {
+                // Admin: all nav buttons keep their Designer positions; compute lowest bottom
+                var visibleNavControls = pnlSidebar.Controls
+                    .OfType<Control>()
+                    .Where(c => c != bttLogout && c != _btnDarkToggle && c.Visible);
+
+                top = visibleNavControls.Any()
+                    ? visibleNavControls.Max(c => c.Bottom) + gap
+                    : 4;
+            }
+
+            // Dark toggle always sits just above logout
+            if (_btnDarkToggle != null)
+            {
+                _btnDarkToggle.Location = new Point(14, top + 4);
+                top += _btnDarkToggle.Height + gap;
             }
 
             if (bttLogout.Visible)
-            {
-                bttLogout.Location = new Point(bttLogout.Location.X, top + 16);
-            }
+                bttLogout.Location = new Point(bttLogout.Location.X, top + 8);
         }
 
         private void ArrangeDashboardLayout()
@@ -387,6 +530,11 @@ namespace QuanLySinhVien
 
         private void ActivityTimer_Tick(object sender, EventArgs e)
         {
+            if (this.IsDisposed || !this.IsHandleCreated)
+            {
+                activityTimer.Stop();
+                return;
+            }
             idleSeconds++;
 
             // Phát hiện user treo máy quá 1 phút (60 giây)
@@ -559,6 +707,9 @@ namespace QuanLySinhVien
 
             if (result == DialogResult.Yes)
             {
+                activityTimer?.Stop();
+                if (filter != null) Application.RemoveMessageFilter(filter);
+
                 // 1. Dọn sạch phiên đăng nhập, xóa session tài khoản hiện tại
                 Globals.ClearSession();
 

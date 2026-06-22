@@ -41,25 +41,35 @@ namespace QuanLySinhVien
             nudCKWeight.BackColor = Color.LightGray;
 
             LoadStudentCombo();
+
+            // Explicitly load data for initially selected student
+            // (SelectedIndexChanged may not fire reliably on first bind)
+            if (cboStudent.SelectedValue != null)
+            {
+                string mssv = cboStudent.SelectedValue.ToString();
+                if (int.TryParse(mssv, out _))
+                {
+                    LoadCoursesRegisteredByStudent(mssv);
+                    DisplayScoreBoard(mssv);
+                }
+            }
         }
 
         private void LoadStudentCombo()
         {
             DataTable dt = Student.GetStudents();
             if (!dt.Columns.Contains("HoTen"))
-            {
                 dt.Columns.Add("HoTen", typeof(string));
-            }
 
             foreach (DataRow row in dt.Rows)
-            {
                 row["HoTen"] = VietnameseTextHelper.Normalize(row["Fname"].ToString()) + " " +
                                VietnameseTextHelper.Normalize(row["Lname"].ToString());
-            }
 
-            cboStudent.DataSource = dt;
+            // Set DisplayMember/ValueMember BEFORE DataSource so SelectedIndexChanged
+            // fires with the correct SelectedValue (MSSV int) instead of DataRowView
             cboStudent.DisplayMember = "HoTen";
             cboStudent.ValueMember = "MSSV";
+            cboStudent.DataSource = dt;
         }
 
         private void LoadCoursesRegisteredByStudent(string mssv)
@@ -70,31 +80,32 @@ namespace QuanLySinhVien
             {
                 db.openConnection();
 
-                // 🚀 GIẢI PHÁP CHÍ MẠNG: Dùng INNER JOIN ép bảng Course kết nối với bảng điểm/đăng ký học phần
-                // để chỉ lôi ra đúng những môn học mà sinh viên này THỰC TẾ ĐÃ ĐĂNG KÝ/CÓ ĐẦU ĐIỂM
-                string query = "SELECT c.MaMH, c.TenMH " +
-                               "FROM Course c " +
-                               "INNER JOIN Score s ON c.MaMH = s.MaMH " +
-                               "WHERE s.MSSV = @mssv " +
-                               "ORDER BY c.TenMH";
+                // Admin form: hiện tất cả môn từ Course để admin có thể nhập điểm bất kỳ.
+                // Ưu tiên môn sinh viên đã đăng ký (DKMH) hoặc đã có điểm (Score) lên đầu.
+                string query =
+                    "SELECT c.MaMH, c.TenMH, " +
+                    "  CASE WHEN EXISTS(SELECT 1 FROM DKMH d WHERE d.MSSV=@mssv AND d.MaMH=c.MaMH) " +
+                    "       OR  EXISTS(SELECT 1 FROM Score s WHERE s.MSSV=@mssv AND s.MaMH=c.MaMH) " +
+                    "  THEN 0 ELSE 1 END AS SortOrder " +
+                    "FROM Course c " +
+                    "ORDER BY SortOrder, c.TenMH";
 
                 SqlCommand cmd = new SqlCommand(query, db.conn);
-                cmd.Parameters.AddWithValue("@mssv", mssv); // Truyền chính xác MSSV đang chọn vào bộ lọc
+                cmd.Parameters.AddWithValue("@mssv", Convert.ToInt32(mssv));
 
                 new SqlDataAdapter(cmd).Fill(dt);
 
-                // Dọn dẹp sạch nguồn cũ và Items ngầm của ô chọn tránh lỗi giật lag đồ họa
                 cboCourse.DataSource = null;
                 cboCourse.Items.Clear();
 
-                // Đổ bộ bảng dữ liệu môn học đã được AI lọc chuẩn chỉ vào ComboBox
                 cboCourse.DataSource = dt;
                 cboCourse.DisplayMember = "TenMH";
                 cboCourse.ValueMember = "MaMH";
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Lỗi nạp danh mục môn học theo sinh viên: " + ex.Message);
+                MessageBox.Show("Lỗi nạp danh sách môn học: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally { db.closeConnection(); }
         }
@@ -217,18 +228,6 @@ namespace QuanLySinhVien
                 DisplayScoreBoard(mssv);
                 ClearInputFields();
 
-                // Nếu cboCourse trống (tất cả môn đã có điểm)
-                // thì hiện placeholder để user biết cần click vào bảng điểm để sửa
-                if (cboCourse.Items.Count == 0)
-                {
-                    System.Data.DataTable dtEmpty = new System.Data.DataTable();
-                    dtEmpty.Columns.Add("MaMH");
-                    dtEmpty.Columns.Add("TenMH");
-                    dtEmpty.Rows.Add("", "← Click vào bảng điểm để sửa");
-                    cboCourse.DataSource = dtEmpty;
-                    cboCourse.DisplayMember = "TenMH";
-                    cboCourse.ValueMember = "MaMH";
-                }
             }
         }
 

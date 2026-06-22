@@ -271,7 +271,7 @@ namespace QuanLySinhVien
             frmResult.Controls.Add(pnlHead);
             frmResult.Controls.Add(rtb);
             frmResult.Controls.Add(btnOK);
-            frmResult.ShowDialog(this);
+            using (frmResult) frmResult.ShowDialog(this);
         }
 
         // ===================================================================

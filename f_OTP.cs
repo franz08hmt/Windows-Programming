@@ -94,8 +94,9 @@ namespace QuanLySinhVien
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("hmtlqd249@gmail.com");
                 mail.To.Add(_email); 
-                mail.Subject = "Mã OTP mới đặt lại mật khẩu / đăng ký";
-                mail.Body = $"Mã OTP mới của bạn là: {_otpCode}\nMã có hiệu lực trong 5 phút.";
+                mail.Subject = "Mã OTP mới đặt lại mật khẩu / đăng ký — HCMUTE";
+                mail.IsBodyHtml = true;
+                mail.Body = EmailHelper.BuildOtpHtml(_otpCode, _email, "đặt lại mật khẩu / đăng ký");
 
                 smtp.Send(mail); 
 

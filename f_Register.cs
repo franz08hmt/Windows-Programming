@@ -84,8 +84,9 @@ namespace QuanLySinhVien
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("hmtlqd249@gmail.com");
                 mail.To.Add(toEmail);
-                mail.Subject = "Mã OTP đăng ký tài khoản";
-                mail.Body = $"Mã OTP của bạn là: {otp}\nMã có hiệu lực trong 5 phút.";
+                mail.Subject = "Mã OTP đăng ký tài khoản — HCMUTE";
+                mail.IsBodyHtml = true;
+                mail.Body = EmailHelper.BuildOtpHtml(otp, toEmail, "đăng ký tài khoản");
                 smtp.Send(mail);
             }
             catch (Exception ex)
@@ -207,7 +208,7 @@ namespace QuanLySinhVien
                 cmd.Parameters.Add("@fname", SqlDbType.NVarChar).Value = txtFname.Text;
                 cmd.Parameters.Add("@lname", SqlDbType.NVarChar).Value = txtLname.Text;
                 cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = txtUsername.Text;
-                cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = txtPassword.Text;
+                cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = HashHelper.HashSHA256(txtPassword.Text);
                 cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = txtEmail.Text;
                 cmd.Parameters.Add("@pic", SqlDbType.Image).Value = (object)picBytes ?? DBNull.Value;
                 cmd.Parameters.Add("@pos", SqlDbType.Int).Value = position;

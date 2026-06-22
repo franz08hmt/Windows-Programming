@@ -552,7 +552,7 @@
             this.btnExportCSV.ShadowDecoration.Enabled = true;
             this.btnExportCSV.Size = new System.Drawing.Size(184, 62);
             this.btnExportCSV.TabIndex = 56;
-            this.btnExportCSV.Text = "💾 Xuất CSV";
+            this.btnExportCSV.Text = "📊 Xuất Excel";
             this.btnExportCSV.Click += new System.EventHandler(this.btnExportCSV_Click_1);
             // 
             // btnAISuggestGroup

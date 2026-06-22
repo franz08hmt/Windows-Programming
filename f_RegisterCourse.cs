@@ -24,6 +24,18 @@ namespace QuanLySinhVien
         private void f_RegisterCourse_Load(object sender, EventArgs e)
         {
             Load_Danh_Sach_Sinh_Vien();
+
+            if (Globals.GlobalPosition == 1) // Student: chỉ xem của chính mình
+            {
+                cboStudent.Enabled = false;
+                label2.Text = "Sinh viên :";
+            }
+
+            // Gọi explicit sau khi DataBinding hoàn tất —
+            // SelectedIndexChanged bắn quá sớm (lúc SelectedValue vẫn là DataRowView)
+            Load_lstBandau();
+            Load_Mon_Hoc_Da_Dang_Ky();
+
             btnAISuggest.Click += new EventHandler(btnAISuggest_Click_1_Handler);
             btnAICheckConflict.Click += new EventHandler(btnAICheckConflict_Click_Handler);
             AdjustLayout();
@@ -67,14 +79,15 @@ namespace QuanLySinhVien
             int yInfo = yList + listH + 4;
             lblMonInfo.SetBounds(xLeft, yInfo, listW + arrowW + margin * 2, lblMonInfo.Height);
 
-            // --- Row 4: Buttons ---
+            // --- Row 4: Buttons — căn giữa với gap cố định 20px ---
             int btnY = yInfo + lblMonInfo.Height + 6;
             int btnW = 190;
             int btnH = 52;
-            int btnGap = (totalW - margin * 2 - btnW * 5) / 4;
-            if (btnGap < 8) btnGap = 8;
+            int btnGap = 20;
+            int groupW = btnW * 5 + btnGap * 4;
+            int startX = Math.Max(margin, (totalW - groupW) / 2);
 
-            btnRegister.SetBounds(margin, btnY, btnW, btnH);
+            btnRegister.SetBounds(startX, btnY, btnW, btnH);
             btnUnregister.SetBounds(btnRegister.Right + btnGap, btnY, btnW, btnH);
             btnSendRequest.SetBounds(btnUnregister.Right + btnGap, btnY, btnW, btnH);
             btnAISuggest.SetBounds(btnSendRequest.Right + btnGap, btnY, btnW, btnH);
@@ -94,21 +107,35 @@ namespace QuanLySinhVien
         {
             try
             {
-                string query = "SELECT MSSV, Fname, Lname FROM Student ORDER BY Lname";
-                SqlDataAdapter da = new SqlDataAdapter(query, db.getConnection);
+                string query;
+                SqlDataAdapter da;
                 DataTable dt = new DataTable();
+
+                if (Globals.GlobalPosition == 1)
+                {
+                    // Student: chỉ load chính họ
+                    query = "SELECT s.MSSV, s.Fname, s.Lname " +
+                            "FROM Student s JOIN Login l ON s.Email = l.Email " +
+                            "WHERE l.MSGV = @msgv";
+                    var cmd = new SqlCommand(query, db.getConnection);
+                    cmd.Parameters.AddWithValue("@msgv", Globals.GlobalUserId);
+                    da = new SqlDataAdapter(cmd);
+                }
+                else
+                {
+                    // Admin/HR: load tất cả sinh viên
+                    query = "SELECT MSSV, Fname, Lname FROM Student ORDER BY Lname";
+                    da = new SqlDataAdapter(query, db.getConnection);
+                }
+
                 da.Fill(dt);
                 VietnameseTextHelper.NormalizeColumns(dt, "Fname", "Lname");
 
                 if (!dt.Columns.Contains("HoTen"))
-                {
                     dt.Columns.Add("HoTen", typeof(string));
-                }
 
                 foreach (DataRow row in dt.Rows)
-                {
-                    row["HoTen"] = row["Fname"].ToString() + " " + row["Lname"].ToString();
-                }
+                    row["HoTen"] = row["Lname"].ToString() + " " + row["Fname"].ToString();
 
                 cboStudent.DataSource = dt;
                 cboStudent.DisplayMember = "HoTen";

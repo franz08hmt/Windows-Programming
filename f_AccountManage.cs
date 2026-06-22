@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
@@ -72,6 +73,25 @@ namespace QuanLySinhVien
 
             // Wire nút AI (đã có trong Designer, chỉ gán handler)
             btnAI.Click += async (s, e) => await ScanFakeAccountsAsync();
+
+            // Nút Mở khóa — chỉ Admin thấy
+            if (Globals.GlobalPosition == 0)
+            {
+                var btnUnlock = new Button
+                {
+                    Text      = "🔓 Mở khóa",
+                    Location  = new Point(403, 9),
+                    Size      = new Size(130, 75),
+                    BackColor = Color.FromArgb(180, 60, 0),
+                    ForeColor = Color.White,
+                    Font      = new Font("Segoe UI", 10, FontStyle.Bold),
+                    FlatStyle = FlatStyle.Flat,
+                    Cursor    = Cursors.Hand
+                };
+                btnUnlock.FlatAppearance.BorderSize = 0;
+                btnUnlock.Click += BtnUnlock_Click;
+                pnlTop.Controls.Add(btnUnlock);
+            }
 
             // Đặt SplitterDistance ngay khi _split có kích thước thực
             // SizeChanged đáng tin hơn BeginInvoke vì fire đúng lúc layout hoàn tất
@@ -336,14 +356,122 @@ namespace QuanLySinhVien
 
         private void btnBack_Click(object sender, EventArgs e) { }
 
-        // ── Double-click vào danh sách đã duyệt → xem thông tin ────────────
+        // ── Nút Mở khóa (Admin only) ───────────────────────────────────────
+        private void BtnUnlock_Click(object sender, EventArgs e)
+        {
+            DataGridView active = dgvApproved.SelectedRows.Count > 0 ? dgvApproved : dgvAccounts;
+            string msgv = GetSelectedMSGV(active);
+            if (string.IsNullOrEmpty(msgv))
+            {
+                MessageBox.Show("Vui lòng chọn tài khoản cần mở khóa!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            string name = GetSelectedName(active);
+            bool ok = LoginSecurityService.UnlockAccount(msgv);
+            MessageBox.Show(ok
+                ? $"Đã mở khóa tài khoản [{name}]!"
+                : $"Tài khoản [{name}] không bị khóa hoặc có lỗi xảy ra.",
+                "Kết quả", MessageBoxButtons.OK, ok ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+        }
+
+        // ── Double-click vào danh sách đã duyệt → xem thông tin + quản lý ─
         private void dgvApproved_DoubleClick(object sender, EventArgs e)
         {
             string msgv = GetSelectedMSGV(dgvApproved);
             if (string.IsNullOrEmpty(msgv)) return;
-            MessageBox.Show(
-                $"MSGV: {msgv}\nHọ tên: {GetSelectedName(dgvApproved)}\nEmail: {GetSelectedEmail(dgvApproved)}",
-                "Thông tin tài khoản", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string name  = GetSelectedName(dgvApproved);
+            string email = GetSelectedEmail(dgvApproved);
+
+            bool canManage = msgv == Globals.GlobalUserId || Globals.GlobalPosition == 0;
+
+            var dlg = new Form
+            {
+                Text            = "Thông tin tài khoản",
+                Size            = new Size(380, canManage ? 290 : 200),
+                StartPosition   = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox     = false, MinimizeBox = false
+            };
+
+            var info = new RichTextBox
+            {
+                Location    = new Point(15, 15), Size = new Size(338, 72),
+                ReadOnly    = true, BorderStyle = BorderStyle.None, BackColor = dlg.BackColor,
+                Text        = $"MSGV: {msgv}\nHọ tên: {name}\nEmail: {email}"
+            };
+            dlg.Controls.Add(info);
+
+            if (canManage)
+            {
+                var btnFace = new Button
+                {
+                    Text      = "📷 Đăng ký khuôn mặt",
+                    Location  = new Point(15, 100), Size = new Size(338, 38),
+                    BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat
+                };
+                btnFace.FlatAppearance.BorderSize = 0;
+                btnFace.Click += (s, _) => { dlg.Close(); RegisterFaceForUser(msgv, name); };
+                dlg.Controls.Add(btnFace);
+
+                var btnUnlockLocal = new Button
+                {
+                    Text      = "🔓 Mở khóa tài khoản này",
+                    Location  = new Point(15, 148), Size = new Size(338, 38),
+                    BackColor = Color.FromArgb(180, 60, 0), ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat
+                };
+                btnUnlockLocal.FlatAppearance.BorderSize = 0;
+                btnUnlockLocal.Click += (s, _) =>
+                {
+                    LoginSecurityService.UnlockAccount(msgv);
+                    MessageBox.Show($"Đã mở khóa [{name}]!", "OK",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dlg.Close();
+                };
+                dlg.Controls.Add(btnUnlockLocal);
+            }
+
+            var btnClose = new Button
+            {
+                Text         = "Đóng",
+                Location     = new Point(15, canManage ? 196 : 100),
+                Size         = new Size(338, 38),
+                DialogResult = DialogResult.Cancel
+            };
+            dlg.Controls.Add(btnClose);
+            dlg.CancelButton = btnClose;
+            dlg.ShowDialog(this);
+        }
+
+        private void RegisterFaceForUser(string msgv, string name)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Ảnh|*.jpg;*.jpeg;*.png;*.bmp";
+                ofd.Title  = $"Chọn ảnh khuôn mặt cho: {name}";
+                if (ofd.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    byte[] imgBytes = File.ReadAllBytes(ofd.FileName);
+                    using (var db = new My_DB())
+                    {
+                        db.openConnection();
+                        var cmd = new SqlCommand("UPDATE Login SET FacePhoto=@img WHERE MSGV=@id", db.conn);
+                        cmd.Parameters.Add("@img", SqlDbType.VarBinary, -1).Value = imgBytes;
+                        cmd.Parameters.AddWithValue("@id", msgv);
+                        cmd.ExecuteNonQuery();
+                    }
+                    MessageBox.Show($"Đã đăng ký khuôn mặt cho [{name}]!\nTài khoản này có thể dùng đăng nhập khuôn mặt.",
+                        "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         // ── Gửi email thông báo sau khi duyệt (Gmail SMTP) ─────────────────
@@ -361,13 +489,9 @@ namespace QuanLySinhVien
                     };
                     var msg = new MailMessage(SMTP_FROM, toEmail)
                     {
-                        Subject = "Tài khoản đã được duyệt - HCMUTE",
-                        Body =
-                            $"Xin chào {name},\n\n" +
-                            "Tài khoản của bạn đã được Admin phê duyệt thành công.\n" +
-                            "Bạn có thể đăng nhập vào Hệ thống Quản lý Sinh viên HCMUTE ngay bây giờ.\n\n" +
-                            "Trân trọng,\nHệ thống Quản lý Sinh viên - HCMUTE",
-                        IsBodyHtml = false
+                        Subject = "Tài khoản đã được phê duyệt — HCMUTE",
+                        IsBodyHtml = true,
+                        Body = EmailHelper.BuildApprovalHtml(name, toEmail, toEmail.Split('@')[0])
                     };
                     smtp.Send(msg);
                 }
@@ -478,7 +602,7 @@ namespace QuanLySinhVien
                 ScrollBars = RichTextBoxScrollBars.Vertical
             };
             f.Controls.Add(rtb);
-            f.ShowDialog(this);
+            using (f) f.ShowDialog(this);
         }
 
         private void btnAI_Click(object sender, EventArgs e)

@@ -663,6 +663,11 @@ END", db.conn).ExecuteNonQuery();
 
         private void ChartAnimationTimer_Tick(object sender, EventArgs e)
         {
+            if (this.IsDisposed || !this.Visible)
+            {
+                chartAnimationTimer.Stop();
+                return;
+            }
             chartAnimationProgress += 0.035;
             double eased = 1 - Math.Pow(1 - Math.Min(chartAnimationProgress, 1), 3);
 
@@ -917,7 +922,7 @@ END", db.conn).ExecuteNonQuery();
             frmResult.Controls.Add(pnlHead);
             frmResult.Controls.Add(rtb);
             frmResult.Controls.Add(btnOK);
-            frmResult.ShowDialog(this);
+            using (frmResult) frmResult.ShowDialog(this);
         }
 
 

@@ -188,6 +188,80 @@ namespace QuanLySinhVien
         }
 
         // ============================================================
+        // XUẤT DANH SÁCH GIẢNG VIÊN — PDF
+        // ============================================================
+        public static void ExportTeacherListToPDF(DataView view)
+        {
+            if (view == null || view.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "PDF Files|*.pdf";
+                sfd.FileName = $"DanhSachGV_{DateTime.Now:yyyyMMdd_HHmm}.pdf";
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    using (PdfWriter writer = new PdfWriter(sfd.FileName))
+                    using (PdfDocument pdf = new PdfDocument(writer))
+                    using (Document doc = new Document(pdf, iText.Kernel.Geom.PageSize.A4.Rotate()))
+                    {
+                        doc.SetMargins(30, 30, 30, 30);
+                        PdfFont bold    = LoadFont(true);
+                        PdfFont regular = LoadFont(false);
+
+                        AddHeader(doc, "DANH SÁCH GIẢNG VIÊN", bold, regular);
+
+                        string[] headers = { "Mã GV", "Họ", "Tên", "Ngày sinh", "Giới tính", "Điện thoại", "Email" };
+                        string[] cols    = { "MSGV", "Fname", "Lname", "Dob", "Gder", "Phone", "Email" };
+                        float[]  widths  = { 60f, 80f, 80f, 90f, 65f, 100f, 140f };
+
+                        Table table = new Table(UnitValue.CreatePointArray(widths));
+                        table.SetWidth(UnitValue.CreatePercentValue(100));
+
+                        foreach (string h in headers)
+                            table.AddHeaderCell(HeaderCell(h, bold));
+
+                        int rowNum = 0;
+                        foreach (DataRowView drv in view)
+                        {
+                            Color bg = (rowNum % 2 == 0)
+                                ? ColorConstants.WHITE
+                                : new DeviceRgb(240, 244, 255);
+                            rowNum++;
+
+                            foreach (string col in cols)
+                            {
+                                string val = "";
+                                if (col == "Dob" && drv[col] != DBNull.Value)
+                                    val = Convert.ToDateTime(drv[col]).ToString("dd/MM/yyyy");
+                                else
+                                    val = drv[col]?.ToString() ?? "";
+
+                                table.AddCell(new Cell().Add(new Paragraph(val)
+                                    .SetFont(regular).SetFontSize(9))
+                                    .SetBackgroundColor(bg));
+                            }
+                        }
+
+                        doc.Add(table);
+                        AddFooter(doc, regular, view.Count);
+                    }
+
+                    AskOpenFile(sfd.FileName, "PDF");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi xuất PDF: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        // ============================================================
         // XUẤT THỐNG KÊ ĐIỂM — EXCEL (có chart)
         // ============================================================
         public static void ExportStatisticsToExcel(DataTable dtGpa, DataTable dtGender)

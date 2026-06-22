@@ -13,6 +13,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using SysColor = System.Drawing.Color;
 
 namespace QuanLySinhVien
 {
@@ -47,6 +50,7 @@ namespace QuanLySinhVien
             cboGroup_SelectedIndexChanged_1(null, null); // Áp dụng bộ lọc theo nhóm đang chọn
             SetupSuggestList();
             SetupPlaceholderSearch();
+            dgvContacts.CellClick += new DataGridViewCellEventHandler(dgvContacts_CellClick);
         }
 
         private void EnsureContactSchemaAndDemoData()
@@ -72,46 +76,165 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
         Email NVARCHAR(100) NULL, Pic IMAGE NULL,
         UserID NVARCHAR(20) NOT NULL);", db.conn).ExecuteNonQuery();
 
-                // Đảm bảo 4 nhóm mặc định tồn tại, lấy ID
-                int familyId  = EnsureGroupExists("Gia đình");
-                int classId   = EnsureGroupExists("Bạn cùng lớp");
-                int teacherId = EnsureGroupExists("Giảng viên");
-                int partnerId = EnsureGroupExists("Đối tác học tập");
+                // Xóa bản ghi bị lỗi từ seed cũ (Fname = số nguyên)
+                var cleanCmd = new SqlCommand(
+                    "DELETE FROM dbo.Contact WHERE ISNUMERIC(Fname) = 1 AND UserID = @uid", db.conn);
+                cleanCmd.Parameters.AddWithValue("@uid", currentUserId);
+                cleanCmd.ExecuteNonQuery();
 
-                // Chỉ seed nếu có ít hơn 12 liên hệ
-                SqlCommand countCmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Contact WHERE UserID=@uid", db.conn);
-                countCmd.Parameters.AddWithValue("@uid", currentUserId);
-                if (Convert.ToInt32(countCmd.ExecuteScalar()) >= 12) return;
+                // Nếu dữ liệu hiện tại không phù hợp với vai trò → xóa và seed lại đúng vai trò
+                int position = Globals.GlobalPosition;
+                if (IsWrongRoleSeed(position))
+                    DeleteAllUserContactsAndGroups();
 
-                // Gia đình — 4 liên hệ
-                InsertContact("Nguyễn", "Minh Anh",   new DateTime(2004,  3, 12), "Nữ",  familyId,  "0901234567", "Quận 1, TP HCM",        "minhanh@example.com");
-                InsertContact("Nguyễn", "Văn An",     new DateTime(1975,  6,  8), "Nam", familyId,  "0902345678", "Bình Dương",              "nvan@example.com");
-                InsertContact("Nguyễn", "Thị Bình",   new DateTime(1978,  9, 20), "Nữ",  familyId,  "0903456789", "Quận 1, TP HCM",        "ntbinh@example.com");
-                InsertContact("Trần",   "Gia Huy",    new DateTime(2006,  1, 15), "Nam", familyId,  "0904567890", "Thủ Đức, TP HCM",       "giahuy@example.com");
-
-                // Bạn cùng lớp — 5 liên hệ
-                InsertContact("Trần",   "Quốc Bảo",   new DateTime(2003,  7, 24), "Nam", classId,   "0912345678", "Thủ Đức, TP HCM",       "quocbao@example.com");
-                InsertContact("Hoàng",  "Thị Lan",    new DateTime(2004,  2, 14), "Nữ",  classId,   "0913456789", "Gò Vấp, TP HCM",        "thilan@example.com");
-                InsertContact("Vũ",     "Minh Đức",   new DateTime(2003, 11,  3), "Nam", classId,   "0914567890", "Quận 12, TP HCM",       "minhduc@example.com");
-                InsertContact("Đặng",   "Thùy Linh",  new DateTime(2004,  5, 30), "Nữ",  classId,   "0915678901", "Bình Thạnh, TP HCM",    "thuylinh@example.com");
-                InsertContact("Bùi",    "Văn Tuấn",   new DateTime(2003,  8, 22), "Nam", classId,   "0916789012", "Tân Bình, TP HCM",      "vantuan@example.com");
-
-                // Giảng viên — 3 liên hệ
-                InsertContact("Lê",     "Hoàng Nam",  new DateTime(1985, 11,  4), "Nam", teacherId, "0987654321", "HCMUTE, Thủ Đức",       "hoangnam@hcmute.edu.vn");
-                InsertContact("Phạm",   "Văn Hùng",   new DateTime(1980,  3, 17), "Nam", teacherId, "0988765432", "HCMUTE, Thủ Đức",       "vanhung@hcmute.edu.vn");
-                InsertContact("Trần",   "Thị Hoa",    new DateTime(1988,  7,  9), "Nữ",  teacherId, "0989876543", "HCMUTE, Thủ Đức",       "thihoa@hcmute.edu.vn");
-
-                // Đối tác học tập — 4 liên hệ
-                InsertContact("Phạm",   "Thanh Trúc", new DateTime(2004, 10, 18), "Nữ",  partnerId, "0933456789", "Bình Thạnh, TP HCM",    "thanhtruc@example.com");
-                InsertContact("Ngô",    "Minh Quân",  new DateTime(2003,  4, 25), "Nam", partnerId, "0934567890", "Quận 3, TP HCM",        "minhquan@example.com");
-                InsertContact("Lý",     "Thị Ngọc",   new DateTime(2004,  8, 11), "Nữ",  partnerId, "0935678901", "Quận 7, TP HCM",        "thingoc@example.com");
-                InsertContact("Đinh",   "Văn Tùng",   new DateTime(2003, 12,  5), "Nam", partnerId, "0936789012", "Nhà Bè, TP HCM",        "vantung@example.com");
+                // Seed danh bạ theo vai trò tài khoản
+                if (position == 0)       SeedAdminContacts();     // Admin: liên hệ quản trị trường
+                else if (position == 2)  SeedHRContacts();        // Giảng viên: đồng nghiệp, sinh viên
+                else                     SeedStudentContacts();   // Sinh viên: gia đình, bạn học
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Lỗi khởi tạo dữ liệu danh bạ: " + ex.Message);
             }
             finally { db.closeConnection(); }
+        }
+
+        // Trả về true nếu nhóm "chỉ điểm" của vai trò khác xuất hiện → dữ liệu seed sai vai trò
+        private bool IsWrongRoleSeed(int position)
+        {
+            string markerGroup = "";
+            if (position == 0 || position == 2)
+                markerGroup = "Bạn cùng lớp";   // Admin/GV không nên có nhóm kiểu sinh viên
+            else
+                markerGroup = "Ban giám hiệu";  // Sinh viên không nên có nhóm kiểu admin
+
+            var cmd = new SqlCommand(
+                "SELECT COUNT(*) FROM dbo.Groups WHERE Name=@n AND UserID=@uid", db.conn);
+            cmd.Parameters.AddWithValue("@n", markerGroup);
+            cmd.Parameters.AddWithValue("@uid", currentUserId);
+            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+        }
+
+        private void DeleteAllUserContactsAndGroups()
+        {
+            var c1 = new SqlCommand("DELETE FROM dbo.Contact WHERE UserID=@uid", db.conn);
+            c1.Parameters.AddWithValue("@uid", currentUserId);
+            c1.ExecuteNonQuery();
+
+            var c2 = new SqlCommand("DELETE FROM dbo.Groups WHERE UserID=@uid", db.conn);
+            c2.Parameters.AddWithValue("@uid", currentUserId);
+            c2.ExecuteNonQuery();
+        }
+
+        // ── Admin: Ban giám hiệu / Phòng ban / Giảng viên / Đối tác trường (16 liên hệ) ──
+        private void SeedAdminContacts()
+        {
+            int g1 = EnsureGroupExists("Ban giám hiệu");
+            int g2 = EnsureGroupExists("Phòng ban");
+            int g3 = EnsureGroupExists("Giảng viên");
+            int g4 = EnsureGroupExists("Đối tác trường");
+
+            var cnt = new SqlCommand("SELECT COUNT(*) FROM dbo.Contact WHERE UserID=@uid", db.conn);
+            cnt.Parameters.AddWithValue("@uid", currentUserId);
+            if (Convert.ToInt32(cnt.ExecuteScalar()) >= 16) return;
+
+            // Ban giám hiệu — 3
+            InsertContact("Nguyễn", "Văn Khải",   new DateTime(1968,  3, 15), "Nam", g1, "0919001001", "HCMUTE, Thủ Đức, TP.HCM",     "hieupho.khai@hcmute.edu.vn");
+            InsertContact("Trần",   "Thị Mai",     new DateTime(1972,  7, 22), "Nữ",  g1, "0919001002", "HCMUTE, Thủ Đức, TP.HCM",     "pho.mai@hcmute.edu.vn");
+            InsertContact("Lê",     "Quốc Bảo",   new DateTime(1970, 11,  5), "Nam", g1, "0919001003", "HCMUTE, Thủ Đức, TP.HCM",     "pho.bao@hcmute.edu.vn");
+
+            // Phòng ban — 4
+            InsertContact("Phạm",   "Hồng Hà",    new DateTime(1980,  4, 12), "Nữ",  g2, "0919002001", "Phòng Đào tạo, HCMUTE",        "daotao@hcmute.edu.vn");
+            InsertContact("Vũ",     "Thanh Long",  new DateTime(1982,  8, 20), "Nam", g2, "0919002002", "Phòng CTSV, HCMUTE",           "ctsv@hcmute.edu.vn");
+            InsertContact("Đặng",   "Thùy An",    new DateTime(1985,  2, 14), "Nữ",  g2, "0919002003", "Phòng Tài chính, HCMUTE",      "taichinh@hcmute.edu.vn");
+            InsertContact("Bùi",    "Minh Tuấn",  new DateTime(1979,  9, 30), "Nam", g2, "0919002004", "Phòng CNTT, HCMUTE",           "cntt@hcmute.edu.vn");
+
+            // Giảng viên đầu ngành — 5
+            InsertContact("Ngô",    "Minh Phúc",  new DateTime(1975,  6, 18), "Nam", g3, "0919003001", "Khoa CNTT, HCMUTE",            "truongkhoa.cntt@hcmute.edu.vn");
+            InsertContact("Đinh",   "Văn Khoa",   new DateTime(1973,  1, 25), "Nam", g3, "0919003002", "Khoa Điện tử, HCMUTE",         "truongkhoa.dt@hcmute.edu.vn");
+            InsertContact("Lý",     "Quốc Hùng",  new DateTime(1969,  5, 10), "Nam", g3, "0919003003", "Khoa Cơ khí, HCMUTE",          "truongkhoa.ck@hcmute.edu.vn");
+            InsertContact("Hoàng",  "Thị Xuân",   new DateTime(1977, 12,  8), "Nữ",  g3, "0919003004", "Khoa Hóa học, HCMUTE",         "truongkhoa.hh@hcmute.edu.vn");
+            InsertContact("Nguyễn", "Bảo Quốc",   new DateTime(1974,  3, 28), "Nam", g3, "0919003005", "Khoa Kinh tế, HCMUTE",         "truongkhoa.kt@hcmute.edu.vn");
+
+            // Đối tác trường — 4
+            InsertContact("Trần",   "Thanh Minh", new DateTime(1983,  7, 15), "Nam", g4, "0919004001", "Tầng 5, FPT Software, Thủ Đức", "partnership@fpt.edu.vn");
+            InsertContact("Lê",     "Thị Hương",  new DateTime(1986, 10, 20), "Nữ",  g4, "0919004002", "Tòa nhà Viettel, Q.10, TP.HCM", "education@viettel.com.vn");
+            InsertContact("Phan",   "Văn Đức",    new DateTime(1984,  4,  5), "Nam", g4, "0919004003", "Grab Vietnam, Quận 1, TP.HCM", "talent@grab.com");
+            InsertContact("Võ",     "Thị Lan",    new DateTime(1988,  1, 18), "Nữ",  g4, "0919004004", "VNPT Technology, TP.HCM",      "recruit@vnpt-technology.vn");
+        }
+
+        // ── Giảng viên/HR: Đồng nghiệp / Sinh viên tiêu biểu / Ban giám hiệu / Đối tác học thuật (16 liên hệ) ──
+        private void SeedHRContacts()
+        {
+            int g1 = EnsureGroupExists("Đồng nghiệp");
+            int g2 = EnsureGroupExists("Sinh viên tiêu biểu");
+            int g3 = EnsureGroupExists("Ban giám hiệu");
+            int g4 = EnsureGroupExists("Đối tác học thuật");
+
+            var cnt = new SqlCommand("SELECT COUNT(*) FROM dbo.Contact WHERE UserID=@uid", db.conn);
+            cnt.Parameters.AddWithValue("@uid", currentUserId);
+            if (Convert.ToInt32(cnt.ExecuteScalar()) >= 16) return;
+
+            // Đồng nghiệp — 5
+            InsertContact("Nguyễn", "Thành Trung", new DateTime(1982,  4, 10), "Nam", g1, "0918001001", "Khoa CNTT, HCMUTE",            "ttrung@hcmute.edu.vn");
+            InsertContact("Trần",   "Thị Bích",    new DateTime(1985,  8, 25), "Nữ",  g1, "0918001002", "Khoa CNTT, HCMUTE",            "tbich@hcmute.edu.vn");
+            InsertContact("Lê",     "Hữu Phước",   new DateTime(1979, 12,  3), "Nam", g1, "0918001003", "Khoa CNTT, HCMUTE",            "hphuoc@hcmute.edu.vn");
+            InsertContact("Phạm",   "Ngọc Lan",    new DateTime(1983,  6, 17), "Nữ",  g1, "0918001004", "Khoa CNTT, HCMUTE",            "ngoclan@hcmute.edu.vn");
+            InsertContact("Vũ",     "Quang Hải",   new DateTime(1980,  2, 28), "Nam", g1, "0918001005", "Khoa CNTT, HCMUTE",            "qhai@hcmute.edu.vn");
+
+            // Sinh viên tiêu biểu — 4
+            InsertContact("Đặng",   "Minh Khoa",   new DateTime(2003,  5, 14), "Nam", g2, "0918002001", "KTX Đại học Quốc gia, Thủ Đức", "minhkhoa.sv@hcmute.edu.vn");
+            InsertContact("Bùi",    "Thị Thu",     new DateTime(2003,  9, 20), "Nữ",  g2, "0918002002", "Quận 9, TP.HCM",               "thithu.sv@hcmute.edu.vn");
+            InsertContact("Hoàng",  "Văn Toàn",   new DateTime(2004,  1,  7), "Nam", g2, "0918002003", "Thủ Đức, TP.HCM",              "vantoan.sv@hcmute.edu.vn");
+            InsertContact("Ngô",    "Thị Cẩm",    new DateTime(2004,  3, 22), "Nữ",  g2, "0918002004", "Bình Dương",                   "thicam.sv@hcmute.edu.vn");
+
+            // Ban giám hiệu — 3
+            InsertContact("Đinh",   "Văn Toàn",   new DateTime(1965,  7, 12), "Nam", g3, "0918003001", "HCMUTE, Thủ Đức",              "hieupho1@hcmute.edu.vn");
+            InsertContact("Lý",     "Thị Hoa",    new DateTime(1970,  3, 18), "Nữ",  g3, "0918003002", "HCMUTE, Thủ Đức",              "truongkhoa@hcmute.edu.vn");
+            InsertContact("Phan",   "Quang Minh", new DateTime(1968, 11,  5), "Nam", g3, "0918003003", "HCMUTE, Thủ Đức",              "phocntt@hcmute.edu.vn");
+
+            // Đối tác học thuật — 4
+            InsertContact("Võ",     "Thanh Hùng",  new DateTime(1975,  8, 30), "Nam", g4, "0918004001", "Đại học Bách khoa, TP.HCM",    "thunghv@hcmut.edu.vn");
+            InsertContact("Nguyễn", "Thị Yến",    new DateTime(1978,  4, 15), "Nữ",  g4, "0918004002", "Viện CNTT, TP.HCM",            "thiyennv@itep.edu.vn");
+            InsertContact("Trần",   "Công Danh",  new DateTime(1980, 12, 20), "Nam", g4, "0918004003", "Đại học KHTN, TP.HCM",         "congdanh@hcmus.edu.vn");
+            InsertContact("Lê",     "Thị Bình",   new DateTime(1982,  6, 10), "Nữ",  g4, "0918004004", "Đại học UEH, TP.HCM",          "thibinh@ueh.edu.vn");
+        }
+
+        // ── Sinh viên: Gia đình / Bạn cùng lớp / Giảng viên / Đối tác học tập (16 liên hệ) ──
+        private void SeedStudentContacts()
+        {
+            int g1 = EnsureGroupExists("Gia đình");
+            int g2 = EnsureGroupExists("Bạn cùng lớp");
+            int g3 = EnsureGroupExists("Giảng viên");
+            int g4 = EnsureGroupExists("Đối tác học tập");
+
+            var cnt = new SqlCommand("SELECT COUNT(*) FROM dbo.Contact WHERE UserID=@uid", db.conn);
+            cnt.Parameters.AddWithValue("@uid", currentUserId);
+            if (Convert.ToInt32(cnt.ExecuteScalar()) >= 16) return;
+
+            // Gia đình — 4
+            InsertContact("Nguyễn", "Minh Anh",   new DateTime(2004,  3, 12), "Nữ",  g1, "0901234567", "Quận 1, TP HCM",        "minhanh@example.com");
+            InsertContact("Nguyễn", "Văn An",     new DateTime(1975,  6,  8), "Nam", g1, "0902345678", "Bình Dương",              "nvan@example.com");
+            InsertContact("Nguyễn", "Thị Bình",   new DateTime(1978,  9, 20), "Nữ",  g1, "0903456789", "Quận 1, TP HCM",        "ntbinh@example.com");
+            InsertContact("Trần",   "Gia Huy",    new DateTime(2006,  1, 15), "Nam", g1, "0904567890", "Thủ Đức, TP HCM",       "giahuy@example.com");
+
+            // Bạn cùng lớp — 5
+            InsertContact("Trần",   "Quốc Bảo",   new DateTime(2003,  7, 24), "Nam", g2, "0912345678", "Thủ Đức, TP HCM",       "quocbao@example.com");
+            InsertContact("Hoàng",  "Thị Lan",    new DateTime(2004,  2, 14), "Nữ",  g2, "0913456789", "Gò Vấp, TP HCM",        "thilan@example.com");
+            InsertContact("Vũ",     "Minh Đức",   new DateTime(2003, 11,  3), "Nam", g2, "0914567890", "Quận 12, TP HCM",       "minhduc@example.com");
+            InsertContact("Đặng",   "Thùy Linh",  new DateTime(2004,  5, 30), "Nữ",  g2, "0915678901", "Bình Thạnh, TP HCM",    "thuylinh@example.com");
+            InsertContact("Bùi",    "Văn Tuấn",   new DateTime(2003,  8, 22), "Nam", g2, "0916789012", "Tân Bình, TP HCM",      "vantuan@example.com");
+
+            // Giảng viên — 3
+            InsertContact("Lê",     "Hoàng Nam",  new DateTime(1985, 11,  4), "Nam", g3, "0987654321", "HCMUTE, Thủ Đức",       "hoangnam@hcmute.edu.vn");
+            InsertContact("Phạm",   "Văn Hùng",   new DateTime(1980,  3, 17), "Nam", g3, "0988765432", "HCMUTE, Thủ Đức",       "vanhung@hcmute.edu.vn");
+            InsertContact("Trần",   "Thị Hoa",    new DateTime(1988,  7,  9), "Nữ",  g3, "0989876543", "HCMUTE, Thủ Đức",       "thihoa@hcmute.edu.vn");
+
+            // Đối tác học tập — 4
+            InsertContact("Phạm",   "Thanh Trúc", new DateTime(2004, 10, 18), "Nữ",  g4, "0933456789", "Bình Thạnh, TP HCM",    "thanhtruc@example.com");
+            InsertContact("Ngô",    "Minh Quân",  new DateTime(2003,  4, 25), "Nam", g4, "0934567890", "Quận 3, TP HCM",        "minhquan@example.com");
+            InsertContact("Lý",     "Thị Ngọc",   new DateTime(2004,  8, 11), "Nữ",  g4, "0935678901", "Quận 7, TP HCM",        "thingoc@example.com");
+            InsertContact("Đinh",   "Văn Tùng",   new DateTime(2003, 12,  5), "Nam", g4, "0936789012", "Nhà Bè, TP HCM",        "vantung@example.com");
         }
 
         private int EnsureGroupExists(string name)
@@ -858,27 +981,97 @@ IF OBJECT_ID('dbo.Contact','U') IS NULL
 
             SaveFileDialog sfd = new SaveFileDialog
             {
-                Filter = "CSV Files|*.csv",
-                FileName = $"DanhBaCaNhan_{DateTime.Now:yyyyMMdd}.csv"
+                Filter = "Excel Files|*.xlsx",
+                FileName = $"DanhBaCaNhan_{DateTime.Now:yyyyMMdd_HHmm}.xlsx"
             };
 
             if (sfd.ShowDialog() != DialogResult.OK) return;
 
             try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("Mã liên hệ,Họ,Tên,Ngày sinh,Giới tính,Phân nhóm,Số điện thoại,Email,Địa chỉ");
+                string[] headers  = { "Mã liên hệ", "Họ", "Tên", "Ngày sinh", "Giới tính", "Phân nhóm", "Số điện thoại", "Email", "Địa chỉ" };
+                string[] colNames = { "ID", "Fname", "Lname", "Dob", "Gender", "TenNhom", "Phone", "Email", "Address" };
+                int      colCount = headers.Length;
 
-                foreach (DataRowView row in contactView)
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                using (ExcelPackage pkg = new ExcelPackage())
                 {
-                    string dobStr = row["Dob"] != DBNull.Value ? Convert.ToDateTime(row["Dob"]).ToString("dd/MM/yyyy") : "";
-                    string safeAddr = $"\"{row["Address"].ToString().Replace("\"", "\"\"")}\"";
+                    ExcelWorksheet ws = pkg.Workbook.Worksheets.Add("Danh bạ cá nhân");
 
-                    sb.AppendLine($"{row["ID"]},{row["Fname"]},{row["Lname"]},{dobStr},{row["Gender"]},{row["TenNhom"]},{row["Phone"]},{row["Email"]},{safeAddr}");
+                    // ── Tiêu đề trường ──
+                    ws.Cells[1, 1].Value = "TRƯỜNG ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM";
+                    ws.Cells[1, 1, 1, colCount].Merge = true;
+                    ws.Cells[1, 1].Style.Font.Bold = true;
+                    ws.Cells[1, 1].Style.Font.Size = 13;
+                    ws.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    ws.Cells[1, 1].Style.Font.Color.SetColor(SysColor.FromArgb(0, 61, 149));
+
+                    // ── Tiêu đề báo cáo ──
+                    ws.Cells[2, 1].Value = "DANH BẠ CÁ NHÂN";
+                    ws.Cells[2, 1, 2, colCount].Merge = true;
+                    ws.Cells[2, 1].Style.Font.Bold = true;
+                    ws.Cells[2, 1].Style.Font.Size = 14;
+                    ws.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    // ── Ngày xuất ──
+                    ws.Cells[3, 1].Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    ws.Cells[3, 1, 3, colCount].Merge = true;
+                    ws.Cells[3, 1].Style.Font.Italic = true;
+                    ws.Cells[3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    // ── Header row (row 5) ──
+                    for (int i = 0; i < colCount; i++)
+                    {
+                        var cell = ws.Cells[5, i + 1];
+                        cell.Value = headers[i];
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        cell.Style.Fill.BackgroundColor.SetColor(SysColor.FromArgb(0, 61, 149));
+                        cell.Style.Font.Color.SetColor(SysColor.White);
+                        cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+
+                    // ── Data rows ──
+                    int rowIdx = 6;
+                    foreach (DataRowView row in contactView)
+                    {
+                        for (int c = 0; c < colCount; c++)
+                        {
+                            var val = row[colNames[c]];
+                            if (colNames[c] == "Dob")
+                                ws.Cells[rowIdx, c + 1].Value = (val != DBNull.Value)
+                                    ? Convert.ToDateTime(val).ToString("dd/MM/yyyy") : "";
+                            else if (colNames[c] == "Phone")
+                            {
+                                // Lưu số điện thoại dạng text để tránh scientific notation
+                                ws.Cells[rowIdx, c + 1].Value = val?.ToString() ?? "";
+                                ws.Cells[rowIdx, c + 1].Style.Numberformat.Format = "@";
+                            }
+                            else
+                                ws.Cells[rowIdx, c + 1].Value = val?.ToString() ?? "";
+                        }
+                        if (rowIdx % 2 == 0)
+                        {
+                            ws.Cells[rowIdx, 1, rowIdx, colCount].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            ws.Cells[rowIdx, 1, rowIdx, colCount].Style.Fill.BackgroundColor.SetColor(SysColor.FromArgb(240, 244, 255));
+                        }
+                        rowIdx++;
+                    }
+
+                    // ── Footer ──
+                    ws.Cells[rowIdx + 1, 1].Value = $"Tổng số bản ghi: {contactView.Count}   |   Xuất bởi: {Globals.GlobalUserName}   |   Hệ thống QuanLySinhVien";
+                    ws.Cells[rowIdx + 1, 1, rowIdx + 1, colCount].Merge = true;
+                    ws.Cells[rowIdx + 1, 1].Style.Font.Italic = true;
+                    ws.Cells[rowIdx + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    ws.Cells.AutoFitColumns();
+                    pkg.SaveAs(new FileInfo(sfd.FileName));
                 }
 
-                File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
-                MessageBox.Show("Xuất file danh bạ cá nhân CSV thành công tốt đẹp!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult dr = MessageBox.Show("Xuất Excel thành công!\nBạn có muốn mở file vừa xuất không?",
+                    "Thành công", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dr == DialogResult.Yes)
+                    System.Diagnostics.Process.Start(sfd.FileName);
             }
             catch (Exception ex) { MessageBox.Show("Lỗi xuất CSV: " + ex.Message); }
         }

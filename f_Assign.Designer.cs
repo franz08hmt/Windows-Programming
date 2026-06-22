@@ -118,7 +118,7 @@
             this.guna2Panel3 = new Guna.UI2.WinForms.Guna2Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.guna2Shapes3 = new Guna.UI2.WinForms.Guna2Shapes();
-            this.button2 = new System.Windows.Forms.Button();
+
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.pnlForm = new Guna.UI2.WinForms.Guna2CustomGradientPanel();
             this.label25 = new System.Windows.Forms.Label();
@@ -1457,7 +1457,6 @@
             this.panel2.Controls.Add(this.guna2Separator3);
             this.panel2.Controls.Add(this.guna2Panel3);
             this.panel2.Controls.Add(this.guna2Shapes3);
-            this.panel2.Controls.Add(this.button2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
@@ -1512,21 +1511,6 @@
             this.guna2Shapes3.Text = "guna2Shapes3";
             this.guna2Shapes3.Zoom = 80;
             // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(61)))), ((int)(((byte)(149)))));
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.25F, System.Drawing.FontStyle.Bold);
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(1536, 0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(171, 129);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "⬅ Quay lại";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // tabPage4
             // 
@@ -2215,7 +2199,6 @@
         private System.Windows.Forms.ErrorProvider erpEdit;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button2;
         private Guna.UI2.WinForms.Guna2Separator guna2Separator1;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
         private System.Windows.Forms.Label lblHethong;

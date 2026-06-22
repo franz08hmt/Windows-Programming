@@ -24,12 +24,18 @@ namespace QuanLySinhVien
             try
             {
                 db.openConnection();
+                // LTRIM/RTRIM handles whitespace stored in DB; CI collation for case-insensitive match
                 SqlCommand cmd = new SqlCommand(
-                    "SELECT Username FROM Login WHERE Email = @email",
+                    "SELECT Username FROM Login WHERE LTRIM(RTRIM(Email)) = @email COLLATE SQL_Latin1_General_CP1_CI_AS",
                     db.conn);
-                cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
+                cmd.Parameters.Add("@email", SqlDbType.NVarChar).Value = email.Trim();
                 object result = cmd.ExecuteScalar();
                 return result != null ? result.ToString() : null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tra cứu email: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
             finally { db.closeConnection(); }
         }
@@ -62,8 +68,9 @@ namespace QuanLySinhVien
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("hmtlqd249@gmail.com");
                 mail.To.Add(toEmail);
-                mail.Subject = "Mã OTP đặt lại mật khẩu";
-                mail.Body = $"Mã OTP của bạn là: {otp}\nMã có hiệu lực trong 5 phút.";
+                mail.Subject = "Mã OTP đặt lại mật khẩu — HCMUTE";
+                mail.IsBodyHtml = true;
+                mail.Body = EmailHelper.BuildOtpHtml(otp, toEmail, "đặt lại mật khẩu");
                 smtp.Send(mail);
             }
             catch (Exception ex)
@@ -75,14 +82,16 @@ namespace QuanLySinhVien
 
         private void btnSendOTP_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtEmail.Text))
+            // txtFname is the actual email input (txtEmail is the back button in header — wrong name in Designer)
+            string emailInput = txtFname.Text.Trim();
+            if (string.IsNullOrEmpty(emailInput) || !emailInput.Contains("@"))
             {
-                MessageBox.Show("Vui lòng nhập email!", "Cảnh báo",
+                MessageBox.Show("Vui lòng nhập địa chỉ email hợp lệ!", "Cảnh báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string username = GetUsernameByEmail(txtEmail.Text);
+            string username = GetUsernameByEmail(emailInput);
             if (username == null)
             {
                 MessageBox.Show("Email không tồn tại trong hệ thống!",
@@ -91,9 +100,9 @@ namespace QuanLySinhVien
             }
 
             otpCode = new Random().Next(100000, 999999).ToString();
-            SendOTP(txtEmail.Text, otpCode);
+            SendOTP(emailInput, otpCode);
 
-            f_OTP otpForm = new f_OTP(otpCode, txtEmail.Text.Trim());
+            f_OTP otpForm = new f_OTP(otpCode, emailInput);
 
             if (otpForm.ShowDialog() == DialogResult.OK)
             {

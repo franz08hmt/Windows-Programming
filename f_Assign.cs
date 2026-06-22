@@ -58,6 +58,18 @@ namespace QuanLySinhVien
                 RepositionTab4Controls();
                 RepositionPnlFormControls();
             }));
+
+            // Trigger layout mỗi khi tab "Sửa thông tin" trở nên visible
+            // (fix: lần đầu mở fullscreen layout chạy với kích thước chưa ổn định)
+            tabPage4.VisibleChanged += (s, e) =>
+            {
+                if (tabPage4.Visible)
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        RepositionTab4Controls();
+                        RepositionPnlFormControls();
+                    }));
+            };
         }
 
         private void RepositionTab4Controls()
@@ -196,12 +208,14 @@ namespace QuanLySinhVien
             LoadData1();
 
             dgvsuathongtin.CellClick += new DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            // BeginInvoke: đợi AutoScale hoàn tất trước khi reposition
+            // Double-BeginInvoke: cho parent layout 2 message-pump cycles để set kích thước cuối cùng
             this.BeginInvoke(new Action(() =>
-            {
-                RepositionTab4Controls();
-                RepositionPnlFormControls();
-            }));
+                this.BeginInvoke(new Action(() =>
+                {
+                    RepositionTab4Controls();
+                    RepositionPnlFormControls();
+                }))
+            ));
         }
 
         private void EnsureLoginTeacherColumns()
@@ -1042,7 +1056,7 @@ IF COL_LENGTH('dbo.Login', 'Address') IS NULL
 
         private void button3_Click(object sender, EventArgs e) {  }
         private void button1_Click(object sender, EventArgs e) { }
-        private void button2_Click(object sender, EventArgs e) {  }
+
         private void dgvAssign_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void cboHR_SelectedIndexChanged(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }
@@ -1103,44 +1117,78 @@ IF COL_LENGTH('dbo.Login', 'Address') IS NULL
                 using (ExcelPackage pkg = new ExcelPackage())
                 {
                     ExcelWorksheet ws = pkg.Workbook.Worksheets.Add("Danh sách GV");
-                    string[] headers = { "Mã GV", "Họ", "Tên", "Ngày sinh", "Giới tính", "Điện thoại", "Email" };
+                    string[] headers  = { "Mã GV", "Họ", "Tên", "Ngày sinh", "Giới tính", "Điện thoại", "Email" };
                     string[] colNames = { "MSGV", "Fname", "Lname", "Dob", "Gder", "Phone", "Email" };
+                    int      colCount = headers.Length;
 
-                    for (int i = 0; i < headers.Length; i++)
+                    // ── Tiêu đề trường ──
+                    ws.Cells[1, 1].Value = "TRƯỜNG ĐẠI HỌC CÔNG NGHỆ KỸ THUẬT TP.HCM";
+                    ws.Cells[1, 1, 1, colCount].Merge = true;
+                    ws.Cells[1, 1].Style.Font.Bold = true;
+                    ws.Cells[1, 1].Style.Font.Size = 13;
+                    ws.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    ws.Cells[1, 1].Style.Font.Color.SetColor(Color.FromArgb(0, 61, 149));
+
+                    // ── Tiêu đề báo cáo ──
+                    ws.Cells[2, 1].Value = "DANH SÁCH GIẢNG VIÊN";
+                    ws.Cells[2, 1, 2, colCount].Merge = true;
+                    ws.Cells[2, 1].Style.Font.Bold = true;
+                    ws.Cells[2, 1].Style.Font.Size = 14;
+                    ws.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    // ── Ngày xuất ──
+                    ws.Cells[3, 1].Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    ws.Cells[3, 1, 3, colCount].Merge = true;
+                    ws.Cells[3, 1].Style.Font.Italic = true;
+                    ws.Cells[3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    // ── Header row (row 5) ──
+                    for (int i = 0; i < colCount; i++)
                     {
-                        var cell = ws.Cells[1, i + 1];
+                        var cell = ws.Cells[5, i + 1];
                         cell.Value = headers[i];
                         cell.Style.Font.Bold = true;
                         cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(31, 73, 125));
+                        cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(0, 61, 149));
                         cell.Style.Font.Color.SetColor(Color.White);
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
 
-                    int rowIdx = 2;
+                    // ── Data rows ──
+                    int rowIdx = 6;
                     foreach (DataRowView drv in gvView)
                     {
-                        for (int c = 0; c < colNames.Length; c++)
+                        for (int c = 0; c < colCount; c++)
                         {
                             var val = drv[colNames[c]];
                             ws.Cells[rowIdx, c + 1].Value = (colNames[c] == "Dob" && val != DBNull.Value)
                                 ? Convert.ToDateTime(val).ToString("dd/MM/yyyy")
                                 : val?.ToString() ?? "";
                         }
+                        if (rowIdx % 2 == 0)
+                        {
+                            ws.Cells[rowIdx, 1, rowIdx, colCount].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            ws.Cells[rowIdx, 1, rowIdx, colCount].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(240, 244, 255));
+                        }
                         rowIdx++;
                     }
-                    ws.Cells[ws.Dimension.Address].AutoFitColumns();
+
+                    // ── Footer ──
+                    ws.Cells[rowIdx + 1, 1].Value = $"Tổng số bản ghi: {gvView.Count}   |   Xuất bởi: {Globals.GlobalUserName}   |   Hệ thống QuanLySinhVien";
+                    ws.Cells[rowIdx + 1, 1, rowIdx + 1, colCount].Merge = true;
+                    ws.Cells[rowIdx + 1, 1].Style.Font.Italic = true;
+                    ws.Cells[rowIdx + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    ws.Cells.AutoFitColumns();
                     pkg.SaveAs(new FileInfo(sfd.FileName));
                 }
 
-                DialogResult dr = MessageBox.Show("Export danh sách giảng viên thành công! Bạn có muốn mở file Excel lên không?",
-                                                  "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult dr = MessageBox.Show("Xuất Excel thành công! Bạn có muốn mở file không?",
+                                                  "Thành công", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (dr == DialogResult.Yes)
-                {
                     System.Diagnostics.Process.Start(sfd.FileName);
-                }
             }
-            catch (Exception ex) { MessageBox.Show("Lỗi Export Excel: " + ex.Message); }
+            catch (Exception ex) { MessageBox.Show("Lỗi xuất Excel: " + ex.Message); }
         }
 
         private void btnChonFile_Click(object sender, EventArgs e)
@@ -1552,9 +1600,8 @@ IF COL_LENGTH('dbo.Login', 'Address') IS NULL
                 // Trích xuất dữ liệu giảng viên hiện tại trên lưới thành bảng DataTable
                 DataTable dtTeachers = gvView.ToTable();
 
-                // 🚀 GIẢI PHÁP CHÍ MẠNG: Ép kiểu sang DataView và tận dụng luôn hàm xuất PDF bọc thép của sinh viên
                 DataView dvTeachers = new DataView(dtTeachers);
-                ReportExportService.ExportStudentListToPDF(dvTeachers);
+                ReportExportService.ExportTeacherListToPDF(dvTeachers);
             }
             catch (Exception ex)
             {

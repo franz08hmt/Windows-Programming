@@ -6,8 +6,12 @@
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-                components.Dispose();
+            if (disposing)
+            {
+                chartAnimationTimer?.Stop();
+                chartAnimationTimer?.Dispose();
+                components?.Dispose();
+            }
             base.Dispose(disposing);
         }
 
